@@ -1,0 +1,43 @@
+.body{
+    width: 1000px;
+}
+.header {
+ width: 100%;
+
+}
+
+.logo {
+  float: left;
+    background-color: aqua;
+}
+
+.suche {
+ float: left;
+    background-color: black;
+}
+
+.warenkorb {
+ float: left;
+    background-color: blue;
+}
+.container{
+    float: left;
+}
+.content {
+ float: left;
+    background-color: brown;
+}
+
+.leisteOben {
+ float: left;
+    background-color: darkblue;
+}
+
+.leisteLinks {
+ float: left;
+    background-color: darkgreen;
+}
+
+.footer{
+    float: left;
+}
