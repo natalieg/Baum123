@@ -12,6 +12,7 @@ function onReady() {
     printItem(myProduct);
 }
 
+// TODO Funktioniert noch nicht richtig!
 function load(){
     DB.Product.find()
         .resultList(myCallback);
@@ -29,6 +30,8 @@ DB.ready(load);
 function printItem(product) {
     $("#hello").append(JSON.stringify(product.toJSON(true), null, "  "));
 }
+
+// TODO Funktionier noch nicht!
 function printItem2(products) {
     $("#hello2")
     products.forEach(function(product){
