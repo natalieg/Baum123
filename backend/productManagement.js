@@ -70,3 +70,4 @@ function printItems(msg, products) {
     });
 }
 
+// TOLLER KOMMENTAR
