@@ -23,6 +23,7 @@ var productFind = function(){
 
 // Ich bin ein Testkommentar!!!!
 // Ich bin noch ein Kommentar!!
+// Sooo... Das ist jetzt eine Abzweigung. Jetzt müssen wir sie nur noch wieder zusammenpuzzlen...
 //hier werden die Methoden ausgeführt, wenn die Datenbank bereit ist
 DB.ready(newProduct);
 DB.ready(productFind);
