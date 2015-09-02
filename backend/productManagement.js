@@ -13,7 +13,9 @@ var newProduct = function() {
 
 // Lädt alle Produkte aus der Datenbank
 var productFind = function(){
-    DB.Product.find().resultList(function(result) {
+    DB.Product.find()
+        .ascending("name")
+        .resultList(function(result) {
         result.forEach(function(product) {
             console.log(product.name);
         });
@@ -37,7 +39,9 @@ function printItem(product) {
 function printItems(msg, products) {
     $("#hello2 h4").html(msg);
     products.forEach(function (product) {
-        $("#hello2 ul").append("<li>" + (product).name  + "</li>");
+        $("#hello2 ul").append("<li>" + (product).name + " || " +
+            "Preis: " +
+            "<input type=" + "text" + " value=" + "" + (product).preis + "" + "></input>" + "</li>");
     });
 }
 
