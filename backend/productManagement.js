@@ -21,7 +21,7 @@ var productFind = function(){
     });
 };
 
-// Ich bin ein Testkommentar!!
+// Ich bin ein Testkommentar!!!!
 
 //hier werden die Methoden ausgeführt, wenn die Datenbank bereit ist
 DB.ready(newProduct);
