@@ -2,9 +2,8 @@
 DB.connect("http://baum123.baqend.com");
 
 
-
 //Let's create a Product item
-function onReady() {
+function newProduct() {
     var myProduct = new DB.Product();
     myProduct.name = "My Todo";
     myProduct.beschreibung = "Testbeschreibung";
@@ -13,29 +12,42 @@ function onReady() {
 }
 
 // TODO Funktioniert noch nicht richtig!
-function load(){
-    DB.Product.find()
-        .resultList(myCallback);
-printItem2(products)
-
+/**
+ * Findet die Produkte
+ * @returns {*}
+ */
+var loadProducts = function () {
+    return DB.Product.find()
+        .resultList();
 }
 
-//Wait for connection
-DB.ready(onReady);
-DB.ready(load);
+// TODO nicht sicher ob die Daten bisher richtig geladen werden und ob die Syntax so stimmt
+// Lädt die Daten
+function loadData() {
+    return
+    loadProducts(); //query
+    (function(products) {
+        printItem2("Produkte", products);
+    });
+}
 
+//hier werden die Methoden ausgeführt, wenn die Datenbank bereit ist
+DB.ready(newProduct);
+DB.ready(loadData);
 
 
 //Boilerplate code below
+
+//Funktion für
 function printItem(product) {
     $("#hello").append(JSON.stringify(product.toJSON(true), null, "  "));
 }
 
 // TODO Funktionier noch nicht!
-function printItem2(products) {
-    $("#hello2")
-    products.forEach(function(product){
-        $("#hello ul").append("<li>" + product.name + " [id:" + product.id + "]</li>");
+function printItem2(msg, products) {
+    $("#hello2 h4").html(msg);
+    products.forEach(function (product) {
+        $("#hello2 ul").append("<li>" + product.name + " [id:" + product.id + "]</li>");
     });
 }
 

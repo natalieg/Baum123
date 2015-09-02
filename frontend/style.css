@@ -41,3 +41,10 @@
 .footer{
     float: left;
 }
+
+#hello2 {
+    padding: 40px;
+    width: 500px;
+    margin: auto;
+    background-color: #ffd4a8;
+}
