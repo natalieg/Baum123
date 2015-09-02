@@ -30,6 +30,7 @@ var productFind = function () {
         .resultList();
 };
 
+// Lädt ein Produkt aus der Datenbank und updated bei Bedarf
 function loadProductAndUpdate() {
     DB.Product.find()
         .ascending("name")
@@ -38,12 +39,14 @@ function loadProductAndUpdate() {
         });
 }
 
+// Produkte werden
 function productUpdate(products) {
     products.forEach(function (product) {
         var preis = document.getElementById(product.id).value;
         if (preis != null && preis != product.preis) {
             product.preis = preis;
             product.update();
+            window.alert("Successfully updated!");
         }
     });
 }
@@ -70,4 +73,3 @@ function printItems(msg, products) {
     });
 }
 
-// TOLLER KOMMENTAR
