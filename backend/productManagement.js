@@ -17,6 +17,7 @@ var productFind = function(){
         result.forEach(function(product) {
             console.log(product.name);
         });
+        printItems("Produkte",result)
     });
 };
 
@@ -31,6 +32,13 @@ DB.ready(productFind);
 //Funktion für
 function printItem(product) {
     $("#hello").append(JSON.stringify(product.toJSON(true), null, "  "));
+};
+
+function printItems(msg, products) {
+    $("#hello2 h4").html(msg);
+    products.forEach(function (product) {
+        $("#hello2 ul").append("<li>" + (product).name  + "</li>");
+    });
 }
 
 
