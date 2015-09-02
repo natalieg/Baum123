@@ -22,6 +22,7 @@ var productFind = function(){
 };
 
 // Ich bin ein Testkommentar!!!!
+// Ich bin noch ein Kommentar!!
 //hier werden die Methoden ausgeführt, wenn die Datenbank bereit ist
 DB.ready(newProduct);
 DB.ready(productFind);
