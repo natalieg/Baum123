@@ -1,38 +1,30 @@
 /**
- * Created by Nat on 01.09.2015.
+ * Created by peukert on 02.09.15.
  */
-
 //Connect
 DB.connect("http://baum123.baqend.com");
 
-
-// die 5 meist verkauften Produkte anzeigen
-var productFind = function(){
+// zeigt die topSaleNumber meist gekauften Produkte an
+var productSelectBestSales = function(){
     DB.Product.find()
-        .ascending("name")
+        .descending("Verkauf_Gesamt").limit(5)
         .resultList(function(result) {
             result.forEach(function(product) {
-                console.log(product.name);
+               // console.log(product.name);
             });
-            printItems("Produkte",result)
+            printItems("Produkt:", result)
         });
 };
 
 //hier werden die Methoden ausgef�hrt, wenn die Datenbank bereit ist
-DB.ready(productFind);
-
-
-//Boilerplate code below
+DB.ready(productSelectBestSales);
 
 //Gibt die Produkte auf der Oberfl�che aus
 function printItems(msg, products) {
     $("#hello2 h4").html(msg);
     products.forEach(function (product) {
         $("#hello2 table").append("<tr><td class=" + "productTD" + ">" + (product).name + " </td>" +
-            "<td class=" + "productTD" + "> Preis: " +
-            "<input type=" + "text" + " value=" + "" + (product).preis + "" + "></input></td>" + "</tr>");
+            "<td class=" + "productTD" + ">" +
+            (product).preis + "" + "></td>" + "</tr>");
     });
 }
-
-
-
