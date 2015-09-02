@@ -39,9 +39,9 @@ function printItem(product) {
 function printItems(msg, products) {
     $("#hello2 h4").html(msg);
     products.forEach(function (product) {
-        $("#hello2 ul").append("<li>" + (product).name + " || " +
-            "Preis: " +
-            "<input type=" + "text" + " value=" + "" + (product).preis + "" + "></input>" + "</li>");
+        $("#hello2 table").append("<tr><td>" + (product).name + " </td>|| " +
+            "<td> Preis: " +
+            "<input type=" + "text" + " value=" + "" + (product).preis + "" + "></input></td>" + "</tr>");
     });
 }
 
