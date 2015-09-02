@@ -11,7 +11,7 @@ var newProduct = function() {
     printItem(myProduct);
 };
 
-
+// Lädt alle Produkte aus der Datenbank
 var productFind = function(){
     DB.Product.find().resultList(function(result) {
         result.forEach(function(product) {
@@ -22,7 +22,6 @@ var productFind = function(){
 };
 
 // Ich bin ein Testkommentar!!!!
-
 //hier werden die Methoden ausgeführt, wenn die Datenbank bereit ist
 DB.ready(newProduct);
 DB.ready(productFind);
@@ -35,6 +34,7 @@ function printItem(product) {
     $("#hello").append(JSON.stringify(product.toJSON(true), null, "  "));
 };
 
+//Gibt die Produkte auf der Oberfläche aus
 function printItems(msg, products) {
     $("#hello2 h4").html(msg);
     products.forEach(function (product) {

@@ -43,8 +43,10 @@
 }
 
 #hello2 {
-    padding: 40px;
+    padding: 20px;
+    margin-top: 200px;
+    margin-right: auto;
+    margin-left: auto;
     width: 500px;
-    margin: auto;
     background-color: #ffd4a8;
 }
