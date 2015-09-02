@@ -7,14 +7,14 @@ DB.connect("http://baum123.baqend.com");
 
 
 // die 5 meist verkauften Produkte anzeigen
-var productFind = function(){
+var productFind = function () {
     DB.Product.find()
         .ascending("name")
-        .resultList(function(result) {
-            result.forEach(function(product) {
+        .resultList(function (result) {
+            result.forEach(function (product) {
                 console.log(product.name);
             });
-            printItems("Produkte",result)
+            printItems("Produkte", result)
         });
 };
 
