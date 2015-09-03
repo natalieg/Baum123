@@ -46,13 +46,11 @@ function productUpdate(products) {
         var stueckzahl = parseInt(document.getElementById(product.id+"b").value);
         if (preis != null && preis != product.preis) {
             product.preis = preis;
-            product.update();
-
         }
         if (stueckzahl!=null && stueckzahl!=0) {
             product.stueckzahl = product.stueckzahl + stueckzahl;
-            product.update();
         }
+        product.update();
     });
 }
 
