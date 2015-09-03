@@ -50,6 +50,7 @@ function productUpdate(products) {
         // Die Prüfung muss hier so gelöst werden, da ein != 0 nicht funktioniert
         if (stueckzahl!=null && (stueckzahl > 0 || stueckzahl < 0 )) {
             product.stueckzahl = product.stueckzahl + stueckzahl;
+            stueckzahl = "";
         }
         product.update();
     });
