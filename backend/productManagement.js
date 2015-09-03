@@ -42,11 +42,16 @@ function loadProductAndUpdate() {
 // Produkte werden
 function productUpdate(products) {
     products.forEach(function (product) {
-        var preis = document.getElementById(product.id).value;
+        var preis = document.getElementById(product.id+"a").value;
+        var stueckzahl = parseInt(document.getElementById(product.id+"b").value);
         if (preis != null && preis != product.preis) {
             product.preis = preis;
             product.update();
-            window.alert("Successfully updated!");
+
+        }
+        if (stueckzahl!=null && stueckzahl!=0) {
+            product.stueckzahl = product.stueckzahl + stueckzahl;
+            product.update();
         }
     });
 }
@@ -70,11 +75,11 @@ function printItems(msg, products) {
         $("#hello2 table").append(
             "<tr><td class=" + "productTD" + ">" + (product).name + " </td> " +
              "<td class=" + "productTD" + "> Preis: " +
-             "<input type=" + "text" + " id=" + "" + (product).id + "" + " value=" + "" + (product).preis + "" + "></input></td>" +
+             "<input type=" + "number" + " id=" + "" + (product).id +"a"+"" + " value=" + "" + (product).preis + "" + "></input></td>" +
 
              "<td class=" + "productTD" + "> Stueckzahl: </td>" +
              "<td class=" + "productTD" + ">" + (product).stueckzahl + " </td> " +
-             "<td><input type=" + "text" + " id=" + "" + (product).id + "" + (product).preis + "" + "></input></td>" +
+             "<td><input type=" + "number" + " id=" + "" + (product).id +"b"+"" + "></input></td>" +
             "</tr>");
     });
 }
