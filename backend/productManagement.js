@@ -53,7 +53,7 @@ function productUpdate(products) {
         }
         product.update();
     });
-
+    location.reload();
 }
 
 //hier werden die Methoden ausgeführt, wenn die Datenbank bereit ist
