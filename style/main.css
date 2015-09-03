@@ -112,6 +112,10 @@
     border-radius: 20px;
 }
 
+.jumbotron .container .row .col-md-3 {
+    width: 270px;
+}
+
 #sideMenu a {
     font-size: 14px;
     font-family: 'Quicksand', sans-serif;

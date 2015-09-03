@@ -23,12 +23,12 @@ DB.ready(productSelectBestSales);
 function printItems(msg, products) {
     $("h4").html(msg);
     products.forEach(function (product) {
-        $("#welcome").append("<div class=\"picture\"><img style=\"height:200px;\" src=\"" + product.bild + "\">" +
+        $("#topProducts").append("<div class=\"col-md-3\"><a href=\"#\" class=\"img-shadow\"><img src=\"" + product.bild + "\"></a>" +
             "<div class=\"productTD\">" + product.name + " </div>" +
             "<div class=\"productTD\">" + product.preis + " Euro</div>" +
             "<div class=\"productTD\">nur noch "  + product.stueckzahl + " vorhanden</div>" +
             "<div class=\"productTD\">Bewertung: "  + product.Feedbacks.reduce(function(avg, el){
                 return avg + el.Bewertung;
-            }, 0)/product.Feedbacks.size + "</div></div>");
+            }, 0)/product.Feedbacks.size + "</div></div></div>");
     });
 }
