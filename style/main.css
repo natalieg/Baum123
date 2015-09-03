@@ -6,17 +6,34 @@
     text-transform: uppercase;
 }
 
+.nav {
+    margin-right: 20%;
+    margin-left: 20%;
+}
+
+#warenkorb {
+    margin-right: 30%;
+}
+
+.nav .container {
+   line-height: 50px;
+}
+
 .nav li {
     display: inline;
 }
 
 #welcome {
     font-size: 30px;
-    position: fixed;
-    margin-left: 20%;
     padding-top: 10px;
     font-family: 'Quicksand', sans-serif;
     color: #6b6b6b;
+    display: inline;
+}
+
+
+#warenkorb {
+    vertical-align: middle;
 }
 
 #search input[type="text"] {
@@ -25,7 +42,7 @@
     color: #bebebe;
     width: 60%;
     padding: 6px 15px 6px 35px;
-    margin-right: auto;
+    margin-right: 20%;
     margin-left: 20%;
     margin-bottom: 10px;
     -webkit-border-radius: 20px;
