@@ -39,7 +39,7 @@ function loadProductAndUpdate() {
         });
 }
 
-// Produkte werden mit neuen Werten aktualisiert
+// Produkte werden
 function productUpdate(products) {
     products.forEach(function (product) {
         var preis = document.getElementById(product.id+"a").value;
@@ -47,14 +47,13 @@ function productUpdate(products) {
         if (preis != null && preis != product.preis) {
             product.preis = preis;
         }
-        // Die Prüfung muss hier so gelöst werden, da ein != 0 nicht funktioniert
-        if (stueckzahl!=null && (stueckzahl > 0 || stueckzahl < 0 )) {
+        if (stueckzahl!=null && stueckzahl!=0) {
             product.stueckzahl = product.stueckzahl + stueckzahl;
             stueckzahl = "";
         }
         product.update();
     });
-    window.alert("Successfully updated!");
+
 }
 
 //hier werden die Methoden ausgeführt, wenn die Datenbank bereit ist
