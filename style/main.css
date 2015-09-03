@@ -86,13 +86,13 @@
     border-top: 1px solid #dbdbdb;
     border-bottom: 1px solid #dbdbdb;
     text-align: center;
+    padding: 20px;
 }
 
 .jumbotron .container .row {
     position: relative;
-    margin-left: auto;
-    margin-right: auto;
-    min-width: 1200px;
+    margin: auto;
+    text-align: center;
 }
 
 .jumbotron h1 {
@@ -110,10 +110,13 @@
 .jumbotron .container .row .col-md-3 .img-shadow img {
     height: 400px;
     border-radius: 20px;
+    display:block;
+    margin:auto;
 }
 
 .jumbotron .container .row .col-md-3 {
     width: 270px;
+    white-space: nowrap;
 }
 
 #sideMenu a {
@@ -172,4 +175,21 @@
 .more a {
     color: #6b6b6b;
     font-family: 'Quicksand', sans-serif;
+}
+
+.productName {
+    font-size: 18px;
+    font-family: 'Quicksand', sans-serif;
+}
+
+.bestsellerText {
+    font-size: 30px;
+    color: rgba(38, 0, 19, 0.54);
+    font-family: 'Quicksand', sans-serif;
+    font-weight: bold;
+    text-align: center;
+    padding-bottom: 0px;
+    right: 26px;
+    top: -10px;
+
 }
