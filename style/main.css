@@ -6,6 +6,11 @@
     text-transform: uppercase;
 }
 
+.nav .container .pull-left {
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
+
 .nav {
     margin-right: 20%;
     margin-left: 20%;
@@ -16,7 +21,7 @@
 }
 
 .nav .container {
-   line-height: 50px;
+    line-height: 50px;
 }
 
 .nav li {
@@ -31,6 +36,15 @@
     display: inline;
 }
 
+#welcome a {
+    font-size: 30px;
+    padding-top: 10px;
+    font-family: 'Quicksand', sans-serif;
+    color: #6b6b6b;
+    display: inline;
+    font-weight: normal;
+    text-transform: none;
+}
 
 #warenkorb {
     vertical-align: middle;
@@ -53,6 +67,7 @@
     -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) inset;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) inset;
 }
+
 
 .navKategorien a {
     color: #5a5a5a;
@@ -95,6 +110,25 @@
 .jumbotron .container .row .col-md-3 .img-shadow img {
     height: 400px;
     border-radius: 20px;
+}
+
+#sideMenu a {
+    font-size: 14px;
+    font-family: 'Quicksand', sans-serif;
+    color: #6b6b6b;
+    padding-left: 0px;
+}
+
+#shopGallerieID {
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
+#shopGallerieID img {
+    height: 200px;
+    margin-left: 10px;
+    margin-bottom: 20px;
+    border-radius: 10px;
 }
 
 .img-shadow {
