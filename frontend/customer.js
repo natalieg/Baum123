@@ -12,7 +12,7 @@ var productSelectBestSales = function(){
             result.forEach(function(product) {
                // console.log(product.name);
             });
-            printItems("Produkt:", result)
+            printItems("", result)
         });
 };
 
@@ -21,10 +21,14 @@ DB.ready(productSelectBestSales);
 
 //Gibt die Produkte auf der Oberfl�che aus
 function printItems(msg, products) {
-    $("#hello2 h4").html(msg);
+    $("h4").html(msg);
     products.forEach(function (product) {
-        $("#hello2 table").append("<tr><td class=" + "productTD" + ">" + (product).name + " </td>" +
-            "<td class=" + "productTD" + ">" +
-            (product).preis + "" + "></td>" + "</tr>");
+        $("#welcome").append("<div class=\"picture\"><img style=\"height:200px;\" src=\"" + product.bild + "\">" +
+            "<div class=\"productTD\">" + product.name + " </div>" +
+            "<div class=\"productTD\">" + product.preis + " Euro</div>" +
+            "<div class=\"productTD\">nur noch "  + product.stueckzahl + " vorhanden</div>" +
+            "<div class=\"productTD\">Bewertung: "  + product.Feedbacks.reduce(function(avg, el){
+                return avg + el.Bewertung;
+            }, 0)/product.Feedbacks.size + "</div></div>");
     });
 }

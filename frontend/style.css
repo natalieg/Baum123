@@ -1,5 +1,7 @@
 .body{
     width: 1000px;
+    margin-right: auto;
+    margin-left: auto;
 }
 .header {
  width: 100%;
@@ -56,6 +58,7 @@
 }
 
 .productTable{
+    float: right;
 }
 
 .abschickenButton {
@@ -63,5 +66,18 @@
 }
 
 .productTD{
- padding-left: 20px;
+    padding-left: 20px;
+}
+
+#welcome {
+    padding: 20px;
+    background-color: #ffd4a8;
+    float: left;
+    width: 1000px;
+    margin: 0 auto;
+}
+
+.picture {
+    float: left;
+    width: 200px;
 }
