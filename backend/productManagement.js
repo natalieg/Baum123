@@ -47,7 +47,7 @@ function productUpdate(products) {
         if (preis != null && preis != product.preis) {
             product.preis = preis;
         }
-        if (stueckzahl!=null && stueckzahl!=0) {
+        if (stueckzahl!=null && stueckzahl<0 || stueckzahl>0) {
             product.stueckzahl = product.stueckzahl + stueckzahl;
             stueckzahl = "";
         }
