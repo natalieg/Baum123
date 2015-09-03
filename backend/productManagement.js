@@ -4,7 +4,7 @@ DB.connect("http://baum123.baqend.com");
 //Let's create a Product item
 var newProduct = function () {
     var myProduct = new DB.Product();
-    myProduct.name = "My Todo";
+    myProduct.name = "My Todo1";
     myProduct.beschreibung = "Testbeschreibung";
     myProduct.preis = 24;
     myProduct.liste = "Baum";
@@ -75,11 +75,11 @@ function printItems(msg, products) {
         $("#hello2 table").append(
             "<tr><td class=" + "productTD" + ">" + (product).name + " </td> " +
              "<td class=" + "productTD" + "> Preis: " +
-             "<input type=" + "number" + " id=" + "" + (product).id +"a"+"" + " value=" + "" + (product).preis + "" + "></input></td>" +
+             "<input min='0' type=" + "number" + " id=" + "" + (product).id +"a"+"" + " value=" + "" + (product).preis + "" + "></input></td>" +
 
              "<td class=" + "productTD" + "> Stueckzahl: </td>" +
              "<td class=" + "productTD" + ">" + (product).stueckzahl + " </td> " +
-             "<td><input type=" + "number" + " id=" + "" + (product).id +"b"+"" + "></input></td>" +
+             "<td><input min='0' type=" + "number" + " id=" + "" + (product).id +"b"+"" + "></input></td>" +
             "</tr>");
     });
 }
