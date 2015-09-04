@@ -2,7 +2,7 @@
 DB.connect("http://baum123.baqend.com");
 
 //Let's create a Product item
-var newProduct = function () {
+var newProduct = function() {
     var myProduct = new DB.Product();
     myProduct.name = "My Todo1";
     myProduct.beschreibung = "Testbeschreibung";
@@ -56,17 +56,79 @@ function productUpdate(products) {
     location.reload();
 }
 
+
+// Variable, mit der, sobald konstruiert, eine Funktion aufgerufen werden kann, die alle Einträge einer DB löscht.
+var clearDataBase;
+
+/* Funktion, die die clearDataBase-Funktion herstellt, welche alle Einträge einer Datenbank löscht.
+*  (Aus verständlichen Gründen nicht getestet.)
+*
+*  @param database : Die Datenbank, aus der alle Einträge gelöscht werden sollen.
+*
+*  Alle Parameter sind als Strings einzugeben.*/
+
+var clearDataBaseConstructor = function(database)
+{
+    var string = "DB." + database + ".find().resultList(function(result)"+
+        "{result.forEach(function(result2){result2.delete().then(function(){},function(){})})})";
+
+    clearDataBase = new Function(string);
+};
+
+
+// Variable, mit der, sobald konstruiert, eine Funktion aufgerufen werden kann, die bestimmte Einträge einer DB löscht.
+var findAndDestroy;
+
+/* Funktion, die die findAndDestroy-Funktion erstellt, welche für eine gegebene Datenbank alle Einträge entfernt,
+* die in einer spezifizierten Kategorie einen bestimmten Wert aufweisen.
+*
+* @param database : Die Datenbank, aus der Einträge gelöscht werden sollen.
+* @param category : Die Kategorie, in der auf bestimmte Werte geachtet werden soll.
+* @param value : Der Wert, anhand der zu löschende Eintrag erkannt wird.
+*
+* Alle Parameter sind als Strings einzugeben.*/
+
+var findAndDestroyConstructor = function(database, category, value)
+{   var string = "DB." + database + ".find().matches(\'" + category + "\', \"^" + value +"\").resultList(function(result)"+
+    "{result.forEach(function(result2){result2.delete().then(function(){},function(){})})})";
+
+    findAndDestroy = new Function(string);
+};
+
+//Variable, mit der, sobald konstruiert, eine Funktion aufgerufen werden kann, die Einträge einer DB durch andere ersetzt.
+var findAndAdjust;
+
+
+/* Funktion, die die findAndAdjust-Funktion erstellt, welche für eine gegebene Datenbank Einträge, die anhand eines
+*  Wertes in einer Kategorie identifiziert wurden, Werte einer Kategorie mit einem übergebenen Wert überschreibt.
+*
+*  @param database : Die Datenbank, in der Einträge geändert werden sollen.
+*  @param idCat : Die Kategorie, in der sich der Wert befindet, anhand der/die zu ändernde(n) Einträge identifiziert
+*                 werden können.
+*  @param idVal : Wert, anhand dessen der/die zu ändernde(n) Einträge identifiziert werden können
+*  @param cat   : Kategorie, in der sich der zu ändernde Wert/ die zu ändernden Werte befinden.
+*  @param newValue: Der aktuelle Wer, der dem Eintrag/ den Einträgen hinzugefügt werden soll.
+*
+*  Alle Parameter sind als Strings einzugeben. */
+
+var findAndAdjustConstructor = function(database, idCat, idVal, cat, newValue)
+{   var string = "DB." + database + ".find().matches(\'" + idCat + "\', \"^" + idVal +"\").resultList(function(result)"+
+    "{result.forEach(function(result2){result2." + cat + " =" + newValue + "; result2.update();})})";
+
+    findAndAdjust = new Function(string);
+};
+
 //hier werden die Methoden ausgeführt, wenn die Datenbank bereit ist
 DB.ready(newProduct);
 DB.ready(productFindAndPrint);
 
 
-//Boilerplate code below -----------------------------------------------------------------------------------------------
+//Boilerplate code below
 
 // Gibt ein neu eingefügtes Produkt auf der Oberfläche aus
 function printItem(product) {
     $("#hello").append(JSON.stringify(product.toJSON(true), null, "  "));
-};
+}
 
 //Gibt die Produkte auf der Oberfläche aus
 function printItems(msg, products) {
