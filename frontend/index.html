@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<head>
+    <link href="http://s3.amazonaws.com/codecademy-content/courses/ltp/css/shift.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://s3.amazonaws.com/codecademy-content/courses/ltp/css/bootstrap.css">
+    <link rel="stylesheet" href="../style/main.css">
+    <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
+</head>
+<body>
+
+<script type="text/javascript" src="http://baqend.com/js-sdk/latest/baqend.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script type="text/javascript" src="../backend/handlebars-v4.0.1.js"></script>
+<script type="text/javascript" src="../backend/landingPage.js"></script>
+
+
+<div class="nav">
+    <div class="container">
+        <ul class="pull-left">
+            <li id="welcome">Welcome to Baum123</li>
+        </ul>
+        <ul class="pull-right" id="warenkorb">
+            <li><a href="#">Sign In</a></li>
+            <li><a href="#">Log In</a></li>
+            <li><a href="#"><img height="20px" src="http://www.garten-profi.de/out/garten4/img/warenkorb.png"/> </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="searchbar">
+    <form id="search">
+        <input type="text">
+    </form>
+</div>
+
+<div class="navKategorien">
+    <div class="container" id="kategorien">
+        <ul class="pull-left">
+            <li><a href="#">Trees</a></li>
+            |
+            <li><a href="#">Flowers</a></li>
+            |
+            <li><a href="#">Bushes</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="jumbotron">
+    <div class="container">
+        <div class="row bestsellerText">Bestseller</div>
+
+        <!--This is our template. -->
+        <!--Data will be inserted in its according place, replacing the brackets.-->
+        <script id="bestseller-template" type="text/x-handlebars-template">
+            {{#each product}}
+            <div class="col-md-3">
+                <a href="#" class="img-shadow">
+                   {{{imageSrc}}}
+                </a>
+
+                <div class="col-md-3">
+                    <div class="productName">
+                        {{productName}}
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </script>
+
+        <!--Your new content will be displayed in here-->
+        <div id="bestseller"></div>
+
+        <div class="row" id="topProducts">
+        </div>
+    </div>
+
+</div>
+
+<div class="more">
+    <div class="container">
+        <h1><a href="shopPage.html">Show me more!</a></h1>
+    </div>
+</div>
+
+
+</body>
+</html>
