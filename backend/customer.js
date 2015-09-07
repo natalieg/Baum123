@@ -58,6 +58,27 @@ function printItemsSmall(products, rowID) {
     });
 }
 
+// Sucht Dinge. Vielleicht.
+function searchBarAction ()
+{
+    var input = document.getElementById('searchbar').value;
+    console.log("Seachbar says: " + input);
+    var inputPrep = "^.*"+ input;
+    var inputReg = new RegExp(inputPrep);
+
+    DB.ready(function()
+        {
+            DB.Product.find().matches('name', inputReg).descending("Verkauf_Gesamt").resultList(function(result)
+                {
+                    printItemsSmall(result2, "#moreTopProducts");
+                }
+            )
+        }
+    );
+};
+
+
+
 //Gibt alle Informationen zu den Produkten aus
 // Wird grad nicht verwendet!
 function printProductComplete(products) {
