@@ -13,21 +13,20 @@ function productSelectBestSales(limitNumber, rowID, bigItem) {
             result.forEach(function (product) {
                 // console.log(product.name);
             });
-            if(bigItem === 1){
+            if (bigItem === 1) {
                 printItemsBig(result, rowID)
             } else {
                 printItemsSmall(result, rowID)
             }
-
         });
 };
 
-var topSales = function(){
+var topSales = function () {
     productSelectBestSales(4, "#topProducts", 1);
 }
 
-var allSales = function(){
-   productSelectBestSales(100, "#moreTopProducts");
+var allSales = function () {
+    productSelectBestSales(100, "#moreTopProducts");
 }
 
 //hier werden die Methoden ausgef�hrt, wenn die Datenbank bereit ist
@@ -40,43 +39,45 @@ function printItemsBig(products, rowID) {
         if (name.length > 10) {
             name = name.substring(0, 9) + "...";
         }
-        $(rowID).append("<div id=\"" + product.id + "\" class=\"productRow col-md-3\"><a href=\"#\" class=\"img-shadow\"><img src=\"" + product.bild + "\"></a>" +
+        $(rowID).append("<div id=\"" + product.id + "\" class=\"productRow col-md-3\">" +
+            "<a href=\"#\" class=\"img-shadow\"><img src=\"" + product.bild + "\"></a>" +
             "<div class=\"productRow col-md-3\"><div class=\"productName\">" + name + " </div></div>" +
             "</div></div>");
     });
+};
 
-}//Gibt die Top-Sales-Produkte auf der Oberfl�che aus
+// Sucht Dinge. Vielleicht.
+function searchBarAction() {
+    var input = document.getElementById('searchbar').value;
+    console.log("Seachbar says: " + input);
+
+    var inputPrep = "^.*" + input;
+    var inputReg = new RegExp(inputPrep);
+
+    DB.ready(function () {
+        DB.Product.find()
+            .matches('name', inputReg)
+            .isNotNull('bild')
+            .descending("Verkauf_Gesamt")
+            .resultList(function (result) {
+                printItemsSmall(result, "#moreTopProducts");
+            })
+    });
+};
+
+//Gibt die Top-Sales-Produkte auf der Oberfl�che aus
 function printItemsSmall(products, rowID) {
     products.forEach(function (product) {
         var name = product.name;
         if (name.length > 10) {
             name = name.substring(0, 9) + "...";
         }
-        $(rowID).append("<div id=\"" + product.id + "\" class=\"productRow col-md-2\"><a href=\"#\"><img src=\"" + product.bild + "\"></a>" +
+        $(rowID).append("<div id=\"" + product.id + "\" class=\"productRow col-md-2\">" +
+            "<a href=\"#\"><img src=\"" + product.bild + "\"></a>" +
             "<div class=\"productRow col-md-2\"><div class=\"productNameSmall\">" + name + " </div></div>" +
             "</div></div>");
     });
 }
-
-// Sucht Dinge. Vielleicht.
-function searchBarAction ()
-{
-    var input = document.getElementById('searchbar').value;
-    console.log("Seachbar says: " + input);
-    var inputPrep = "^.*"+ input;
-    var inputReg = new RegExp(inputPrep);
-
-    DB.ready(function()
-        {
-            DB.Product.find().matches('name', inputReg).descending("Verkauf_Gesamt").resultList(function(result)
-                {
-                    printItemsSmall(result2, "#moreTopProducts");
-                }
-            )
-        }
-    );
-};
-
 
 
 //Gibt alle Informationen zu den Produkten aus

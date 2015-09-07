@@ -9,20 +9,27 @@
  */
 var main = function () {
     $(document).on('keydown', function (event) {
-        // Keypress "m"
-        if (event.ctrlKey && ( String.fromCharCode(event.which) === 'm' || String.fromCharCode(event.which) === 'M')){
+        // Keypress "strg+m"
+        if (event.ctrlKey && ( String.fromCharCode(event.which) === 'm' || String.fromCharCode(event.which) === 'M')) {
             $('.bestsellerRow').hide();
             $('.bestsellerText').hide();
             $('.more').hide();
             $('.moreBestseller').html("").show();
             DB.ready(allSales);
-            // Keypress "h"
+            // Keypress "strg+h"
         } else if (event.ctrlKey && ( String.fromCharCode(event.which) === 'y' || String.fromCharCode(event.which) === 'Y')) {
             $('.bestsellerRow').show();
             $('.bestsellerText').show();
             $('.more').show();
             $(".moreBestseller").html("").hide();
         }
+    });
+    $('.searchbar').keyup(function (){
+        $('.bestsellerRow').hide();
+        $('.bestsellerText').hide();
+        $('.more').hide();
+        $('.moreBestseller').html("").show();
+        searchBarAction();
     });
 };
 
