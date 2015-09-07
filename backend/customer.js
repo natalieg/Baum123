@@ -5,36 +5,62 @@
 DB.connect("http://baum123.baqend.com");
 
 // zeigt die topSaleNumber meist gekauften Produkte an
-var productSelectBestSales = function () {
+function productSelectBestSales(limitNumber, rowID, bigItem) {
     DB.Product.find()
-        .descending("Verkauf_Gesamt").limit(4)
+        .isNotNull('bild')
+        .descending("Verkauf_Gesamt").limit(limitNumber)
         .resultList(function (result) {
             result.forEach(function (product) {
                 // console.log(product.name);
             });
-            printItems("", result)
+            if(bigItem === 1){
+                printItemsBig(result, rowID)
+            } else {
+                printItemsSmall(result, rowID)
+            }
+
         });
 };
 
-//hier werden die Methoden ausgef�hrt, wenn die Datenbank bereit ist
-DB.ready(productSelectBestSales);
+var topSales = function(){
+    productSelectBestSales(4, "#topProducts", 1);
+}
 
-//Gibt die Produkte auf der Oberfl�che aus
-function printItems(msg, products) {
+var allSales = function(){
+   productSelectBestSales(100, "#moreTopProducts");
+}
+
+//hier werden die Methoden ausgef�hrt, wenn die Datenbank bereit ist
+DB.ready(topSales);
+
+//Gibt die Top-Sales-Produkte auf der Oberfl�che aus
+function printItemsBig(products, rowID) {
     products.forEach(function (product) {
         var name = product.name;
         if (name.length > 10) {
             name = name.substring(0, 9) + "...";
         }
-        $("#topProducts").append("<div class=\"col-md-3\"><a href=\"#\" class=\"img-shadow\"><img src=\"" + product.bild + "\"></a>" +
-            "<div class=\"col-md-3\"><div class=\"productName\">" + name + " </div></div>" +
+        $(rowID).append("<div id=\"" + product.id + "\" class=\"productRow col-md-3\"><a href=\"#\" class=\"img-shadow\"><img src=\"" + product.bild + "\"></a>" +
+            "<div class=\"productRow col-md-3\"><div class=\"productName\">" + name + " </div></div>" +
+            "</div></div>");
+    });
+
+}//Gibt die Top-Sales-Produkte auf der Oberfl�che aus
+function printItemsSmall(products, rowID) {
+    products.forEach(function (product) {
+        var name = product.name;
+        if (name.length > 10) {
+            name = name.substring(0, 9) + "...";
+        }
+        $(rowID).append("<div id=\"" + product.id + "\" class=\"productRow col-md-2\"><a href=\"#\"><img src=\"" + product.bild + "\"></a>" +
+            "<div class=\"productRow col-md-2\"><div class=\"productNameSmall\">" + name + " </div></div>" +
             "</div></div>");
     });
 }
 
 //Gibt alle Informationen zu den Produkten aus
 // Wird grad nicht verwendet!
-function printProductComplete(msg, products) {
+function printProductComplete(products) {
     products.forEach(function (product) {
         $("#topProducts").append("<div class=\"col-md-3\"><a href=\"#\" class=\"img-shadow\"><img src=\"" + product.bild + "\"></a>" +
             "<div class=\"productTD\">" + product.name + " </div>" +

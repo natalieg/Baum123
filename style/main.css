@@ -114,6 +114,7 @@
     margin:auto;
 }
 
+
 .jumbotron .container .row .col-md-3 {
     width: 270px;
     white-space: nowrap;
@@ -126,16 +127,15 @@
     padding-left: 0px;
 }
 
-#shopGallerieID {
+#moreTopProducts {
     margin-left: 15%;
     margin-right: 15%;
 }
 
-#shopGallerieID img {
-    height: 200px;
-    margin-left: 10px;
-    margin-bottom: 20px;
-    border-radius: 10px;
+#moreTopProducts img {
+    height: 150px;
+    border-radius: 8px;
+    border:1px solid rgba(60, 55, 64, 0.53);
 }
 
 .img-shadow {
@@ -180,7 +180,14 @@
 .productName {
     font-size: 18px;
     font-family: 'Quicksand', sans-serif;
+    padding-right: 10px;
+}
+
+.productNameSmall {
+    font-size: 12px;
+    font-family: 'Quicksand', sans-serif;
     padding-right: 40px;
+    white-space: nowrap;
 }
 
 .bestsellerText {
