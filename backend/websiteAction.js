@@ -42,7 +42,6 @@ var main = function () {
         $('.more').hide();
         $('.moreBestseller').html("").show();
         searchBarAction();
-
     });
 
     $('.sortBox').change(function (){
@@ -51,8 +50,13 @@ var main = function () {
         $('.more').hide();
         $('.moreBestseller').html("").show();
         searchBarAction();
+    });
+};
 
-    })
+var clickAction = function(){
+    $(".testClass").click(function () {
+        console.log(this.id);
+    });
 };
 
 

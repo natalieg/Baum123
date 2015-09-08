@@ -41,7 +41,7 @@ function searchBarAction() {
     var sort = document.getElementById('sortOption').value;
 
     var inputPrep = "^.*" + input;
-    var inputReg = new RegExp(inputPrep, 'i');
+    var inputReg = new RegExp(inputPrep);
 
     DB.ready(function () {
         DB.Product.find()
@@ -68,11 +68,12 @@ function printItemsBig(products, rowID) {
         if (name.length > 10) {
             name = name.substring(0, 9) + "...";
         }
-        $(rowID).append("<div id=\"" + product.id + "\" class=\"productRow col-md-3\">" +
-            "<a href=\"#\" class=\"img-shadow\"><img src=\"" + product.bild + "\"></a>" +
+        $(rowID).append("<div id=\"" + product.id + "\" class=\"testClass productRow col-md-3\">" +
+            "<a class=\"img-shadow\"><img src=\"" + product.bild + "\"></a>" +
             "<div class=\"productRow col-md-3\"><div class=\"productName\">" + name + " </div></div>" +
             "</div></div>");
     });
+    clickAction();
 };
 
 
@@ -83,11 +84,13 @@ function printItemsSmall(products, rowID) {
         if (name.length > 10) {
             name = name.substring(0, 9) + "...";
         }
-        $(rowID).append("<div id=\"" + product.id + "\" class=\"productRow col-md-2\">" +
+        $(rowID).append("<div id=\"" + product.id + "\" class=\"testClass productRow col-md-2\">" +
             "<a href=\"#\"><img src=\"" + product.bild + "\"></a>" +
-            "<div class=\"productRow col-md-2\"><div class=\"productNameSmall\">" + name + " </div></div>" +
+            "<div class=\"productRow col-md-2\"><div class=\"productNameSmall\">" + name + "<br><p>"
+            +" EUR " + product.preis + "</p></div>" +
             "</div></div>");
     });
+    clickAction();
 }
 
 
