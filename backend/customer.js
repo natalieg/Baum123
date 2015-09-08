@@ -21,6 +21,13 @@ function productSelectBestSales(limitNumber, rowID, bigItem) {
         });
 };
 
+var loadSingleProduct = function (pid) {
+    DB.Product.load(pid).then(function (product) {
+        console.log(JSON.stringify(product));
+        printSingleProduct(product);
+    });
+};
+
 var topSales = function () {
     productSelectBestSales(4, "#topProducts", 1);
 }
@@ -28,6 +35,7 @@ var topSales = function () {
 var allSales = function () {
     productSelectBestSales(100, "#moreTopProducts");
 }
+
 
 //hier werden die Methoden ausgef�hrt, wenn die Datenbank bereit ist
 DB.ready(topSales);
@@ -43,8 +51,7 @@ function searchBarAction() {
     var inputPrep = "^.*" + input;
     var inputReg = new RegExp(inputPrep);
 
-    if(sort =="preis")
-    {
+    if (sort == "preis") {
         DB.ready(function () {
             DB.Product.find()
                 .matches('name', inputReg)
@@ -54,10 +61,7 @@ function searchBarAction() {
                     printItemsSmall(result, "#moreTopProducts");
                 })
         });
-    }
-    else
-
-    {
+    } else {
         DB.ready(function () {
             DB.Product.find()
                 .matches('name', inputReg)
@@ -73,8 +77,7 @@ function searchBarAction() {
 //Gibt die Top-Sales-Produkte auf der Oberflaeche aus
 
 //Testweises ersetzen der Url in der History. Scheint zu funzen.
-function urlChange()
-{
+function urlChange() {
     window.history.replaceState(null, null, "fuu.html");
 }
 
@@ -104,11 +107,23 @@ function printItemsSmall(products, rowID) {
         $(rowID).append("<div id=\"" + product.id + "\" class=\"testClass productRow col-md-2\">" +
             "<a><img src=\"" + product.bild + "\"></a>" +
             "<div class=\"productRow col-md-2\"><div class=\"productNameSmall\">" + name + "<br><p>"
-            +" EUR " + product.preis + "</p></div>" +
+            + " EUR " + product.preis + "</p></div>" +
             "</div></div>");
     });
     clickAction();
 }
+
+var printSingleProduct = function (product) {
+    console.log("hey");
+    $("#singleProduct").append(
+        "<div class=\"col-md-3\"><a href=\"#\" class=\"img-shadow\"><img src=\"" + product.bild + "\"></a>" +
+        "<div class=\"productTD\">" + product.name + " </div>" +
+        "<div class=\"productTD\">" + product.preis + " Euro</div>" +
+        "<div class=\"productTD\">nur noch " + product.stueckzahl + " vorhanden" +
+
+        "</div></div></div>"
+    );
+};
 
 
 //Gibt alle Informationen zu den Produkten aus
