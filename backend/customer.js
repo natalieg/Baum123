@@ -29,7 +29,7 @@ var allSales = function () {
     productSelectBestSales(100, "#moreTopProducts");
 }
 
-//hier werden die Methoden ausgefuehrt, wenn die Datenbank bereit ist
+//hier werden die Methoden ausgef�hrt, wenn die Datenbank bereit ist
 DB.ready(topSales);
 
 
@@ -43,18 +43,42 @@ function searchBarAction() {
     var inputPrep = "^.*" + input;
     var inputReg = new RegExp(inputPrep);
 
-    DB.ready(function () {
-        DB.Product.find()
-            .matches('name', inputReg)
-            .isNotNull('bild')
-            .descending(sort)
-            .resultList(function (result) {
-                printItemsSmall(result, "#moreTopProducts");
-            })
-    });
+    if(sort =="preis")
+    {
+        DB.ready(function () {
+            DB.Product.find()
+                .matches('name', inputReg)
+                .isNotNull('bild')
+                .ascending(sort)
+                .resultList(function (result) {
+                    printItemsSmall(result, "#moreTopProducts");
+                })
+        });
+    }
+    else
+
+    {
+        DB.ready(function () {
+            DB.Product.find()
+                .matches('name', inputReg)
+                .isNotNull('bild')
+                .descending(sort)
+                .resultList(function (result) {
+                    printItemsSmall(result, "#moreTopProducts");
+                })
+        });
+    }
 };
 
 //Gibt die Top-Sales-Produkte auf der Oberflaeche aus
+
+//Testweises ersetzen der Url in der History. Scheint zu funzen.
+function urlChange()
+{
+    window.history.replaceState(null, null, "fuu.html");
+}
+
+//Gibt die Top-Sales-Produkte auf der Oberfl�che aus
 function printItemsBig(products, rowID) {
     products.forEach(function (product) {
         var name = product.name;
@@ -78,7 +102,7 @@ function printItemsSmall(products, rowID) {
             name = name.substring(0, 9) + "...";
         }
         $(rowID).append("<div id=\"" + product.id + "\" class=\"testClass productRow col-md-2\">" +
-            "<a href=\"#\"><img src=\"" + product.bild + "\"></a>" +
+            "<a><img src=\"" + product.bild + "\"></a>" +
             "<div class=\"productRow col-md-2\"><div class=\"productNameSmall\">" + name + "<br><p>"
             +" EUR " + product.preis + "</p></div>" +
             "</div></div>");

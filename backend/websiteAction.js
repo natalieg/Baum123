@@ -24,21 +24,29 @@ var main = function () {
             $(".moreBestseller").html("").hide();
         }
     });
-    $('.searchbar').keyup(function () {
+    $(document).ready( function(){
+        if(window.location.href.match(/^.*\?.*/))
+        {
+            // Seitenumbau!
+        }
+    })
+    $('.searchbar').keyup(function (){
         $('.bestsellerRow').hide();
         $('.bestsellerText').hide();
         $('.more').hide();
         $('.moreBestseller').html("").show();
         searchBarAction();
     });
-    $('.sortBox').change(function () {
+    $('.sortBox').change(function (){
         $('.bestsellerRow').hide();
         $('.bestsellerText').hide();
         $('.more').hide();
         $('.moreBestseller').html("").show();
         searchBarAction();
     });
-
+    $('.kategorie').click(function (){
+        $(this).toggleClass("active");
+    });
 };
 
 var clickAction = function(){
@@ -60,6 +68,7 @@ var clickAction = function(){
                 });
             });
 };
+
 
 
 $(document).ready(main);
