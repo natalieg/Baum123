@@ -101,7 +101,7 @@ function printItemsSmall(products, rowID) {
             name = name.substring(0, 9) + "...";
         }
         $(rowID).append("<div id=\"" + product.id + "\" class=\"testClass productRow col-md-2\">" +
-            "<a href=\"#\"><img src=\"" + product.bild + "\"></a>" +
+            "<a><img src=\"" + product.bild + "\"></a>" +
             "<div class=\"productRow col-md-2\"><div class=\"productNameSmall\">" + name + "<br><p>"
             +" EUR " + product.preis + "</p></div>" +
             "</div></div>");

@@ -198,8 +198,6 @@
     float: left;
 }
 
-#kategorien {
-}
 
 .more h1 {
     font-size: 48px;
@@ -243,5 +241,28 @@
     padding-bottom: 0px;
     right: 26px;
     top: -10px;
+}
 
+.testClass {
+    cursor: pointer;
+}
+
+.kategorie {
+    cursor: pointer;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding-top: 7px !important;
+}
+
+.active {
+    background: rgba(187, 218, 227, 0.49);
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }

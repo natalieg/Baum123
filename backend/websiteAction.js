@@ -24,18 +24,12 @@ var main = function () {
             $(".moreBestseller").html("").hide();
         }
     });
-
-    $( document ).ready( function(){
+    $(document).ready( function(){
         if(window.location.href.match(/^.*\?.*/))
         {
             // Seitenumbau!
         }
     })
-
-
-
-
-
     $('.searchbar').keyup(function (){
         $('.bestsellerRow').hide();
         $('.bestsellerText').hide();
@@ -43,7 +37,6 @@ var main = function () {
         $('.moreBestseller').html("").show();
         searchBarAction();
     });
-
     $('.sortBox').change(function (){
         $('.bestsellerRow').hide();
         $('.bestsellerText').hide();
@@ -51,7 +44,12 @@ var main = function () {
         $('.moreBestseller').html("").show();
         searchBarAction();
     });
+    $('.kategorie').click(function (){
+        $(this).toggleClass("active");
+    });
 };
+
+
 
 var clickAction = function(){
     $(".testClass").click(function () {
