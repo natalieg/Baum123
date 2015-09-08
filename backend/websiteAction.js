@@ -44,12 +44,13 @@ var main = function () {
 var clickAction = function(){
     $(".testClass").click(function () {
         console.log(this.id);
+        $('.bestsellerRow').hide();
+        $('.bestsellerText').hide();
+        $('.more').hide();
         var pid = this.id;
-        DB.Product.find()
-            .matches('id')
-            .resultList(function (result) {
-                result.forEach(function (product) {
-                    $("#singleProducts").append("<div class=\"col-md-3\"><a href=\"#\" class=\"img-shadow\"><img src=\"" + product.bild + "\"></a>" +
+        DB.Product.load(pid).then(function (product){
+            console.log(JSON.stringify(product));
+                    $("#singleProduct").append("<div class=\"col-md-3\"><a href=\"#\" class=\"img-shadow\"><img src=\"" + product.bild + "\"></a>" +
                         "<div class=\"singleView\">" + product.name + " </div>" +
                         "<div class=\"singleView\">" + product.preis + " Euro</div>" +
                         "<div class=\"singleView\">nur noch " + productd.stueckzahl + " vorhanden</div>" +
@@ -57,7 +58,6 @@ var clickAction = function(){
                             return avg + el.Bewertung;
                         }, 0) / product.Feedbacks.size + "</div></div></div>");
                 });
-            });
             });
 };
 

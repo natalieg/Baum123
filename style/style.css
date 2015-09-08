@@ -71,6 +71,7 @@
 
 .singleView{
     padding-left: 20px;
+    z-index: 500;
 }
 
 #welcome {
