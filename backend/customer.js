@@ -41,7 +41,7 @@ function searchBarAction() {
     var sort = document.getElementById('sortOption').value;
 
     var inputPrep = "^.*" + input;
-    var inputReg = new RegExp(inputPrep);
+    var inputReg = new RegExp(inputPrep, 'i');
 
     DB.ready(function () {
         DB.Product.find()
