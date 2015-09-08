@@ -24,24 +24,28 @@ var main = function () {
             $(".moreBestseller").html("").hide();
         }
     });
-    $('.searchbar').keyup(function (){
+    $('.searchbar').keyup(function () {
         $('.bestsellerRow').hide();
         $('.bestsellerText').hide();
         $('.more').hide();
         $('.moreBestseller').html("").show();
         searchBarAction();
-
     });
-
-    $('.sortBox').change(function (){
+    $('.sortBox').change(function () {
         $('.bestsellerRow').hide();
         $('.bestsellerText').hide();
         $('.more').hide();
         $('.moreBestseller').html("").show();
         searchBarAction();
-
-    })
+    });
 };
+
+var clickAction = function(){
+    $(".testClass").click(function () {
+        console.log(this.id);
+    });
+};
+
 
 
 $(document).ready(main);
