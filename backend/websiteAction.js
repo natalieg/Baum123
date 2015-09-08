@@ -16,7 +16,7 @@ var main = function () {
             $('.more').hide();
             $('.moreBestseller').html("").show();
             DB.ready(allSales);
-            // Keypress "strg+h"
+            // Keypress "strg+y"
         } else if (event.ctrlKey && ( String.fromCharCode(event.which) === 'y' || String.fromCharCode(event.which) === 'Y')) {
             $('.bestsellerRow').show();
             $('.bestsellerText').show();

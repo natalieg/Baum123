@@ -32,19 +32,6 @@ var allSales = function () {
 //hier werden die Methoden ausgef�hrt, wenn die Datenbank bereit ist
 DB.ready(topSales);
 
-//Gibt die Top-Sales-Produkte auf der Oberfl�che aus
-function printItemsBig(products, rowID) {
-    products.forEach(function (product) {
-        var name = product.name;
-        if (name.length > 10) {
-            name = name.substring(0, 9) + "...";
-        }
-        $(rowID).append("<div id=\"" + product.id + "\" class=\"productRow col-md-3\">" +
-            "<a href=\"#\" class=\"img-shadow\"><img src=\"" + product.bild + "\"></a>" +
-            "<div class=\"productRow col-md-3\"><div class=\"productName\">" + name + " </div></div>" +
-            "</div></div>");
-    });
-};
 
 // Sucht Dinge. Vielleicht.
 function searchBarAction() {
@@ -68,9 +55,22 @@ function searchBarAction() {
 };
 
 //Gibt die Top-Sales-Produkte auf der Oberfl�che aus
+function printItemsBig(products, rowID) {
+    products.forEach(function (product) {
+        var name = product.name;
+        if (name.length > 10) {
+            name = name.substring(0, 9) + "...";
+        }
+        $(rowID).append("<div id=\"" + product.id + "\" class=\"productRow col-md-3\">" +
+            "<a href=\"#\" class=\"img-shadow\"><img src=\"" + product.bild + "\"></a>" +
+            "<div class=\"productRow col-md-3\"><div class=\"productName\">" + name + " </div></div>" +
+            "</div></div>");
+    });
+};
+
+
+//Gibt die Top-Sales-Produkte auf der Oberfl�che aus
 function printItemsSmall(products, rowID) {
-
-
     products.forEach(function (product) {
         var name = product.name;
         if (name.length > 10) {
