@@ -43,15 +43,31 @@ function searchBarAction() {
     var inputPrep = "^.*" + input;
     var inputReg = new RegExp(inputPrep);
 
-    DB.ready(function () {
-        DB.Product.find()
-            .matches('name', inputReg)
-            .isNotNull('bild')
-            .descending(sort)
-            .resultList(function (result) {
-                printItemsSmall(result, "#moreTopProducts");
-            })
-    });
+    if(sort =="preis")
+    {
+        DB.ready(function () {
+            DB.Product.find()
+                .matches('name', inputReg)
+                .isNotNull('bild')
+                .ascending(sort)
+                .resultList(function (result) {
+                    printItemsSmall(result, "#moreTopProducts");
+                })
+        });
+    }
+    else
+
+    {
+        DB.ready(function () {
+            DB.Product.find()
+                .matches('name', inputReg)
+                .isNotNull('bild')
+                .descending(sort)
+                .resultList(function (result) {
+                    printItemsSmall(result, "#moreTopProducts");
+                })
+        });
+    }
 };
 
 
