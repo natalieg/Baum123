@@ -54,6 +54,13 @@ function searchBarAction() {
     });
 };
 
+
+//Testweises ersetzen der Url in der History. Scheint zu funzen.
+function urlChange()
+{
+    window.history.replaceState(null, null, "fuu.html");
+}
+
 //Gibt die Top-Sales-Produkte auf der Oberfl�che aus
 function printItemsBig(products, rowID) {
     products.forEach(function (product) {

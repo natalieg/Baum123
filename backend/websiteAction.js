@@ -24,6 +24,18 @@ var main = function () {
             $(".moreBestseller").html("").hide();
         }
     });
+
+    $( document ).ready( function(){
+        if(window.location.href.match(/^.*\?.*/))
+        {
+            // Seitenumbau!
+        }
+    })
+
+
+
+
+
     $('.searchbar').keyup(function (){
         $('.bestsellerRow').hide();
         $('.bestsellerText').hide();
