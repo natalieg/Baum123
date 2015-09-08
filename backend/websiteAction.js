@@ -4,7 +4,7 @@
 
 
 /**
- * Togglet die Top-Produkte Ansicht in Hide/Show wenn "m" gedrückt wird
+ * Togglet die Top-Produkte Ansicht in Hide/Show wenn "m" gedrï¿½ckt wird
  * TODO Bei m (more) verstecken, unterproduktansicht anzeigen
  */
 var main = function () {
@@ -38,14 +38,28 @@ var main = function () {
         $('.moreBestseller').html("").show();
         searchBarAction();
     });
+
 };
 
 var clickAction = function(){
     $(".testClass").click(function () {
         console.log(this.id);
-    });
+        var pid = this.id;
+        DB.Product.find()
+            .matches('id')
+            .resultList(function (result) {
+                result.forEach(function (product) {
+                    $("#singleProducts").append("<div class=\"col-md-3\"><a href=\"#\" class=\"img-shadow\"><img src=\"" + product.bild + "\"></a>" +
+                        "<div class=\"singleView\">" + product.name + " </div>" +
+                        "<div class=\"singleView\">" + product.preis + " Euro</div>" +
+                        "<div class=\"singleView\">nur noch " + productd.stueckzahl + " vorhanden</div>" +
+                        "<div class=\"singleView\">Bewertung: " + product.Feedbacks.reduce(function (avg, el) {
+                            return avg + el.Bewertung;
+                        }, 0) / product.Feedbacks.size + "</div></div></div>");
+                });
+            });
+            });
 };
-
 
 
 $(document).ready(main);

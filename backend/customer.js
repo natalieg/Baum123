@@ -29,7 +29,7 @@ var allSales = function () {
     productSelectBestSales(100, "#moreTopProducts");
 }
 
-//hier werden die Methoden ausgef�hrt, wenn die Datenbank bereit ist
+//hier werden die Methoden ausgefuehrt, wenn die Datenbank bereit ist
 DB.ready(topSales);
 
 
@@ -54,7 +54,7 @@ function searchBarAction() {
     });
 };
 
-//Gibt die Top-Sales-Produkte auf der Oberfl�che aus
+//Gibt die Top-Sales-Produkte auf der Oberflaeche aus
 function printItemsBig(products, rowID) {
     products.forEach(function (product) {
         var name = product.name;
@@ -70,7 +70,7 @@ function printItemsBig(products, rowID) {
 };
 
 
-//Gibt die Top-Sales-Produkte auf der Oberfl�che aus
+//Gibt die Top-Sales-Produkte auf der Oberflaeche aus
 function printItemsSmall(products, rowID) {
     products.forEach(function (product) {
         var name = product.name;
@@ -99,4 +99,5 @@ function printProductComplete(products) {
                 return avg + el.Bewertung;
             }, 0) / product.Feedbacks.size + "</div></div></div>");
     });
+    clickAction();
 }
