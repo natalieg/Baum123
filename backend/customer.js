@@ -51,6 +51,8 @@ function searchBarAction() {
     var input = document.getElementById('searchbar').value;
     console.log("Seachbar says: " + input);
 
+    var sort = document.getElementById('sortOption').value;
+
     var inputPrep = "^.*" + input;
     var inputReg = new RegExp(inputPrep);
 
@@ -58,7 +60,7 @@ function searchBarAction() {
         DB.Product.find()
             .matches('name', inputReg)
             .isNotNull('bild')
-            .descending("Verkauf_Gesamt")
+            .descending(sort)
             .resultList(function (result) {
                 printItemsSmall(result, "#moreTopProducts");
             })
@@ -67,6 +69,8 @@ function searchBarAction() {
 
 //Gibt die Top-Sales-Produkte auf der Oberfl�che aus
 function printItemsSmall(products, rowID) {
+
+
     products.forEach(function (product) {
         var name = product.name;
         if (name.length > 10) {

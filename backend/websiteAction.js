@@ -30,7 +30,17 @@ var main = function () {
         $('.more').hide();
         $('.moreBestseller').html("").show();
         searchBarAction();
+
     });
+
+    $('.sortBox').change(function (){
+        $('.bestsellerRow').hide();
+        $('.bestsellerText').hide();
+        $('.more').hide();
+        $('.moreBestseller').html("").show();
+        searchBarAction();
+
+    })
 };
 
 
