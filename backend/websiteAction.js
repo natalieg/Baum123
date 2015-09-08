@@ -10,7 +10,7 @@
 var main = function () {
     $(document).on('keydown', function (event) {
         // Keypress "strg+m"
-        if (event.ctrlKey && ( String.fromCharCode(event.which) === 'm' || String.fromCharCode(event.which) === 'M')) {
+        if ((event.ctrlKey && ( String.fromCharCode(event.which) === 'm' || String.fromCharCode(event.which) === 'M'))) {
             $('.bestsellerRow').hide();
             $('.bestsellerText').hide();
             $('.more').hide();

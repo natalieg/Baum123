@@ -2,7 +2,7 @@
     color: #5a5a5a;
     font-size: 11px;
     font-weight: bold;
-    padding: 14px 10px;
+    padding-left: 10px;
     text-transform: uppercase;
 }
 
@@ -11,13 +11,11 @@
     margin-bottom: 0px;
 }
 
-.nav {
-    margin-right: 20%;
-    margin-left: 20%;
+.nav ul {
+    padding-right: 18%
 }
 
 #warenkorb {
-    margin-right: 30%;
 }
 
 .nav .container {
@@ -34,6 +32,8 @@
     font-family: 'Quicksand', sans-serif;
     color: #6b6b6b;
     display: inline;
+    padding-left: 65%;
+    white-space: nowrap;
 }
 
 #welcome a {
@@ -163,7 +163,6 @@
 }
 
 #kategorien {
-    margin-left: 16%;
 }
 
 .more h1 {
