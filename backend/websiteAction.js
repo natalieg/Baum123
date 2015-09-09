@@ -27,11 +27,7 @@ var main = function () {
             $(".moreBestseller").html("").hide();
         }
     });
-    $(document).ready(function () {
-        if (window.location.href.match(/^.*\?.*/)) {
-            // Seitenumbau!
-        }
-    })
+
     $('.searchbar').keyup(function () {
        // if(event.ctrlKey || event.altKey || event.shiftKey || String.fromCharCode(event.which) == 27 || String.fromCharCode(event.which) == 13)
         //{console.log("fuu")};
@@ -63,9 +59,43 @@ var clickAction = function () {
         $(".moreBestseller").html("").hide();
         $('.singleView').html("").show();
         var pid = this.id;
+        var urlString = "?p=" + pid;
+        var popString = "Page of " + pid;
+        window.history.pushState({info: popString}, null, urlString);
         DB.ready(loadSingleProduct(pid));
     });
 };
 
+window.onpopstate = function (event)
+{
+var url = window.location.href;
+    if(url.match(/^.*\?p=.*/))
+    {
+        $('.bestsellerRow').hide();
+        $('.bestsellerText').hide();
+        $('.more').hide();
+        $('.singleView').html("").show();
+        var pid = url.substring(url.indexOf('=')+1,url.length);
+        console.log("pid " + pid);
+        DB.ready(loadSingleProduct(pid));
+    }
+    else if (url.match(/^.*\?s=.*/))
+    {
+        $('.bestsellerRow').hide();
+        $('.bestsellerText').hide();
+        $('.more').hide();
+        $('.moreBestseller').html("").show();
+        document.getElementById("searchbar").value = url.substring(url.indexOf('=')+1,url.length);
+        searchBarAction();
+    }
+    else
+    {
+        $('.bestsellerRow').show();
+        $('.bestsellerText').show();
+        $('.more').show();
+        $(".moreBestseller").html("").hide();
+        $('.singleView').html("").hide();
+    }
+};
 
 $(document).ready(main);

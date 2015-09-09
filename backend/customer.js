@@ -54,6 +54,19 @@ function searchBarAction() {
     var inputPrep = "^.*" + input;
     var inputReg = new RegExp(inputPrep);
 
+    if (window.location.href.match(/^.*\?s=.*/))
+    {
+        var urlString = "?s=" + input;
+        var popString = "Search for " + input;
+        window.history.replaceState({info: popString}, null, urlString);
+    }
+    else
+    {
+        var urlString = "?s=" + input;
+        var popString = "Search for " + input;
+        window.history.pushState({info: popString}, null, urlString);
+    }
+
     switch(sort)
     {
         case 'preis':
@@ -138,6 +151,7 @@ function urlChange()
 {
     window.history.replaceState(null, null, "fuu.html");
 }
+
 
 //Gibt die Top-Sales-Produkte auf der Oberfl�che aus
 function printItemsBig(products, rowID) {
