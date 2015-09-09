@@ -116,7 +116,7 @@ var getBewertung = function (pid) {
 
         if(product.Feedbacks == null)
         {
-// Sonderfall einfügen.
+// Sonderfall einfügen...
         }
         else
         {
