@@ -43,7 +43,7 @@ DB.ready(topSales);
 
 // Sucht Dinge. Vielleicht.
 function searchBarAction() {
-    var input = document.getElementById('searchbar').value;
+    var input = document.getElementById('searchbar').value.toLowerCase();
     console.log("Seachbar says: " + input);
 
     var sort = document.getElementById('sortOption').value;
@@ -51,33 +51,110 @@ function searchBarAction() {
     var inputPrep = "^.*" + input;
     var inputReg = new RegExp(inputPrep);
 
-    if (sort == "preis") {
-        DB.ready(function () {
+    switch(sort)
+    {
+        case 'preis':
+
             DB.Product.find()
-                .matches('name', inputReg)
+                .matches('tags', inputReg)
                 .isNotNull('bild')
-                .ascending(sort)
+                .ascending('preis')
                 .resultList(function (result) {
                     printItemsSmall(result, "#moreTopProducts");
-                })
-        });
-    } else {
-        DB.ready(function () {
-            DB.Product.find()
-                .matches('name', inputReg)
-                .isNotNull('bild')
-                .descending(sort)
-                .resultList(function (result) {
-                    printItemsSmall(result, "#moreTopProducts");
-                })
-        });
+                });
+            break;
+
+        case 'Feedbacks':
+
+            var list = [];
+            var secondList = [];
+            var out = [];
+
+
+            //Komplett sinn - und nutzloser Nudelcode. Bitte nicht beachten.
+
+           /* console.log("list" + list);
+            DB.Product.find().matches('tags', inputReg)
+                .isNotNull('bild').resultList(function(result)
+                {
+                    result.forEach(function(result2){
+
+                        if (result2.Feedbacks == null)
+                        {
+                            out.push({id: result2.id, bewertung: 0});
+                        }
+                        else
+                        {
+                            var bew = result2.Feedbacks.reduce(function (avg, el) {
+                                    return avg + el.Bewertung;
+                                }, 0) / result2.Feedbacks.size;
+                            console.log("bew" + bew);
+                            var obj = {id: result2.id, bewertung: bew};
+                            list.push(obj);
+                            console.log("stuff" + list);
+                        }
+                    })
+
+                    console.log("list out" + list);
+                    function sortNumber(a,b) {
+
+                        console.log("In function a =" + a);
+                        console.log("in function b =" + b);
+                        console.log("in function a.bew =" + a.bewertung);
+                        console.log("in function b.bew =" + b.bewertung);
+                        var erg = b.bewertung - a.bewertung;
+                        console.log("erg = " + erg);
+
+                        return b.bewertung - a.bewertung;
+                    }
+                    console.log("Out function a =" + list[1]);
+                    console.log("Out function b =" + list[2]);
+                    console.log("Out function a.bew =" + list[1].bewertung);
+                    console.log("Out function b.bew =" + list[2].bewertung);
+                    sortNumber(list[1],list[2]);
+
+                    list.sort(sortNumber);
+                    var newList = list.concat(out);
+                    console.log("new list" + newList);
+
+
+                    for(i = 0; i < list.length; ++i)
+                    {
+                        var id = list[i].id;
+
+                        DB.Product.load(id).then(function(product)
+                        {
+                            secondList.push(product);
+                            console.log("Hui");
+                        })
+                    };
+                    printItemsSmall(secondList, "#moreTopProducts");
+                }); */
+
+
+
+
+            break;
+
+        default:
+            DB.ready(function () {
+                DB.Product.find()
+                    .matches('tags', inputReg)
+                    .isNotNull('bild')
+                    .descending(sort)
+                    .resultList(function (result) {
+                        printItemsSmall(result, "#moreTopProducts");
+                    })
+            });
     }
+
+
 };
 
-//Gibt die Top-Sales-Produkte auf der Oberflaeche aus
 
 //Testweises ersetzen der Url in der History. Scheint zu funzen.
-function urlChange() {
+function urlChange()
+{
     window.history.replaceState(null, null, "fuu.html");
 }
 
