@@ -60,6 +60,7 @@ var clickAction = function () {
         $('.bestsellerRow').hide();
         $('.bestsellerText').hide();
         $('.more').hide();
+        $(".moreBestseller").html("").hide();
         $('.singleView').html("").show();
         var pid = this.id;
         DB.ready(loadSingleProduct(pid));

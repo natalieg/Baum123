@@ -22,9 +22,11 @@ function productSelectBestSales(limitNumber, rowID, bigItem) {
 };
 
 var loadSingleProduct = function (pid) {
+    var idBewertung = {};
     DB.Product.load(pid).then(function (product) {
         console.log(JSON.stringify(product));
         printSingleProduct(product);
+        console.log(idBewertung[getProductScore(product)]);
     });
 };
 
@@ -195,4 +197,16 @@ function printProductComplete(products) {
             }, 0) / product.Feedbacks.size + "</div></div></div>");
     });
     clickAction();
+}
+
+//Gibt die Bewertung eines Produkts zurück
+function getProductScore(products)
+{
+    products.forEach(function (product)
+    {
+        return product.id + (product.Feedbacks.reduce(function (avg, el)
+        {
+            return avg + el.Bewertung;
+        }, 0) / product.Feedbacks.size);
+    });
 }
