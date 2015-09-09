@@ -61,9 +61,9 @@ var addProduct = function()
             preis: document.getElementById('produktpreis').value,
             beschreibung: document.getElementById('produktbeschreibung').value,
             bild: document.getElementById('produktbild').value,
-            tags: document.getElementById('produkttags').value
-
-}
+            tags: document.getElementById('produkttags').value,
+            liste: document.getElementById('produktliste').value
+        }
     );
 
     myProduct.insert()
