@@ -28,6 +28,7 @@ var loadSingleProduct = function (pid) {
     });
 };
 
+
 var topSales = function () {
     productSelectBestSales(4, "#topProducts", 1);
 }
@@ -41,7 +42,7 @@ var allSales = function () {
 DB.ready(topSales);
 
 
-// Sucht Dinge. Vielleicht.
+// Sucht Dinge. Vielleicht. Jetzt auch mit Sortierung nach Bewertung.
 function searchBarAction() {
     var input = document.getElementById('searchbar').value.toLowerCase();
     console.log("Seachbar says: " + input);
@@ -66,73 +67,30 @@ function searchBarAction() {
 
         case 'Feedbacks':
 
-            var list = [];
-            var secondList = [];
-            var out = [];
-
-
-            //Komplett sinn - und nutzloser Nudelcode. Bitte nicht beachten.
-
-           /* console.log("list" + list);
             DB.Product.find().matches('tags', inputReg)
                 .isNotNull('bild').resultList(function(result)
                 {
-                    result.forEach(function(result2){
-
-                        if (result2.Feedbacks == null)
-                        {
-                            out.push({id: result2.id, bewertung: 0});
-                        }
-                        else
-                        {
-                            var bew = result2.Feedbacks.reduce(function (avg, el) {
-                                    return avg + el.Bewertung;
-                                }, 0) / result2.Feedbacks.size;
-                            console.log("bew" + bew);
-                            var obj = {id: result2.id, bewertung: bew};
-                            list.push(obj);
-                            console.log("stuff" + list);
-                        }
-                    })
-
-                    console.log("list out" + list);
-                    function sortNumber(a,b) {
-
-                        console.log("In function a =" + a);
-                        console.log("in function b =" + b);
-                        console.log("in function a.bew =" + a.bewertung);
-                        console.log("in function b.bew =" + b.bewertung);
-                        var erg = b.bewertung - a.bewertung;
-                        console.log("erg = " + erg);
-
-                        return b.bewertung - a.bewertung;
-                    }
-                    console.log("Out function a =" + list[1]);
-                    console.log("Out function b =" + list[2]);
-                    console.log("Out function a.bew =" + list[1].bewertung);
-                    console.log("Out function b.bew =" + list[2].bewertung);
-                    sortNumber(list[1],list[2]);
-
-                    list.sort(sortNumber);
-                    var newList = list.concat(out);
-                    console.log("new list" + newList);
-
-
-                    for(i = 0; i < list.length; ++i)
+                    function sortBew(a,b)
                     {
-                        var id = list[i].id;
-
-                        DB.Product.load(id).then(function(product)
+                        function bewfinder(obj)
                         {
-                            secondList.push(product);
-                            console.log("Hui");
-                        })
-                    };
-                    printItemsSmall(secondList, "#moreTopProducts");
-                }); */
+                            if(obj.Feedbacks == null)
+                            {
+                                return 0;
+                            }
+                            else
+                            {
+                                return obj.Feedbacks.reduce(function (avg, el) {
+                                    return avg + el.Bewertung;
+                                }, 0) / obj.Feedbacks.size;
+                            }
 
-
-
+                        }
+                        return bewfinder(b) - bewfinder(a);
+                    }
+                    result.sort(sortBew);
+                    printItemsSmall(result, "#moreTopProducts");
+                });
 
             break;
 
@@ -149,6 +107,27 @@ function searchBarAction() {
     }
 
 
+};
+
+// In Arbeit: Id rein, Bewertung raus
+
+var getBewertung = function (pid) {
+    DB.Product.load(pid).then(function (product) {
+
+        if(product.Feedbacks == null)
+        {
+// Sonderfall einfügen.
+        }
+        else
+        {
+            var bew = product.Feedbacks.reduce(function (avg, el) {
+                    return avg + el.Bewertung;
+                }, 0) / product.Feedbacks.size;
+            console.log(bew);
+            //Ergebnis kann zwar berechnet, aber nicht ausgegeben werden oO
+        }
+
+    });
 };
 
 

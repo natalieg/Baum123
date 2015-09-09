@@ -33,6 +33,8 @@ var main = function () {
         }
     })
     $('.searchbar').keyup(function () {
+       // if(event.ctrlKey || event.altKey || event.shiftKey || String.fromCharCode(event.which) == 27 || String.fromCharCode(event.which) == 13)
+        //{console.log("fuu")};
         $('.bestsellerRow').hide();
         $('.bestsellerText').hide();
         $('.more').hide();
