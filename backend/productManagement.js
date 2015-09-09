@@ -1,7 +1,15 @@
 //Connect
 DB.connect("http://baum123.baqend.com");
 
-
+//Let's create a Product item
+var newProduct = function() {
+    var myProduct = new DB.Product();
+    myProduct.name = document.getElementById('nameprodukt');
+    myProduct.beschreibung = "Testbeschreibung";
+    myProduct.preis = 24;
+    myProduct.liste = "Baum";
+    printItem(myProduct);
+};
 
 // Lädt alle Produkte aus der Datenbank und druckt diese
 var productFindAndPrint = function () {
@@ -63,14 +71,15 @@ var addProduct = function()
             bild: document.getElementById('produktbild').value,
             tags: document.getElementById('produkttags').value,
             liste: document.getElementById('produktliste').value
-        }
+
+}
     );
 
     myProduct.insert()
        .then(function()
-        {console.log("Success!");},
-       function()
-        {console.log("Why??");});
+       {console.log("Success!");},
+      function()
+       {console.log("Why??");});
 };
 
 
