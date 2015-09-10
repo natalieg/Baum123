@@ -213,6 +213,7 @@ var printSingleProduct = function (product) {
         "<div class=\"productTD\"><h2>" + product.name + " </h2></div>" +
         "<div class=\"productTD\">" + product.preis + " Euro</div>" +
         "<div class=\"productTD\">nur noch <h6 class=\"stueckZahl\">" + product.stueckzahl + "</h6> vorhanden" +
+        "<div class=\"productDescription productTD\">" + product.beschreibung + "</div>" +
             "<br><button type=\"button\" class=\"cartButton\" id=" + product.id + ">Add to Cart</button> " +
         "</div></div></div></div>"
     );
