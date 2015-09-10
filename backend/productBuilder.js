@@ -188,7 +188,7 @@ function printItemsSmall(products, rowID) {
 var printSingleProduct = function (product) {
     console.log("hey");
     $("#singleProduct").append(
-        "<div class=\"col-md-3\"><a href=\"#\" class=\"img-shadow\"><img src=\"" + product.bild + "\"></a>" +
+        "<div class=\"col-md-3\"><a class=\"img-shadow\"><img src=\"" + product.bild + "\"></a>" +
         "<div class=\"productTD\">" + product.name + " </div>" +
         "<div class=\"productTD\">" + product.preis + " Euro</div>" +
         "<div class=\"productTD\">nur noch " + product.stueckzahl + " vorhanden" +
