@@ -33,6 +33,7 @@ var loadSingleProduct = function (pid) {
 };
 
 
+
 var topSales = function () {
     productSelectBestSales(4, "#topProducts", 1);
 }
@@ -208,13 +209,15 @@ function printItemsSmall(products, rowID) {
 var printSingleProduct = function (product) {
     console.log("printSingleProduct wird aufgerufen. Zeigt ein einzelnes Produkt an.");
     $("#singleProduct").append(
-        "<div class=\"col-md-3\"><a class=\"img-shadow\"><img src=\"" + product.bild + "\"></a>" +
-        "<div class=\"productTD\">" + product.name + " </div>" +
+        "<div class=\"col-md-3 singleViewDiv\"><img src=\"" + product.bild + "\"></div>" +
+        "<div class=\"col-md-3 singleViewContent\">" +
+        "<div class=\"productTD\"><h2>" + product.name + " </h2></div>" +
         "<div class=\"productTD\">" + product.preis + " Euro</div>" +
-        "<div class=\"productTD\">nur noch " + product.stueckzahl + " vorhanden" +
-
-        "</div></div></div>"
+        "<div class=\"productTD\">nur noch <h6 class=\"stueckZahl\">" + product.stueckzahl + "</h6> vorhanden" +
+            "<br><button type=\"button\" class=\"cartButton\" id=" + product.id + ">Add to Cart</button> " +
+        "</div></div></div></div>"
     );
+    clickCartBtn();
 };
 
 

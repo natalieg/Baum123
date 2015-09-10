@@ -272,3 +272,35 @@
     -ms-user-select: none;
     user-select: none;
 }
+
+.singleViewDiv {
+    padding-left: 20%;
+}
+
+.singleViewContent {
+    padding-left: 20%;
+}
+
+.singleViewContent h2{
+    max-width: 160em;
+    word-wrap:break-word;
+}
+
+.singleViewContent button{
+    margin-top: 100px;
+}
+
+.singleViewDiv img{
+    height: 400px;
+    border-radius: 20px;
+    border: 1px solid rgba(60, 55, 64, 0.53);
+}
+
+.cartCounter {
+}
+
+.stueckZahl {
+    display: inline;
+    font-weight: bold;
+    font-size: 14px;
+}

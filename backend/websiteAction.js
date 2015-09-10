@@ -3,6 +3,9 @@
  */
 
 
+
+var cartCount = 0;
+
 /**
  * Togglet die Top-Produkte Ansicht in Hide/Show wenn "m" gedr?ckt wird
  * TODO Bei m (more) verstecken, unterproduktansicht anzeigen
@@ -92,6 +95,18 @@ var clickAction = function () {
         DB.ready(loadSingleProduct(pid));
     });
 };
+
+var clickCartBtn = function(){
+    $('.cartButton').click(function(){
+        cartCount = cartCount + 1;
+        $('.cartCounter').text(cartCount);
+        var pid = this.id;
+        DB.ready(updateProductAnzahl(pid));
+        updateCartItem(pid);
+    })
+};
+
+
 
 window.onpopstate = function (event)
 {
