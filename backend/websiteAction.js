@@ -37,6 +37,13 @@ var main = function () {
     $('.kategorie').click(function () {
         $(this).toggleClass("active");
     });
+    $('.baum123').click(function () {
+       showMainPageOnly();
+    });
+    $('.more').click(function () {
+        DB.ready(allSales);
+       showProductOverviewOnly();
+    });
 };
 
 // Zeigt die LandingPage Ansicht der Hauptseite

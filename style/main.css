@@ -199,14 +199,12 @@
 }
 
 
-.more h1 {
+
+
+#showMore {
     font-size: 48px;
-    font-family: 'Shift', sans-serif;
     font-weight: bold;
     text-align: center;
-}
-
-.more a {
     color: #6b6b6b;
     font-family: 'Quicksand', sans-serif;
 }
@@ -244,6 +242,14 @@
 }
 
 .productLink {
+    cursor: pointer;
+}
+
+.baum123 {
+    cursor: pointer;
+}
+
+.more {
     cursor: pointer;
 }
 
