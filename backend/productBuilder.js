@@ -1,8 +1,6 @@
 /**
  * Created by peukert on 02.09.15.
  */
-//Connect
-DB.connect("http://baum123.baqend.com");
 
 // zeigt die topSaleNumber meist gekauften Produkte an
 function productSelectBestSales(limitNumber, rowID, bigItem) {

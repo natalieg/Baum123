@@ -2,8 +2,7 @@
  * Created by peukert on 09.09.15.
  */
 
-    //Connect
-DB.connect("http://baum123.baqend.com");
+//DB.connect("http://baum123.baqend.com");
 
 var register = function() {
     var user = document.getElementById('username').value; //$('#username');
@@ -26,6 +25,6 @@ var lgt = document.getElementById('logout'); //$('#logout').click(function()...)
 lgt.onclick = function() {
     DB.User.logout().then(function () {
         //We are logged out again
-        console.log(DB.User.me); //null
+        console.log("Logged out: "); //null
     });
 }
