@@ -57,15 +57,16 @@ var showProductOverviewOnly = function(){
 };
 
 var showMainPageOnly = function(){
-    $('.bestsellerRow').show();
+    $('.bestsellerRow').html("").show();
     $('.bestsellerText').show();
     $('.more').show();
     hideProductOverview();
     hideSingleProduct();
+    topSales();
 };
 
 var hideMainPage = function(){
-    $('.bestsellerRow').hide();
+    $('.bestsellerRow').html("").hide();
     $('.bestsellerText').hide();
     $('.more').hide();
 };
@@ -102,7 +103,6 @@ var clickCartBtn = function(){
         $('.cartCounter').text(cartCount);
         var pid = this.id;
         DB.ready(updateProductAnzahl(pid));
-        updateCartItem(pid);
     })
 };
 

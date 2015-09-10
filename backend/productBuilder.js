@@ -7,6 +7,7 @@ function productSelectBestSales(limitNumber, rowID, bigItem) {
     console.log("productSelectBestSales wird aufgerufen. Die meistverkauften Produkte sollen angezeigt werden.");
     DB.Product.find()
         .isNotNull('bild')
+        .greaterThan("stueckzahl", 0)
         .descending("Verkauf_Gesamt").limit(limitNumber)
         .resultList(function (result) {
             result.forEach(function (product) {

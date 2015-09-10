@@ -9,9 +9,14 @@ var cartItems = [];
 var updateProductAnzahl = function (pid) {
     console.log("Anzahl der Produkte wird um 1 reduziert");
     DB.Product.load(pid).then(function (product) {
-        product.stueckzahl = product.stueckzahl - 1;
-        product.update();
-        $('.stueckZahl').text(product.stueckzahl);
+        if(product.stueckzahl >= 1){
+            product.stueckzahl = product.stueckzahl - 1;
+            product.update();
+            $('.stueckZahl').text(product.stueckzahl);
+            updateCartItem(pid);
+        } else {
+            window.alert("Keine mehr auf Lager!");
+        }
     });
 };
 
