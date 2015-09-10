@@ -1,11 +1,13 @@
 //Connect
-DB.connect("http://baum123.baqend.com").then(function() {
+DB.connect("http://baum123.baqend.com");
+
+/**DB.connect("http://baum123.baqend.com").then(function() {
     return DB.User.me && DB.Role.load(1);
 }).then(function(role) {
     if (!role || !role.hasUser(DB.User.me)) {
         throw Error('Not logged in');
     }
-}).then(function() {
+}).then(function() { **/
 
 //Let's create a Product item
     var newProduct = function() {
@@ -19,6 +21,7 @@ DB.connect("http://baum123.baqend.com").then(function() {
 
 // L�dt alle Produkte aus der Datenbank und druckt diese
     var productFindAndPrint = function () {
+        console.log("Laedt die Produkte aus der DB")
         DB.Product.find()
             .ascending("name")
             .resultList(function (result) {
@@ -208,8 +211,7 @@ DB.connect("http://baum123.baqend.com").then(function() {
                 "<td><input min='0' type=" + "number" + " id=" + "" + (product).id +"b"+"" + "></input></td>" +
                 "</tr>");
         });
-    }
-}).catch(function() {
-    throw error('Fehler aufgetreten');
-});
+    };
+
+
 
