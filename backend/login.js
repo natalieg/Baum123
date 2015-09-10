@@ -8,7 +8,14 @@ var register = function() {
     var user = document.getElementById('username').value; //$('#username');
     var pwd =  document.getElementById('pwd').value;
     DB.User.register(user,pwd).then(function () {
-        console.log(DB.User.me.username); //'john.doe@example.com'
+        console.log(DB.User.me.username);
+        //User als Rolle Kaeufer eintragen
+        DB.Role.load(11).then(function(role){
+            console.log("Rollen: " + role);
+            role.addUser(DB.User.me);
+            role._metadata.writeAccess();
+            role.save();
+        });
     });
 }
 
