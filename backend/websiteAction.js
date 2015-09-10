@@ -20,9 +20,9 @@ var main = function () {
         }
     });
 
-    $('.searchbar').keyup(function (event) {
-        if((event.ctrlKey || event.altKey || event.shiftKey || String.fromCharCode(event.which) == 27 || String.fromCharCode(event.which) == 13))
-        {console.log("Bad Key detected!")};
+    $('.searchbar').keyup(function () {
+       // if(event.ctrlKey || event.altKey || event.shiftKey || String.fromCharCode(event.which) == 27 || String.fromCharCode(event.which) == 13)
+        //{console.log("fuu")};
         console.log("searchbar.keyup - Keyrelease registriert!");
         showProductOverviewOnly();
         searchBarAction();
@@ -138,8 +138,7 @@ window.onpopstate = function (event)
         console.log("window.onpopstate - Folgende Produkt-ID wurde eingelesen: " + pid);
         DB.ready(loadSingleProduct(pid));
     }
-    else if (url.match(/^.*\?s=.*/))
-    {
+    else if (url.match(/^.*\?s=.*/)) {
         console.log("window.onpopstate - Anfrage nach Suchergebnissen erkannt!");
         showProductOverviewOnly();
         var search = url.substring(url.indexOf('=')+1,url.length);
@@ -147,8 +146,7 @@ window.onpopstate = function (event)
         document.getElementById("searchbar").value = search;
         searchBarAction();
     }
-    else
-    {
+    else {
         console.log("window.onpopstate - Keine Anfrage nach Spezialseiten erkannt.");
         showMainPageOnly();
     }
