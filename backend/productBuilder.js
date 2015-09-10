@@ -45,6 +45,12 @@ var allSales = function () {
 //hier werden die Methoden ausgef�hrt, wenn die Datenbank bereit ist
 DB.ready(topSales);
 
+var filter = /^.*/;
+
+function setFilter(newFilter)
+{
+    filter = newFilter;
+}
 
 // Sucht Dinge. Vielleicht. Jetzt auch mit Sortierung nach Bewertung.
 function searchBarAction() {
@@ -82,6 +88,7 @@ function searchBarAction() {
 
             console.log("searchBarAction - Suche und Sortierung nach Preis eingeleitet");
             DB.Product.find()
+                .matches('liste', filter)
                 .matches('tags', inputReg)
                 .isNotNull('bild')
                 .ascending('preis')
@@ -93,7 +100,7 @@ function searchBarAction() {
         case 'Feedbacks':
 
             console.log("searchBarAction - Suche und Sortierung nach Feedbacks eingeleitet");
-            DB.Product.find().matches('tags', inputReg)
+            DB.Product.find().matches('liste', filter).matches('tags', inputReg)
                 .isNotNull('bild').resultList(function(result)
                 {
                     function sortBew(a,b)
@@ -125,6 +132,7 @@ function searchBarAction() {
             console.log("searchBarAction - Suche und Sortierung nach " + sort + " eingeleitet");
             DB.ready(function () {
                 DB.Product.find()
+                    .matches('liste', filter)
                     .matches('tags', inputReg)
                     .isNotNull('bild')
                     .descending(sort)

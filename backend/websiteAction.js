@@ -2,8 +2,6 @@
  * Created by Nat on 07.09.2015.
  */
 
-
-
 var cartCount = 0;
 
 /**
@@ -12,9 +10,6 @@ var cartCount = 0;
  */
 var main = function () {
     $(document).on('keydown', function (event) {
-        $('.kategorie').click(function () {
-            $(this).toggleClass("active");
-        });
         // Keypress "strg+m"
         if ((event.ctrlKey && ( String.fromCharCode(event.which) === 'm' || String.fromCharCode(event.which) === 'M'))) {
             DB.ready(allSales);
@@ -25,9 +20,9 @@ var main = function () {
         }
     });
 
-    $('.searchbar').keyup(function () {
-       // if(event.ctrlKey || event.altKey || event.shiftKey || String.fromCharCode(event.which) == 27 || String.fromCharCode(event.which) == 13)
-        //{console.log("fuu")};
+    $('.searchbar').keyup(function (event) {
+        if((event.ctrlKey || event.altKey || event.shiftKey || String.fromCharCode(event.which) == 27 || String.fromCharCode(event.which) == 13))
+        {console.log("Bad Key detected!")};
         console.log("searchbar.keyup - Keyrelease registriert!");
         showProductOverviewOnly();
         searchBarAction();
@@ -38,16 +33,36 @@ var main = function () {
         searchBarAction();
     });
     $('.kategorie').click(function () {
-        $(this).toggleClass("active");
+        var filter;
+        if($(this).hasClass('active'))
+        {
+            $(this).removeClass("active");
+            console.log("active");
+            filter = new RegExp("^.*");
+        }
+        else
+        {
+            $('.kategorie').removeClass("active");
+            $(this).addClass("active");
+            console.log("not active");
+            filter = new RegExp("^"+this.id);
+        }
+        showProductOverviewOnly();
+        setFilter(filter);
+        searchBarAction();
     });
+
     $('.baum123').click(function () {
        showMainPageOnly();
     });
+
     $('.more').click(function () {
         DB.ready(allSales);
        showProductOverviewOnly();
     });
 };
+
+
 
 // Zeigt die LandingPage Ansicht der Hauptseite
 var showProductOverviewOnly = function(){
@@ -117,10 +132,8 @@ window.onpopstate = function (event)
     if(url.match(/^.*\?p=.*/))
     {
         console.log("window.onpopstate - Anfrage nach Produktansicht erkannt!");
-        $('.bestsellerRow').hide();
-        $('.bestsellerText').hide();
-        $('.more').hide();
-        $('.singleView').html("").show();
+        hideMainPage();
+        showSingleProduct();
         var pid = url.substring(url.indexOf('=')+1,url.length);
         console.log("window.onpopstate - Folgende Produkt-ID wurde eingelesen: " + pid);
         DB.ready(loadSingleProduct(pid));
@@ -128,10 +141,7 @@ window.onpopstate = function (event)
     else if (url.match(/^.*\?s=.*/))
     {
         console.log("window.onpopstate - Anfrage nach Suchergebnissen erkannt!");
-        $('.bestsellerRow').hide();
-        $('.bestsellerText').hide();
-        $('.more').hide();
-        $('.moreBestseller').html("").show();
+        showProductOverviewOnly();
         var search = url.substring(url.indexOf('=')+1,url.length);
         console.log("window.onpopstate - Folgender Suchbegriff wurde eingelesen: " + search);
         document.getElementById("searchbar").value = search;
@@ -140,11 +150,7 @@ window.onpopstate = function (event)
     else
     {
         console.log("window.onpopstate - Keine Anfrage nach Spezialseiten erkannt.");
-        $('.bestsellerRow').show();
-        $('.bestsellerText').show();
-        $('.more').show();
-        $(".moreBestseller").html("").hide();
-        $('.singleView').html("").hide();
+        showMainPageOnly();
     }
 };
 
