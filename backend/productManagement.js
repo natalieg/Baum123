@@ -1,13 +1,11 @@
 //Connect
-DB.connect("http://baum123.baqend.com");
-
-/**DB.connect("http://baum123.baqend.com").then(function() {
-    return DB.User.me && DB.Role.load(1);
+DB.ready().then(function() {
+    return DB.User.me && DB.Role.load(10);
 }).then(function(role) {
     if (!role || !role.hasUser(DB.User.me)) {
         throw Error('Not logged in');
     }
-}).then(function() { **/
+}).then(function() {
 
 //Let's create a Product item
 var newProduct = function () {
@@ -192,12 +190,13 @@ function printItems(msg, products) {
             "<td class=" + "productTD" + "> Preis: " +
             "<input min='0' type=" + "number" + " id=" + "" + (product).id + "a" + "" + " value=" + "" + (product).preis + "" + "></input></td>" +
 
-            "<td class=" + "productTD" + "> Stueckzahl: </td>" +
-            "<td class=" + "productTD" + ">" + (product).stueckzahl + " </td> " +
-            "<td><input min='0' type=" + "number" + " id=" + "" + (product).id + "b" + "" + "></input></td>" +
-            "</tr>");
-    });
-};
-
-
+                "<td class=" + "productTD" + "> Stueckzahl: </td>" +
+                "<td class=" + "productTD" + ">" + (product).stueckzahl + " </td> " +
+                "<td><input min='0' type=" + "number" + " id=" + "" + (product).id +"b"+"" + "></input></td>" +
+                "</tr>");
+        });
+    }
+}).catch(function() {
+    throw error('Fehler aufgetreten');
+});
 
