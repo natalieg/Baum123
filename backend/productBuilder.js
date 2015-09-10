@@ -6,12 +6,13 @@ DB.connect("http://baum123.baqend.com");
 
 // zeigt die topSaleNumber meist gekauften Produkte an
 function productSelectBestSales(limitNumber, rowID, bigItem) {
+    console.log("productSelectBestSales wird aufgerufen. Die meistverkauften Produkte sollen angezeigt werden.");
     DB.Product.find()
         .isNotNull('bild')
         .descending("Verkauf_Gesamt").limit(limitNumber)
         .resultList(function (result) {
             result.forEach(function (product) {
-                // console.log(product.name);
+               console.log("productSelectBest Sales - Folgendes Produkt soll ausgegeben werden:" + JSON.stringify(product));
             });
             if (bigItem === 1) {
                 printItemsBig(result, rowID)
@@ -22,11 +23,12 @@ function productSelectBestSales(limitNumber, rowID, bigItem) {
 };
 
 var loadSingleProduct = function (pid) {
+    console.log("loadSingleProduct wird aufgerufen. Anzeige des Produkts und seiner Bewertung soll via ID eingeleitet werden.");
     var idBewertung = {};
     DB.Product.load(pid).then(function (product) {
-        console.log(JSON.stringify(product));
+        console.log("loadSingleProduct - Folgendes Produkt geladen:" + JSON.stringify(product));
         printSingleProduct(product);
-        console.log(idBewertung[getProductScore(product)]);
+        console.log("loadSingleProduct - Folgende Bewertung errechnet:" + idBewertung[getProductScore(product)]);
     });
 };
 
@@ -46,31 +48,39 @@ DB.ready(topSales);
 
 // Sucht Dinge. Vielleicht. Jetzt auch mit Sortierung nach Bewertung.
 function searchBarAction() {
+    console.log("searchBarAction wird aufgerufen. Inhalt der Suchleiste soll gesucht werden.");
     var input = document.getElementById('searchbar').value.toLowerCase();
-    console.log("Seachbar says: " + input);
+    console.log("searchBarAction - Searchbar enthaelt folgenden Input: " + input);
 
     var sort = document.getElementById('sortOption').value;
+    console.log("searchBarAction - Ergebnisse werden sortiert nach: " + sort);
 
     var inputPrep = "^.*" + input;
     var inputReg = new RegExp(inputPrep);
+    console.log("searchBarAction - Folgender RegEx wurde gebildet: " + inputReg);
 
     if (window.location.href.match(/^.*\?s=.*/))
     {
+        console.log("searchBarAction - Suche durch URL erkannt.");
         var urlString = "?s=" + input;
         var popString = "Search for " + input;
         window.history.replaceState({info: popString}, null, urlString);
+        console.log("searchBarAction - URL modifiziert mit: " + urlString);
     }
     else
     {
+        console.log("searchBarAction - Keine Suche erkannt.");
         var urlString = "?s=" + input;
         var popString = "Search for " + input;
         window.history.pushState({info: popString}, null, urlString);
+        console.log("searchBarAction - URL modifiziert mit: " + urlString);
     }
 
     switch(sort)
     {
         case 'preis':
 
+            console.log("searchBarAction - Suche und Sortierung nach Preis eingeleitet");
             DB.Product.find()
                 .matches('tags', inputReg)
                 .isNotNull('bild')
@@ -82,6 +92,7 @@ function searchBarAction() {
 
         case 'Feedbacks':
 
+            console.log("searchBarAction - Suche und Sortierung nach Feedbacks eingeleitet");
             DB.Product.find().matches('tags', inputReg)
                 .isNotNull('bild').resultList(function(result)
                 {
@@ -110,6 +121,8 @@ function searchBarAction() {
             break;
 
         default:
+
+            console.log("searchBarAction - Suche und Sortierung nach " + sort + " eingeleitet");
             DB.ready(function () {
                 DB.Product.find()
                     .matches('tags', inputReg)
@@ -155,10 +168,14 @@ function urlChange()
 
 //Gibt die Top-Sales-Produkte auf der Oberfl�che aus
 function printItemsBig(products, rowID) {
+    console.log("printItemsBig wird aufgerufen. Zeigt die meistverkauften Produkte an.");
     products.forEach(function (product) {
+        console.log("printItemsBig - Folgendes Produkt soll angezeigt werden: " + JSON.stringify(product));
         var name = product.name;
+        console.log("printItemsBig - Folgender Name soll angezeigt werden: " + name);
         if (name.length > 10) {
             name = name.substring(0, 9) + "...";
+            console.log("printItemsBig - Name wird verkürzt auf: " + name);
         }
         $(rowID).append("<div id=\"" + product.id + "\" class=\"productLink productRow col-md-3\">" +
             "<a class=\"img-shadow\"><img src=\"" + product.bild + "\"></a>" +
@@ -169,12 +186,15 @@ function printItemsBig(products, rowID) {
 };
 
 
-//Gibt die Top-Sales-Produkte auf der Oberflaeche aus
+//Zeigt kleine Produkte an.
 function printItemsSmall(products, rowID) {
+    console.log("printItemsSmall wird aufgerufen. Zeigt Miniaturansichten der Produkte an (Suchergebnisse).");
     products.forEach(function (product) {
+        console.log("printItemsSmall - Folgendes Produkt soll angezeigt werden: " + JSON.stringify(product));
         var name = product.name;
         if (name.length > 10) {
             name = name.substring(0, 9) + "...";
+            console.log("printItemsSmall - Folgender Name soll angezeigt werden: " + name);
         }
         $(rowID).append("<div id=\"" + product.id + "\" class=\"productLink productRow col-md-2\">" +
             "<a><img src=\"" + product.bild + "\"></a>" +
@@ -186,7 +206,7 @@ function printItemsSmall(products, rowID) {
 }
 
 var printSingleProduct = function (product) {
-    console.log("hey");
+    console.log("printSingleProduct wird aufgerufen. Zeigt ein einzelnes Produkt an.");
     $("#singleProduct").append(
         "<div class=\"col-md-3\"><a href=\"#\" class=\"img-shadow\"><img src=\"" + product.bild + "\"></a>" +
         "<div class=\"productTD\">" + product.name + " </div>" +
@@ -216,6 +236,7 @@ function printProductComplete(products) {
 //Gibt die Bewertung eines Produkts zurück
 function getProductScore(products)
 {
+    console.log("getProductScore wird aufgerufen. Gibt die Bewertungen aller Produkte zurueck.");
     products.forEach(function (product)
     {
         return product.id + (product.Feedbacks.reduce(function (avg, el)
