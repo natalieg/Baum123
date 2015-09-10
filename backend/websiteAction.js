@@ -25,10 +25,12 @@ var main = function () {
     $('.searchbar').keyup(function () {
        // if(event.ctrlKey || event.altKey || event.shiftKey || String.fromCharCode(event.which) == 27 || String.fromCharCode(event.which) == 13)
         //{console.log("fuu")};
+        console.log("searchbar.keyup - Keyrelease registriert!");
         showProductOverviewOnly();
         searchBarAction();
     });
     $('.sortBox').change(function () {
+        console.log("sortBox.change - Änderung an der Combobox registriert!");
         showProductOverviewOnly();
         searchBarAction();
     });
@@ -86,28 +88,36 @@ var clickAction = function () {
 
 window.onpopstate = function (event)
 {
-var url = window.location.href;
+    console.log("window.onpopstate - Postate-Event registriert!");
+    var url = window.location.href;
+    console.log("window.onpopstate - Folgende URL wurde eingelesen: " + url);
+
     if(url.match(/^.*\?p=.*/))
     {
+        console.log("window.onpopstate - Anfrage nach Produktansicht erkannt!");
         $('.bestsellerRow').hide();
         $('.bestsellerText').hide();
         $('.more').hide();
         $('.singleView').html("").show();
         var pid = url.substring(url.indexOf('=')+1,url.length);
-        console.log("pid " + pid);
+        console.log("window.onpopstate - Folgende Produkt-ID wurde eingelesen: " + pid);
         DB.ready(loadSingleProduct(pid));
     }
     else if (url.match(/^.*\?s=.*/))
     {
+        console.log("window.onpopstate - Anfrage nach Suchergebnissen erkannt!");
         $('.bestsellerRow').hide();
         $('.bestsellerText').hide();
         $('.more').hide();
         $('.moreBestseller').html("").show();
-        document.getElementById("searchbar").value = url.substring(url.indexOf('=')+1,url.length);
+        var search = url.substring(url.indexOf('=')+1,url.length);
+        console.log("window.onpopstate - Folgender Suchbegriff wurde eingelesen: " + search);
+        document.getElementById("searchbar").value = search;
         searchBarAction();
     }
     else
     {
+        console.log("window.onpopstate - Keine Anfrage nach Spezialseiten erkannt.");
         $('.bestsellerRow').show();
         $('.bestsellerText').show();
         $('.more').show();
