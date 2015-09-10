@@ -160,7 +160,7 @@ function printItemsBig(products, rowID) {
         if (name.length > 10) {
             name = name.substring(0, 9) + "...";
         }
-        $(rowID).append("<div id=\"" + product.id + "\" class=\"testClass productRow col-md-3\">" +
+        $(rowID).append("<div id=\"" + product.id + "\" class=\"productLink productRow col-md-3\">" +
             "<a class=\"img-shadow\"><img src=\"" + product.bild + "\"></a>" +
             "<div class=\"productRow col-md-3\"><div class=\"productName\">" + name + " </div></div>" +
             "</div></div>");
@@ -176,7 +176,7 @@ function printItemsSmall(products, rowID) {
         if (name.length > 10) {
             name = name.substring(0, 9) + "...";
         }
-        $(rowID).append("<div id=\"" + product.id + "\" class=\"testClass productRow col-md-2\">" +
+        $(rowID).append("<div id=\"" + product.id + "\" class=\"productLink productRow col-md-2\">" +
             "<a><img src=\"" + product.bild + "\"></a>" +
             "<div class=\"productRow col-md-2\"><div class=\"productNameSmall\">" + name + "<br><p>"
             + " EUR " + product.preis + "</p></div>" +
@@ -202,7 +202,7 @@ var printSingleProduct = function (product) {
 // Wird grad nicht verwendet!
 function printProductComplete(products) {
     products.forEach(function (product) {
-        $("#topProducts").append("<div class=\"col-md-3\"><a href=\"#\" class=\"img-shadow\"><img src=\"" + product.bild + "\"></a>" +
+        $("#topProducts").append("<div class=\"col-md-3\"><a class=\"img-shadow\"><img src=\"" + product.bild + "\"></a>" +
             "<div class=\"productTD\">" + product.name + " </div>" +
             "<div class=\"productTD\">" + product.preis + " Euro</div>" +
             "<div class=\"productTD\">nur noch " + product.stueckzahl + " vorhanden</div>" +

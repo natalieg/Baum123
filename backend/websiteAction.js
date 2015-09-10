@@ -51,7 +51,7 @@ var main = function () {
 
 
 var clickAction = function () {
-    $(".testClass").click(function () {
+    $(".productLink").click(function () {
         console.log(this.id);
         $('.bestsellerRow').hide();
         $('.bestsellerText').hide();
