@@ -51,7 +51,6 @@ var main = function () {
         setFilter(filter);
         searchBarAction();
     });
-
     $('.baum123').click(function () {
        showMainPageOnly();
     });
@@ -59,6 +58,12 @@ var main = function () {
     $('.more').click(function () {
         DB.ready(allSales);
        showProductOverviewOnly();
+    });
+    $('#cartId').click(function(){
+        hideMainPage();
+        hideProductOverview();
+        hideSingleProduct();
+
     });
 };
 
