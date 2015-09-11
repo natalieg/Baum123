@@ -11,6 +11,7 @@ var updateProductAnzahl = function (pid) {
     DB.Product.load(pid).then(function (product) {
         if(product.stueckzahl >= 1){
             product.stueckzahl = product.stueckzahl - 1;
+            product.gesamtverkauf = product.gesamtverkauf +1;
             product.update();
             $('.stueckZahl').text(product.stueckzahl);
             updateCartItem(pid);

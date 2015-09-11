@@ -51,7 +51,6 @@ var main = function () {
         setFilter(filter);
         searchBarAction();
     });
-
     $('.baum123').click(function () {
         $('.kategorie').removeClass("active");
         window.history.pushState({info: "Mainpage"}, null, "index.html");
@@ -63,6 +62,12 @@ var main = function () {
         $('.kategorie').removeClass("active");
         window.history.pushState({info: "Mainpage"}, null, "?s=&f=");
        showProductOverviewOnly();
+    });
+    $('#cartId').click(function(){
+        hideMainPage();
+        hideProductOverview();
+        hideSingleProduct();
+
     });
 };
 
