@@ -190,12 +190,15 @@ function printItems(msg, products) {
             "<td class=" + "productTD" + "> Preis: " +
             "<input min='0' type=" + "number" + " id=" + "" + (product).id + "a" + "" + " value=" + "" + (product).preis + "" + "></input></td>" +
 
-                "<td class=" + "productTD" + "> Stueckzahl: </td>" +
-                "<td class=" + "productTD" + ">" + (product).stueckzahl + " </td> " +
-                "<td><input min='0' type=" + "number" + " id=" + "" + (product).id +"b"+"" + "></input></td>" +
-                "</tr>");
-        });
-    }
+            "<td class=" + "productTD" + "> Stueckzahl: </td>" +
+            "<td class=" + "productTD" + ">" + (product).stueckzahl + " </td> " +
+            "<td><input min='0' type=" + "number" + " id=" + "" + (product).id + "b" + "" + "></input></td>" +
+            "</tr>");
+    });
+    $("#hello2 table").append("<button  class=\"abschickenButton\" type=\"button\" onclick=\"loadProductAndUpdate()\">Abschicken</button>" +
+        "<li><a href=\"eintragen.html\">neues produkt eintragen</a> </li>");
+}
+
 }).catch(function() {
     throw error('Fehler aufgetreten');
 });

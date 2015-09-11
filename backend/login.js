@@ -2,7 +2,14 @@
  * Created by peukert on 09.09.15.
  */
 
-//DB.connect("http://baum123.baqend.com");
+$(document).ready(function() {
+    $(".button").click(function(e) {
+        $("body").append(''); $(".popup").show();
+        $(".close").click(function(e) {
+            $(".popup, .overlay").hide();
+        });
+    });
+});
 
 var register = function() {
     var user = document.getElementById('username').value; //$('#username');
