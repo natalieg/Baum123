@@ -53,11 +53,15 @@ var main = function () {
         searchBarAction();
     });
     $('.baum123').click(function () {
+        $('.kategorie').removeClass("active");
+        window.history.pushState({info: "Mainpage"}, null, "index.html");
        showMainPageOnly();
     });
 
     $('.more').click(function () {
         DB.ready(allSales);
+        $('.kategorie').removeClass("active");
+        window.history.pushState({info: "Mainpage"}, null, "?s=&f=");
        showProductOverviewOnly();
     });
     // Warenkorb Seite wird angezeigt wenn das Warenkorb Symbol angeklickt wird
@@ -160,21 +164,44 @@ window.onpopstate = function (event)
     {
         console.log("window.onpopstate - Anfrage nach Produktansicht erkannt!");
         hideMainPage();
+        hideProductOverview();
         showSingleProduct();
         var pid = url.substring(url.indexOf('=')+1,url.length);
         console.log("window.onpopstate - Folgende Produkt-ID wurde eingelesen: " + pid);
         DB.ready(loadSingleProduct(pid));
     }
-    else if (url.match(/^.*\?s=.*/)) {
+    else if (url.match(/^.*\?s=.*f=.*/)) {
         console.log("window.onpopstate - Anfrage nach Suchergebnissen erkannt!");
         showProductOverviewOnly();
-        var search = url.substring(url.indexOf('=')+1,url.length);
-        console.log("window.onpopstate - Folgender Suchbegriff wurde eingelesen: " + search);
-        document.getElementById("searchbar").value = search;
+        var paramString = url.substring(url.indexOf('s=')+1,url.length);
+        var filterString = paramString.substring(paramString.indexOf('f=')+2, paramString.length);
+        setFilter(new RegExp("^" + filterString));
+        var searchLength = paramString.length - ( filterString.length + 3);
+        var searchString = paramString.substring(1 , searchLength);
+        console.log("window.onpopstate - Folgender Filter wurde eingelesen: " + filterString);
+        console.log("window.onpopstate - Folgender Suchbegriff wurde eingelesen: " + searchString);
+        document.getElementById("searchbar").value = searchString;
+
+        $('.kategorie').each(function()
+        {
+            if(this.id == filterString)
+            {
+                $(this).addClass("active");
+            }
+            else
+            {
+                $(this).removeClass("active");
+            }
+        });
+
+
+
         searchBarAction();
     }
     else {
         console.log("window.onpopstate - Keine Anfrage nach Spezialseiten erkannt.");
+        $('.kategorie').removeClass("active");
+        document.getElementById("searchbar").value = "";
         showMainPageOnly();
     }
 };
