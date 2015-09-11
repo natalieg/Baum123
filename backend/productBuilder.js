@@ -191,7 +191,7 @@ function printItemsBig(products, rowID) {
             "</div></div>");
     });
     clickAction();
-};
+}
 
 
 //Zeigt kleine Produkte an.

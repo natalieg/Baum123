@@ -9,6 +9,7 @@ var cartCount = 0;
  * TODO Bei m (more) verstecken, unterproduktansicht anzeigen
  */
 var main = function () {
+    hideCartPage();
     $(document).on('keydown', function (event) {
         // Keypress "strg+m"
         if ((event.ctrlKey && ( String.fromCharCode(event.which) === 'm' || String.fromCharCode(event.which) === 'M'))) {
@@ -59,11 +60,15 @@ var main = function () {
         DB.ready(allSales);
        showProductOverviewOnly();
     });
-    $('#cartId').click(function(){
+    // Warenkorb Seite wird angezeigt wenn das Warenkorb Symbol angeklickt wird
+    $('.cart').click(function(){
         hideMainPage();
         hideProductOverview();
         hideSingleProduct();
-
+        showCartPage();
+        buildCartPage();
+        calculateFullPrice();
+        printTotalPrice();
     });
 };
 
@@ -73,6 +78,7 @@ var main = function () {
 var showProductOverviewOnly = function(){
     hideMainPage();
     hideSingleProduct();
+    hideCartPage();
     $('.moreBestseller').html("").show();
 };
 
@@ -82,6 +88,7 @@ var showMainPageOnly = function(){
     $('.more').show();
     hideProductOverview();
     hideSingleProduct();
+    hideCartPage();
     topSales();
 };
 
@@ -103,11 +110,26 @@ var showSingleProduct = function(){
     $('.singleView').html("").show();
 };
 
+var showCartPage = function(){
+    $('#cartTop').show();
+    $('#cartPage').html("").show();
+    $('#fullPrice').html("").show();
+}
+
+var hideCartPage = function(){
+    $('#cartTop').hide();
+    $('#cartPage').hide();
+    $('#fullPrice').hide();
+}
+
+// Wenn ein Produkt angeklickt wir auf der Hauptseite oder auf der Uebersicht
+// gelangt man auf eine Einzelproduktseite
 var clickAction = function () {
     $(".productLink").click(function () {
         console.log(this.id);
         hideMainPage();
         hideProductOverview();
+        hideCartPage();
         showSingleProduct();
         var pid = this.id;
         var urlString = "?p=" + pid;

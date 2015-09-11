@@ -13,18 +13,18 @@
 
 
 <div class="nav">
-    <div class="container baum123">
+    <div class="container">
         <ul class="pull-left" id="welcome">
-            <li>Baum123</li>
+            <li class="baum123">Baum123</li>
         </ul>
         <ul class="pull-right" id="warenkorb">
             <li><a href="register.html">Sign In</a></li>
             <li><a href="login.html">Log In</a></li>
             <li><a href="#" id="logout">Log Out</a></li>
-            <li id="cartId">
+            <li class="cart">
                 <img height="15px" src="http://www.garten-profi.de/out/garten4/img/warenkorb.png"/>
             </li>
-            <li class="cartCounter"></li>
+            <li class="cartCounter cart"></li>
         </ul>
     </div>
 </div>
@@ -62,6 +62,14 @@
         <div class="row bestsellerRow" id="topProducts"></div>
         <div class="row moreBestseller" id="moreTopProducts"></div>
         <div class="row singleView" id="singleProduct"></div>
+        <div class="row cartTopView" id="cartTop">
+            <div class="col-md-2"></div>
+            <div class="col-md-2">Name</div>
+            <div class="col-md-2">Price</div>
+            <div class="col-md-2">Quantity</div>
+        </div>
+        <div class="row cartView" id="cartPage"></div>
+        <div class="row fullPriceView" id="fullPrice"></div>
     </div>
 </div>
 

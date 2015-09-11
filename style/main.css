@@ -312,3 +312,33 @@
     text-align: left;
     font-weight: normal !important;
 }
+
+.cart {
+    cursor: pointer;
+}
+
+.cartItem img {
+    height: 80px !important;
+    border-radius: 5px;
+}
+
+.cartTopView {
+    padding-left: 20%;
+    border-bottom: 1px solid rgba(151, 151, 151, 0.68);
+
+}
+
+.cartView {
+    padding-left: 20%;
+    height: 100px;
+    line-height: 100px;
+}
+
+.fullPriceView {
+    padding-left: 20%;
+}
+
+.totalPrice {
+    font-weight: bold;
+}
+
