@@ -10,6 +10,43 @@ var cartCount = 0;
  */
 var main = function () {
     hideCartPage();
+
+    DB.ready(function()
+    {
+        var url = window.location.href;
+        console.log("reach this!");
+        if(url.match(/^.*\?p=.*/))
+        {
+            hideMainPage();
+            hideProductOverview();
+            showSingleProduct();
+            var pid = url.substring(url.indexOf('=')+1,url.length);
+            loadSingleProduct(pid);
+        }
+        else if (url.match(/^.*\?s=.*f=.*/)) {
+            showProductOverviewOnly();
+            var paramString = url.substring(url.indexOf('s=')+1,url.length);
+            var filterString = paramString.substring(paramString.indexOf('f=')+2, paramString.length);
+            setFilter(new RegExp("^" + filterString));
+            var searchLength = paramString.length - ( filterString.length + 3);
+            var searchString = paramString.substring(1 , searchLength);
+            document.getElementById("searchbar").value = searchString;
+
+            $('.kategorie').each(function()
+            {
+                if(this.id == filterString)
+                {
+                    $(this).addClass("active");
+                }
+                else
+                {
+                    $(this).removeClass("active");
+                }
+            });
+
+            searchBarAction();
+        }});
+
     $(document).on('keydown', function (event) {
         // Keypress "strg+m"
         if ((event.ctrlKey && ( String.fromCharCode(event.which) === 'm' || String.fromCharCode(event.which) === 'M'))) {
@@ -69,6 +106,12 @@ var main = function () {
         hideMainPage();
         hideProductOverview();
         hideSingleProduct();
+
+        $('.kategorie').each(function()
+        {
+            $(this).removeClass("active");
+        });
+
         showCartPage();
         buildCartPage();
         calculateFullPrice();
