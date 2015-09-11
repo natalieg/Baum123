@@ -65,10 +65,13 @@ function searchBarAction() {
     var inputReg = new RegExp(inputPrep);
     console.log("searchBarAction - Folgender RegEx wurde gebildet: " + inputReg);
 
-    if (window.location.href.match(/^.*\?s=.*/))
+    var filterString = filter.toString().substring(2, filter.toString().length - 1);
+    if(filterString.match(/^\.\*/)){filterString = ""};
+
+    if (window.location.href.match(/^.*\?s=.*f=.*/))
     {
         console.log("searchBarAction - Suche durch URL erkannt.");
-        var urlString = "?s=" + input;
+        var urlString = "?s=" + input + "&f=" + filterString;
         var popString = "Search for " + input;
         window.history.replaceState({info: popString}, null, urlString);
         console.log("searchBarAction - URL modifiziert mit: " + urlString);
@@ -76,7 +79,7 @@ function searchBarAction() {
     else
     {
         console.log("searchBarAction - Keine Suche erkannt.");
-        var urlString = "?s=" + input;
+        var urlString = "?s=" + input + "&f=" + filterString;
         var popString = "Search for " + input;
         window.history.pushState({info: popString}, null, urlString);
         console.log("searchBarAction - URL modifiziert mit: " + urlString);
