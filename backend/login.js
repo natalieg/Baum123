@@ -26,7 +26,7 @@ var login = function() {
     var passwd = document.getElementById('passwd').value;//$('#passwd');
     DB.User.login(usr, passwd).then(function() {
     //Hey we are logged in again
-        console.log(DB.User.me.username); //'john.doe@example.com'
+        console.log(DB.User.me.username);
         $("#logout").show();
         $(".button1").hide();
         $(".button2").hide();
