@@ -7,22 +7,50 @@
     <link href="http://s3.amazonaws.com/codecademy-content/courses/ltp/css/shift.css" rel="stylesheet">
     <link rel="stylesheet" href="http://s3.amazonaws.com/codecademy-content/courses/ltp/css/bootstrap.css">
     <link rel="stylesheet" href="../style/main.css">
+    <link rel="stylesheet" href="../style/style.css">
     <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet" type="text/css">
 </head>
 <body>
+<div id="wrapper">
 
 
 <div class="nav">
-    <div class="container">
+    <div class="container baum123">
         <ul class="pull-left" id="welcome">
-            <li class="baum123">Baum123</li>
+            <li>Baum123</li>
         </ul>
         <ul class="pull-right" id="warenkorb">
-            <li><a href="register.html">Sign In</a></li>
-            <li><a href="login.html">Log In</a></li>
-            <li><a href="#" id="logout">Log Out</a></li>
-            <li class="cart">
-                <img height="15px" src="http://www.garten-profi.de/out/garten4/img/warenkorb.png"/>
+            <li>
+                <div class="al">
+                  <a class="button1" href="#">Sign Up</a>
+                    <div class="popup1">
+                        <a href="#" class="close">CLOSE</a>
+                        <form>
+                            <P><span class="title">Username</span> <input name="" type="text" id="username"/></P>
+                            <P><span class="title">Password</span> <input name="" type="password" id="pwd"/></P>
+                            <P><button class="anmelden1" type="button" onclick="register()">Registrieren</button></P>
+                        </form>
+                    </div>
+                </div>
+            </li>
+            <li><a class="button" href="#" id="logout">Log Out</a></li>
+            <li>
+                <div class="al">
+                  <a class="button2" href="#">Log In</a>
+                    <div class="popup2">
+                        <a href="#" class="close">CLOSE</a>
+                        <form>
+                            <P><span class="title">Username</span> <input name="" type="text" id="usr"/></P>
+                            <P><span class="title">Password</span> <input name="" type="password" id="passwd"/></P>
+                            <P><button class="anmelden2" type="button" onclick="login()">Anmelden</button></P>
+                        </form>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <a href="#">
+                    <img height="15px" src="http://www.garten-profi.de/out/garten4/img/warenkorb.png"/>
+                </a>
             </li>
             <li class="cartCounter cart"></li>
         </ul>
@@ -78,13 +106,23 @@
         <h1 id="showMore">Show me more!</h1>
     </div>
 </div>
-<script type="text/javascript" src="../backend/jquery-1.11.3.js"></script>
+
+<div id="footer3">
+    <div>
+        <p>&copy; <a href="#" title="">Gartenzeugs</a>, Created by <strong>baum123</strong> 2016.</p>
+    </div>
+</div>
+</div>
+
 <script type="text/javascript" src="http://baqend.com/js-sdk/latest/baqend.min.js"></script>
+<script type="text/javascript" src="../backend/jquery-1.11.3.js"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 <script type="text/javascript" src="../backend/connectDB.js"></script>
 <script type="text/javascript" src="../backend/productBuilder.js"></script>
 <script type="text/javascript" src="../backend/login.js"></script>
 <script type="text/javascript" src="../backend/cart.js"></script>
 <script type="text/javascript" src="../backend/websiteAction.js"></script>
+<script type="text/javascript" src="../backend/popup.js"></script>
+
 </body>
 </html>

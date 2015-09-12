@@ -1,111 +1,32 @@
-.body{
-    width: 1000px;
-    margin-right: auto;
-    margin-left: auto;
-}
-.header {
- width: 100%;
 
-}
 
-.logo {
-  float: left;
-    background-color: aqua;
-}
+@charset "utf-8";
+/* CSS by TeckStack.com */
 
-.suche {
- float: left;
-    background-color: black;
-}
+*{ margin: 0; }
 
-.warenkorb {
- float: left;
-    background-color: blue;
-}
-.container{
-    float: left;
-}
-.content {
- float: left;
-    background-color: brown;
-}
-
-.leisteOben {
- float: left;
-    background-color: darkblue;
-}
-
-.leisteLinks {
- float: left;
-    background-color: darkgreen;
-}
-
-.footer{
-    float: left;
-}
-
-#hello2 {
-    padding: 20px;
-    margin-top: 100px;
-    margin-right: auto;
-    margin-left: auto;
-    width: 500px;
-    background-color: #ffd4a8;
-}
-
-#hello2 input {
-    width: 50px;
-}
-
-.productTable{
-    float: right;
-}
-
-.abschickenButton {
-    float: right;
-}
-
-.productTD{
-    padding-left: 20px;
-}
-
-.singleView{
-    padding-left: 20px;
-    z-index: 500;
-}
-
-#welcome {
-    padding: 20px;
-    background-color: #ffd4a8;
-    float: left;
-    width: 1000px;
-    margin: 0 auto;
-}
-
-.picture {
-    float: left;
-    width: 200px;
-}
-
-body{ background: #930; font: 16px/150% Verdana, Geneva, sans-serif;}
+/*body{ background: #930; font: 16px/150% Verdana, Geneva, sans-serif;}*/
 .ar{ float: right; }
 .al{ float: left;}
 .clear{ clear: both;}
 a{ text-decoration: none; color: #666;}
 
-#wrapper{ margin: 0 auto; width: 960px; position: relative; }
-#nav li{ float: left; list-style: none; padding: 5px 10px; color: #000; text-transform: uppercase;  }
+#wrapper{ margin: 0 auto; width: auto; position: relative; }
+/*#nav li{ float: left; list-style: none; padding: 5px 10px; color: #000; text-transform: uppercase;  }
 #nav li a{ text-decoration: none; color: #fff; display: block; text-transform: none;}
-
+*/
 form{ background: #eee; padding: 10px; }
-form p{ padding: 5px 0;}
+/*form p{ padding: 1px 0;}*/
 form .title{ min-width: 100px; display: inline-block; }
-form input[type=text], form input[type=password]{ border: 1px solid #fff; padding: 5px;}
+form input[type=text], form input[type=password]{ border: 1px solid #666; padding: 5px;}
 
-.button{ display: inline-block; background: #000; padding:5px 10px; z-index: 0; color: #fff; }
+.button{ display: inline-block; background: #fff; padding:2px 2px; z-index: 0; color: #eee; }
 .overlay{ z-index:5; background: rgba(0, 0, 0, .50); display: block; position:fixed; width: 100%; height: 100%; }
 
-.popup{ padding: 10px 10px 35px; background: #fff; z-index: 999; display: none; position: absolute; right: 0; }
+.popup1{ padding: 10px 10px 35px; background: #fff; z-index: 999; display: none; position: absolute;
+    left:650px; top:50px; width:400px; height: 270px; }
+.popup2{ padding: 10px 10px 35px; background: #fff; z-index: 999; display: none; position: absolute;
+    left:650px; top:50px; width:400px; height: 270px; }
 #footer{ position: fixed; bottom: 0; background: #fff; width: 100%; font-size: 12px; text-align: center; }
 #footer div{ padding: 5px; }
 
