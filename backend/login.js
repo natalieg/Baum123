@@ -3,11 +3,50 @@
  */
 
 
+$(document).ready(function() {
+
+    DB.ready()
+    .then(function () {
+        if (!DB.User.me) {
+            $("#logout").hide();
+            $(".button1").show();
+            $(".button2").show();
+        }
+    else {
+        $("#logout").show();
+        $(".button1").hide();
+        $(".button2").hide();
+    }});
+
+    $(".button1").click(function(e) {
+        $("body").append('<div class="overlay"></div>');
+        $(".popup1").show();
+        $(".anmelden1").click(function(e){
+            $(".popup1, .overlay").hide();
+        });
+
+        $(".close").click(function(e) {
+            $(".popup1, .overlay").hide();
+        });
+    });
+
+    $(".button2").click(function(e) {
+        $("body").append('<div class="overlay"></div>');
+        $(".popup2").show();
+        $(".anmelden2").click(function(e){
+            $(".popup2, .overlay").hide();
+        });
+
+        $(".close").click(function(e) {
+            $(".popup2, .overlay").hide();
+        });
+    });
+});
+
 var register = function() {
     var user = document.getElementById('username').value; //$('#username');
     var pwd =  document.getElementById('pwd').value;
     DB.User.register(user,pwd).then(function () {
-        console.log(DB.User.me.username);
         //User als Rolle Kaeufer eintragen
         DB.Role.load(11).then(function(role){
             console.log("Rollen: " + role);
@@ -25,21 +64,29 @@ var login = function() {
     var usr = document.getElementById('usr').value;//$('#usr');
     var passwd = document.getElementById('passwd').value;//$('#passwd');
     DB.User.login(usr, passwd).then(function() {
-    //Hey we are logged in again
-        console.log(DB.User.me.username);
         $("#logout").show();
         $(".button1").hide();
         $(".button2").hide();
+
+        //wenn Admin, dann Admin-Seite
+        DB.ready().then(function() {
+            return DB.User.me && DB.Role.load(10);
+        }).then(function(role) {
+            if (role || role.hasUser(DB.User.me))
+            {
+                window.location=("http://localhost:63342/baum123/frontend/produktaenderung.html");
+            }
+        });
     });
+
 }
 
-var lgt = document.getElementById('logout'); //$('#logout').click(function()...);
-lgt.onclick = function() {
-    DB.User.logout().then(function () {
-        //We are logged out again
-        console.log("Logged out: "); //null
+$('#logout').click(function()
+{
+    DB.User.logout().then(function ()
+    {
         $("#logout").hide();
         $(".button1").show();
         $(".button2").show();
     });
-}
+});
