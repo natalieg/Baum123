@@ -26,7 +26,7 @@ var loadSingleProduct = function (pid) {
     var idBewertung = {};
     DB.Product.load(pid).then(function (product) {
         console.log("loadSingleProduct - Folgendes Produkt geladen:" + JSON.stringify(product));
-        printSingleProduct(product);
+            printSingleProduct(product);
         console.log("loadSingleProduct - Folgende Bewertung errechnet:" + idBewertung[getProductScore(product)]);
     });
 };

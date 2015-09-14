@@ -12,104 +12,114 @@
 </head>
 <body>
 <div id="wrapper">
-<div class="nav">
-    <div class="container baum123">
-        <ul class="pull-left" id="welcome">
-            <li>Baum123</li>
-        </ul>
-        <ul class="pull-right" id="warenkorb">
-            <li>
-                <div class="al">
-                  <a class="button1" href="#">Sign Up</a>
-                    <div class="popup1">
-                        <a href="#" class="close">CLOSE</a>
-                        <form>
-                            <P><span class="title">Username</span> <input name="" type="text" id="username"/></P>
-                            <P><span class="title">Password</span> <input name="" type="password" id="pwd"/></P>
-                            <P><button class="anmelden1" type="button" onclick="register()">Registrieren</button></P>
-                        </form>
+    <div class="nav">
+        <div class="container baum123">
+            <ul class="pull-left" id="welcome">
+                <li>Baum123</li>
+            </ul>
+            <ul class="pull-right" id="warenkorb">
+                <li>
+                    <div class="al">
+                        <a class="button1" href="#">Sign Up</a>
+
+                        <div class="popup1">
+                            <a href="#" class="close">CLOSE</a>
+
+                            <form>
+                                <P><span class="title">Username</span> <input name="" type="text" id="username"/></P>
+
+                                <P><span class="title">Password</span> <input name="" type="password" id="pwd"/></P>
+
+                                <P>
+                                    <button class="anmelden1" type="button" onclick="register()">Registrieren</button>
+                                </P>
+                            </form>
+                        </div>
                     </div>
-                </div>
-            </li>
-            <li><a class="button" href="#" id="logout">Log Out</a></li>
-            <li>
-                <div class="al">
-                  <a class="button2" href="#">Log In</a>
-                    <div class="popup2">
-                        <a href="#" class="close">CLOSE</a>
-                        <form>
-                            <P><span class="title">Username</span> <input name="" type="text" id="usr"/></P>
-                            <P><span class="title">Password</span> <input name="" type="password" id="passwd"/></P>
-                            <P><button class="anmelden2" type="button" onclick="login()">Anmelden</button></P>
-                        </form>
+                </li>
+                <li><a class="button" href="#" id="logout">Log Out</a></li>
+                <li>
+                    <div class="al">
+                        <a class="button2" href="#">Log In</a>
+
+                        <div class="popup2">
+                            <a href="#" class="close">CLOSE</a>
+
+                            <form>
+                                <P><span class="title">Username</span> <input name="" type="text" id="usr"/></P>
+
+                                <P><span class="title">Password</span> <input name="" type="password" id="passwd"/></P>
+
+                                <P>
+                                    <button class="anmelden2" type="button" onclick="login()">Anmelden</button>
+                                </P>
+                            </form>
+                        </div>
                     </div>
-                </div>
-            </li>
-            <li>
-                <a href="#">
+                </li>
+                <li class="cart">
                     <img height="15px" src="http://www.garten-profi.de/out/garten4/img/warenkorb.png"/>
-                </a>
-            </li>
-            <li class="cartCounter cart"></li>
-        </ul>
-    </div>
-</div>
-
-<div class="searchline">
-    <div class="searchbar" id="hallo">
-        <form id="search">
-            <input id="searchbar" type="text" placeholder="Suchen Sie Ihr gruenes Glueck!"
-                   onkeypress="return event.keyCode!=13">
-
-        </form>
-    </div>
-</div>
-
-<div class="navKategorien">
-    <div class="container" id="kategorien">
-        <ul class="pull-left noselect">
-            <li><a class="kategorie" id="Baum">Trees</a></li>
-            <li><a class="kategorie" id="Blume">Flowers</a></li>
-            <li><a class="kategorie" id="Busch">Bushes</a></li>
-        </ul>
-        <div class="sortBox">
-            <select class="pull-right select-style" id='sortOption'>
-                <option value="Verkauf_Gesamt">Meist verkauft</option>
-                <option value="Feedbacks">am besten bewertet</option>
-                <option value="preis">Schnaeppchenjaeger</option>
-            </select>
+                </li>
+                <li class="cartCounter cart"></li>
+            </ul>
         </div>
     </div>
-</div>
 
-<div class="jumbotron">
-    <div class="container">
-        <div class="row bestsellerText">Bestseller</div>
-        <div class="row bestsellerRow" id="topProducts"></div>
-        <div class="row moreBestseller" id="moreTopProducts"></div>
-        <div class="row singleView" id="singleProduct"></div>
-        <div class="row cartTopView" id="cartTop">
-            <div class="col-md-2"></div>
-            <div class="col-md-2">Name</div>
-            <div class="col-md-2">Price</div>
-            <div class="col-md-2">Quantity</div>
+    <div class="searchline">
+        <div class="searchbar" id="hallo">
+            <form id="search">
+                <input id="searchbar" type="text" placeholder="Suchen Sie Ihr gruenes Glueck!"
+                       onkeypress="return event.keyCode!=13">
+
+            </form>
         </div>
-        <div class="row cartView" id="cartPage"></div>
-        <div class="row fullPriceView" id="fullPrice"></div>
     </div>
-</div>
 
-<div class="more">
-    <div class="container">
-        <h1 id="showMore">Show me more!</h1>
+    <div class="navKategorien">
+        <div class="container" id="kategorien">
+            <ul class="pull-left noselect">
+                <li><a class="kategorie" id="Baum">Trees</a></li>
+                <li><a class="kategorie" id="Blume">Flowers</a></li>
+                <li><a class="kategorie" id="Busch">Bushes</a></li>
+            </ul>
+            <div class="sortBox">
+                <select class="pull-right select-style" id='sortOption'>
+                    <option value="Verkauf_Gesamt">Meist verkauft</option>
+                    <option value="Feedbacks">am besten bewertet</option>
+                    <option value="preis">Schnaeppchenjaeger</option>
+                </select>
+            </div>
+        </div>
     </div>
-</div>
 
-<div id="footer3">
-    <div>
-        <p>&copy; <a href="#" title="">Gartenzeugs</a>, Created by <strong>baum123</strong> 2016.</p>
+    <div class="jumbotron">
+        <div class="container">
+            <div class="row bestsellerText">Bestseller</div>
+            <div class="row bestsellerRow" id="topProducts"></div>
+            <div class="row moreBestseller" id="moreTopProducts"></div>
+            <div class="row singleView" id="singleProduct"></div>
+            <div class="row cartTopView" id="cartTop">
+                <div class="col-md-2"></div>
+                <div class="col-md-2">Name</div>
+                <div class="col-md-2">Price</div>
+                <div class="col-md-2">Quantity</div>
+            </div>
+            <div class="row cartView" id="cartPage"></div>
+            <div class="row fullPriceView" id="fullPrice"></div>
+        </div>
     </div>
-</div>
+
+    <div class="more">
+        <div class="container">
+            <h1 id="showMore">Show me more!</h1>
+        </div>
+    </div>
+
+    <div id="footer3">
+        <div>
+            <p>&copy; <a href="#" title="">Gartenzeugs</a>, Created by <strong>baum123</strong> 2016.</p>
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript" src="http://baqend.com/js-sdk/latest/baqend.min.js"></script>

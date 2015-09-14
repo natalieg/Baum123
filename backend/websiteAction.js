@@ -88,7 +88,7 @@ var main = function () {
         setFilter(filter);
         searchBarAction();
     });
-    $('.baum123').click(function () {
+    $('#welcome').click(function () {
         $('.kategorie').removeClass("active");
         window.history.pushState({info: "Mainpage"}, null, "index.html");
        showMainPageOnly();
@@ -110,12 +110,10 @@ var main = function () {
         {
             $(this).removeClass("active");
         });
-
         showCartPage();
         buildCartPage();
         printTotalPrice();
         changeAndCalculateFullPrice();
-
     });
 };
 
