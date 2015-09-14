@@ -8,7 +8,7 @@ function productSelectBestSales(limitNumber, rowID, bigItem) {
     DB.Product.find()
         .isNotNull('bild')
         .greaterThan("stueckzahl", 0)
-        .descending("Verkauf_Gesamt").limit(limitNumber)
+        .descending("gesamtverkauf").limit(limitNumber)
         .resultList(function (result) {
             result.forEach(function (product) {
                console.log("productSelectBest Sales - Folgendes Produkt soll ausgegeben werden:" + JSON.stringify(product));
@@ -57,96 +57,115 @@ function searchBarAction() {
     console.log("searchBarAction wird aufgerufen. Inhalt der Suchleiste soll gesucht werden.");
     var input = document.getElementById('searchbar').value.toLowerCase();
     console.log("searchBarAction - Searchbar enthaelt folgenden Input: " + input);
+    var inputReg = new RegExp("^.*" + input);
+    console.log("searchBarAction - Folgender RegEx wurde gebildet: " + inputReg);
+
+    var filterString = filter.toString().substring(2, filter.toString().length - 1);
+    if(filterString.match(/^\.\*/))
+    {
+        filterString = "";
+    };
+    urlRefresh(input, filterString);
 
     var sort = document.getElementById('sortOption').value;
     console.log("searchBarAction - Ergebnisse werden sortiert nach: " + sort);
 
-    var inputPrep = "^.*" + input;
-    var inputReg = new RegExp(inputPrep);
-    console.log("searchBarAction - Folgender RegEx wurde gebildet: " + inputReg);
+    sortSwitch(sort, inputReg);
+};
 
-    var filterString = filter.toString().substring(2, filter.toString().length - 1);
-    if(filterString.match(/^\.\*/)){filterString = ""};
+function sortSwitch(sort, inputReg)
+{
+    switch(sort)
+    {
+        case 'preis':
+            priceSearch(filter, inputReg);
+            break;
 
+        case 'Feedbacks':
+            feedbackSearch(filter, inputReg);
+            break;
+
+        default:
+            defaultSearch(filter,inputReg, sort);
+    }
+}
+
+function urlRefresh(searchInput, filterInput)
+{
     if (window.location.href.match(/^.*\?s=.*f=.*/))
     {
         console.log("searchBarAction - Suche durch URL erkannt.");
-        var urlString = "?s=" + input + "&f=" + filterString;
-        var popString = "Search for " + input;
+        var urlString = "?s=" + searchInput + "&f=" + filterInput;
+        var popString = "Search for " + searchInput;
         window.history.replaceState({info: popString}, null, urlString);
         console.log("searchBarAction - URL modifiziert mit: " + urlString);
     }
     else
     {
         console.log("searchBarAction - Keine Suche erkannt.");
-        var urlString = "?s=" + input + "&f=" + filterString;
-        var popString = "Search for " + input;
+        var urlString = "?s=" + searchInput + "&f=" + filterInput;
+        var popString = "Search for " + searchInput;
         window.history.pushState({info: popString}, null, urlString);
         console.log("searchBarAction - URL modifiziert mit: " + urlString);
     }
+}
 
-    switch(sort)
-    {
-        case 'preis':
+function priceSearch(filterRegex, inputRegex)
+{
+    console.log("searchBarAction - Suche und Sortierung nach Preis eingeleitet");
+    DB.Product.find()
+        .matches('liste', filterRegex)
+        .matches('tags', inputRegex)
+        .isNotNull('bild')
+        .ascending('preis')
+        .resultList(function (result) {
+            printItemsSmall(result, "#moreTopProducts");
+        });
+}
 
-            console.log("searchBarAction - Suche und Sortierung nach Preis eingeleitet");
-            DB.Product.find()
-                .matches('liste', filter)
-                .matches('tags', inputReg)
-                .isNotNull('bild')
-                .ascending('preis')
-                .resultList(function (result) {
-                    printItemsSmall(result, "#moreTopProducts");
-                });
-            break;
-
-        case 'Feedbacks':
-
-            console.log("searchBarAction - Suche und Sortierung nach Feedbacks eingeleitet");
-            DB.Product.find().matches('liste', filter).matches('tags', inputReg)
-                .isNotNull('bild').resultList(function(result)
+function feedbackSearch(filterRegex,inputRegex)
+{
+    console.log("searchBarAction - Suche und Sortierung nach Feedbacks eingeleitet");
+    DB.Product.find().matches('liste', filterRegex).matches('tags', inputRegex)
+        .isNotNull('bild').resultList(function(result)
+        {
+            function sortBew(a,b)
+            {
+                function bewfinder(obj)
                 {
-                    function sortBew(a,b)
+                    if(obj.Feedbacks == null)
                     {
-                        function bewfinder(obj)
-                        {
-                            if(obj.Feedbacks == null)
-                            {
-                                return 0;
-                            }
-                            else
-                            {
-                                return obj.Feedbacks.reduce(function (avg, el) {
-                                    return avg + el.Bewertung;
-                                }, 0) / obj.Feedbacks.size;
-                            }
-
-                        }
-                        return bewfinder(b) - bewfinder(a);
+                        return 0;
                     }
-                    result.sort(sortBew);
-                    printItemsSmall(result, "#moreTopProducts");
-                });
+                    else
+                    {
+                        return obj.Feedbacks.reduce(function (avg, el) {
+                                return avg + el.Bewertung;
+                            }, 0) / obj.Feedbacks.size;
+                    }
 
-            break;
+                }
+                return bewfinder(b) - bewfinder(a);
+            }
+            result.sort(sortBew);
+            printItemsSmall(result, "#moreTopProducts");
+        });
+}
 
-        default:
-
-            console.log("searchBarAction - Suche und Sortierung nach " + sort + " eingeleitet");
-            DB.ready(function () {
-                DB.Product.find()
-                    .matches('liste', filter)
-                    .matches('tags', inputReg)
-                    .isNotNull('bild')
-                    .descending(sort)
-                    .resultList(function (result) {
-                        printItemsSmall(result, "#moreTopProducts");
-                    })
-            });
-    }
-
-
-};
+function defaultSearch(filterRegex, inputRegex, sortParam)
+{
+    console.log("searchBarAction - Suche und Sortierung nach " + sortParam + " eingeleitet");
+    DB.ready(function () {
+        DB.Product.find()
+            .matches('liste', filterRegex)
+            .matches('tags', inputRegex)
+            .isNotNull('bild')
+            .descending(sortParam)
+            .resultList(function (result) {
+                printItemsSmall(result, "#moreTopProducts");
+            })
+    });
+}
 
 // In Arbeit: Id rein, Bewertung raus
 
@@ -224,6 +243,7 @@ var printSingleProduct = function (product) {
         "<div class=\"productTD\"><h2>" + product.name + " </h2></div>" +
         "<div class=\"productTD\">" + product.preis + " Euro</div>" +
         "<div class=\"productTD\">nur noch <h6 class=\"stueckZahl\">" + product.stueckzahl + "</h6> vorhanden" +
+        "<div class=\"productTD\">" + "<input type =\"range\" class=\"bewslide\" min=0 max=500 step=100 value=500>" + "</div>" +
         "<div class=\"productDescription productTD\"><p class=\"productDescription\">" + product.beschreibung + "</p></div>" +
             "<br><button type=\"button\" class=\"cartButton\" id=" + product.id + ">Add to Cart</button> " +
         "</div></div></div></div>"
