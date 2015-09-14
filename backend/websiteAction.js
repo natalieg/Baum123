@@ -160,8 +160,7 @@ var showCartPage = function(){
     $('#cartTop').show();
     $('#cartPage').html("").show();
     $('#fullPrice').html("").show();
-
-};
+}
 
 var hideCartPage = function(){
     $('#cartTop').hide();
