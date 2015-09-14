@@ -14,6 +14,7 @@ var cartCount = $('.cartCounter').value;
  * @param pid
  */
 var updateProductQuantity = function (pid, amount) {
+    amount = parseInt(amount);
     console.log("Anzahl der Produkte wird um 1 reduziert");
     DB.Product.load(pid).then(function (cartProduct) {
         if (cartProduct.stueckzahl >= 1) {
@@ -40,7 +41,7 @@ var updateCartItem = function (pid, amount) {
         var productExists = false;
         cartItems.forEach(function (product) {
             if (product.p.id === pid) {
-                product.a = product.a + amount;
+                product.a += amount;
                 productExists = true;
             }
         });
@@ -87,13 +88,13 @@ var changeAndCalculateFullPrice = function () {
         var productPrice = CartProduct.p.preis;
         var oldAmount = CartProduct.a;
         var newAmount = $('#' + CartProduct.p.id + 'a').val();
-        parseInt(newAmount);
+        newAmount = parseInt(newAmount);
         var inStock = 0;
         DB.Product.load(CartProduct.p.id).then(function (product) {
             console.log("Aktualisiere Produkt in DB");
             inStock = product.stueckzahl;
             console.log("New Amount: " + newAmount + " Old Amount: " + oldAmount + " Auf Lager " + inStock);
-            var inStockPlusOldAmount = (parseInt(oldAmount) + parseInt(inStock));
+            var inStockPlusOldAmount = (oldAmount + inStock);
             // Hier wird sichergestellt, dass nicht mehr Produkte in den Warenkorb gelegt werden, als auf Lager sind
             if (newAmount > 0) {
                 if ((newAmount <= parseInt(inStockPlusOldAmount))) {
