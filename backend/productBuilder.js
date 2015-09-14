@@ -242,7 +242,11 @@ var printSingleProduct = function (product) {
         "<div class=\"col-md-3 singleViewContent\">" +
         "<div class=\"productTD\"><h2>" + product.name + " </h2></div>" +
         "<div class=\"productTD\">" + product.preis + " Euro</div>" +
-        "<div class=\"productTD\">nur noch <h6 class=\"stueckZahl\">" + product.stueckzahl + "</h6> vorhanden" +
+        "<div class=\"productTD\">nur noch <h6 class=\"stueckZahl\">" + product.stueckzahl + "</h6> vorhanden</div>" +
+        "<div class=\"productTD\">Durchschnittliche Produktbewertung: <h6 class=\"stueckZahl\">"  + product.Feedbacks.reduce(function (avg, el)
+        {
+            return avg + el.Bewertung;
+        }, 0) / product.Feedbacks.size + "</h6> Punkte</div>" +
         "<div class=\"productTD\">" + "<input type =\"range\" class=\"bewslide\" min=0 max=500 step=100 value=500>" + "</div>" +
         "<div class=\"productDescription productTD\"><p class=\"productDescription\">" + product.beschreibung + "</p></div>" +
             "<br><button type=\"button\" class=\"cartButton\" id=" + product.id + ">Add to Cart</button> " +

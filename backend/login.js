@@ -12,11 +12,13 @@ $(document).ready(function() {
             $(".button1").show();
             $(".button2").show();
         }
-    else {
-        $("#logout").show();
-        $(".button1").hide();
-        $(".button2").hide();
-    }});
+        else
+        {
+            $("#logout").show();
+            $(".button1").hide();
+            $(".button2").hide();
+        }
+        });
 
     $(".button1").click(function(e) {
         $("body").append('<div class="overlay"></div>');
