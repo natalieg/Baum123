@@ -23,6 +23,8 @@ var updateProductQuantity = function (pid, amount) {
             cartProduct.update();
             $('.stueckZahl').text(cartProduct.stueckzahl);
             updateCartItem(pid, 1);
+            cartCount = cartCount + 1;
+            $('.cartCounter').text(cartCount);
         } else {
             window.alert("Keine mehr auf Lager!");
         }

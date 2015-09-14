@@ -212,8 +212,6 @@ var changeCartAmountAction = function(){
 // 1 erhöht und in der Datenbank um 1 verringert
 var clickCartBtn = function(){
     $('.cartButton').click(function(){
-        cartCount = cartCount + 1;
-        $('.cartCounter').text(cartCount);
         var pid = this.id;
         DB.ready(updateProductQuantity(pid, 1));
     })

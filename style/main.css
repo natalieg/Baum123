@@ -354,7 +354,12 @@
     border-color: #BBB #ECECEC #ECECEC #BBB;
 }
 
-.bewslide
-{
+.bewslide {
     width: 100px;
+}
+
+.productScore {
+    display: inline;
+    font-weight: bold;
+    font-size: 14px;
 }
