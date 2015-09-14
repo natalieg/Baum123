@@ -58,11 +58,13 @@ var main = function () {
         }
     });
 
-    $('.searchbar').keyup(function () {
-       // if(event.ctrlKey || event.altKey || event.shiftKey || String.fromCharCode(event.which) == 27 || String.fromCharCode(event.which) == 13)
+    $('.searchbar').on('keyup', function (event) {
+        if(!(event.ctrlKey || event.altKey || event.shiftKey || String.fromCharCode(event.which) == 27 || String.fromCharCode(event.which) == 13))
+        {
         console.log("searchbar.keyup - Keyrelease registriert!");
         showProductOverviewOnly();
         searchBarAction();
+        }
     });
     $('.sortBox').change(function () {
         console.log("sortBox.change - Änderung an der Combobox registriert!");
