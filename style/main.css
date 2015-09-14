@@ -335,6 +335,7 @@
     padding-left: 20%;
     height: 100px;
     line-height: 100px;
+    z-index: 900;
 }
 
 .fullPriceView {
@@ -343,5 +344,13 @@
 
 .totalPrice {
     font-weight: bold;
+}
+
+.cartAmountInput {
+    height: 22px;
+    width: 100px;
+    background: rgba(255, 255, 255, 0.43);
+    border: 1px solid #BBB;
+    border-color: #BBB #ECECEC #ECECEC #BBB;
 }
 
