@@ -60,7 +60,6 @@ var main = function () {
 
     $('.searchbar').keyup(function () {
        // if(event.ctrlKey || event.altKey || event.shiftKey || String.fromCharCode(event.which) == 27 || String.fromCharCode(event.which) == 13)
-        //{console.log("fuu")};
         console.log("searchbar.keyup - Keyrelease registriert!");
         showProductOverviewOnly();
         searchBarAction();
@@ -94,7 +93,7 @@ var main = function () {
         window.history.pushState({info: "Mainpage"}, null, "index.html");
        showMainPageOnly();
     });
-
+    // Wird auf "Show me more" gelickt, werden weitere Produkte in einem kleineren Raster angezeigt
     $('.more').click(function () {
         DB.ready(allSales);
         $('.kategorie').removeClass("active");
@@ -114,14 +113,15 @@ var main = function () {
 
         showCartPage();
         buildCartPage();
-        calculateFullPrice();
         printTotalPrice();
+        changeAndCalculateFullPrice();
+
     });
 };
 
 
 
-// Zeigt die LandingPage Ansicht der Hauptseite
+// Zeigt die Produktuebersicht Ansicht der Hauptseite
 var showProductOverviewOnly = function(){
     hideMainPage();
     hideSingleProduct();
@@ -129,6 +129,7 @@ var showProductOverviewOnly = function(){
     $('.moreBestseller').html("").show();
 };
 
+// LandingPage wird angezeigt
 var showMainPageOnly = function(){
     $('.bestsellerRow').html("").show();
     $('.bestsellerText').show();
@@ -161,13 +162,14 @@ var showCartPage = function(){
     $('#cartTop').show();
     $('#cartPage').html("").show();
     $('#fullPrice').html("").show();
-}
+
+};
 
 var hideCartPage = function(){
     $('#cartTop').hide();
     $('#cartPage').hide();
     $('#fullPrice').hide();
-}
+};
 
 // Wenn ein Produkt angeklickt wir auf der Hauptseite oder auf der Uebersicht
 // gelangt man auf eine Einzelproduktseite
@@ -186,12 +188,23 @@ var clickAction = function () {
     });
 };
 
+// Im Warenkorb wird die Stückzahl geaendert, daraufhin muss die Datenbank aktualisiert und auch
+// der Gesamtpreis neu berechnet werden
+var changeCartAmountAction = function(){
+    $('#fullPrice').html("").show();
+    $('.cartAmountInput').change(function(){
+        changeAndCalculateFullPrice();
+    });
+};
+
+// Action für den Warenkorb-Button, wenn dieser geklickt wird, wird die Stückzahl im Warenkorb um
+// 1 erhöht und in der Datenbank um 1 verringert
 var clickCartBtn = function(){
     $('.cartButton').click(function(){
         cartCount = cartCount + 1;
         $('.cartCounter').text(cartCount);
         var pid = this.id;
-        DB.ready(updateProductAnzahl(pid));
+        DB.ready(updateProductQuantity(pid, 1));
     })
 };
 
@@ -236,9 +249,6 @@ window.onpopstate = function (event)
                 $(this).removeClass("active");
             }
         });
-
-
-
         searchBarAction();
     }
     else {
