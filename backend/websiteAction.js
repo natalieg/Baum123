@@ -8,6 +8,18 @@ var cartCount = 0;
  * Togglet die Top-Produkte Ansicht in Hide/Show wenn "m" gedr?ckt wird
  * TODO Bei m (more) verstecken, unterproduktansicht anzeigen
  */
+var cartItems = [];
+var totalPrice = 0;
+/**
+function stopRKey(evt) {
+    var evt = (evt) ? evt : ((event) ? event : null);
+    var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+    if ((evt.keyCode == 13) && (node.type=="text"))  {return false;}
+}
+
+document.onkeypress = stopRKey;
+**/
+
 var main = function () {
     hideCartPage();
 
@@ -58,14 +70,16 @@ var main = function () {
         }
     });
 
-    $('.searchbar').keyup(function () {
-       // if(event.ctrlKey || event.altKey || event.shiftKey || String.fromCharCode(event.which) == 27 || String.fromCharCode(event.which) == 13)
+    $('.searchbar').on('keyup', function (event) {
+        if(!(event.ctrlKey || event.altKey || event.shiftKey || String.fromCharCode(event.which) == 27 || String.fromCharCode(event.which) == 13))
+        {
         console.log("searchbar.keyup - Keyrelease registriert!");
         showProductOverviewOnly();
         searchBarAction();
+        }
     });
     $('.sortBox').change(function () {
-        console.log("sortBox.change - Änderung an der Combobox registriert!");
+        console.log("sortBox.change - ï¿½nderung an der Combobox registriert!");
         showProductOverviewOnly();
         searchBarAction();
     });
