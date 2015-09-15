@@ -21,49 +21,8 @@ document.onkeypress = stopRKey;
 **/
 
 var main = function () {
-   hideCartPage();
 
-    DB.ready(function()
-    {
-        var url = window.location.href;
-        if(url.match(/^.*\?p=.*/))
-        {
-            showSingleProductOnly();
-            var pid = url.substring(url.indexOf('=')+1,url.length);
-            loadSingleProduct(pid);
-        }
-        else if (url.match(/^.*\?s=.*f=.*/)) {
-            var paramString = url.substring(url.indexOf('s=')+1,url.length);
-            var filterString = paramString.substring(paramString.indexOf('f=')+2, paramString.length);
-            setFilter(new RegExp("^" + filterString));
-            var searchLength = paramString.length - ( filterString.length + 3);
-            var searchString = paramString.substring(1 , searchLength);
-            document.getElementById("searchbar").value = searchString;
-
-            $('.kategorie').each(function()
-            {
-                if(this.id == filterString)
-                {
-                    $(this).addClass("active");
-                }
-                else
-                {
-                    $(this).removeClass("active");
-                }
-            });
-            startSearch();
-        }
-        else if (url.match(/^.*\?cart.*/))
-        {
-            visualizeCartPage();
-        }
-        else {
-            $('.kategorie').removeClass("active");
-            document.getElementById("searchbar").value = "";
-            showMainPageOnly();
-        }
-    });
-
+    DB.ready(function(){createPage()});
 
     $('.searchbar').on('keyup', function (event) {
         if(!(event.ctrlKey || event.altKey || event.shiftKey || String.fromCharCode(event.which) == 27 || String.fromCharCode(event.which) == 13))
@@ -94,24 +53,83 @@ var main = function () {
     });
 
     $('#welcome').click(function () {
-        $('.kategorie').removeClass("active");
-        document.getElementById("searchbar").value = "";
         window.history.pushState({info: "Mainpage"}, null, "index.html");
        showMainPageOnly();
     });
 
     // Wird auf "Show me more" gelickt, werden weitere Produkte in einem kleineren Raster angezeigt
     $('.more').click(function () {
-        $('.kategorie').removeClass("active");
         window.history.pushState({info: "Mainpage"}, null, "?s=&f=");
         startSearch();
     });
 
     // Warenkorb Seite wird angezeigt wenn das Warenkorb Symbol angeklickt wird
     $('.cart').click(function(){
-        visualizeCartPage();
+        showCartPageOnly();
         window.history.pushState({info: "Cart"}, null, "?cart");
     });
+};
+
+window.onpopstate = function ()
+{
+    DB.ready(function(){createPage()});
+};
+
+function createPage()
+{
+    var url = window.location.href;
+    if(url.match(/^.*\?p=.*/))
+    {
+        showSingleProductOnly();
+        var pid = url.substring(url.indexOf('=')+1,url.length);
+        loadSingleProduct(pid);
+    }
+    else if (url.match(/^.*\?s=.*f=.*/)) {
+        var paramString = url.substring(url.indexOf('s=')+1,url.length);
+        var filterString = paramString.substring(paramString.indexOf('f=')+2, paramString.length);
+        setFilter(new RegExp("^" + filterString));
+        var searchLength = paramString.length - ( filterString.length + 3);
+        var searchString = paramString.substring(1 , searchLength);
+        document.getElementById("searchbar").value = searchString;
+
+        $('.kategorie').each(function()
+        {
+            if(this.id == filterString)
+            {
+                $(this).addClass("active");
+            }
+            else
+            {
+                $(this).removeClass("active");
+            }
+        });
+        startSearch();
+    }
+    else if (url.match(/^.*\?cart.*/))
+    {
+        showCartPageOnly();
+    }
+    else {
+        showMainPageOnly();
+    }
+}
+
+function showSingleProductOnly()
+{
+    hideMainPage();
+    hideProductOverview();
+    hideCartPage();
+
+    showSingleProduct();
+}
+
+var showSingleProduct = function()
+{
+    $('.singleView').html("").show();
+};
+
+var hideSingleProduct = function(){
+    $('.singleView').html("").hide();
 };
 
 
@@ -121,6 +139,12 @@ var showProductOverviewOnly = function(){
     hideMainPage();
     hideSingleProduct();
     hideCartPage();
+
+    showProductOverview();
+};
+
+var showProductOverview = function()
+{
     $('.moreBestseller').html("").show();
 };
 
@@ -130,12 +154,20 @@ var hideProductOverview = function(){
 
 // LandingPage wird angezeigt
 var showMainPageOnly = function(){
-    $('.bestsellerRow').html("").show();
-    $('.bestsellerText').show();
-    $('.more').show();
     hideProductOverview();
     hideSingleProduct();
     hideCartPage();
+
+    resetSearch();
+
+    showMainPage();
+};
+
+var showMainPage = function()
+{
+    $('.bestsellerRow').html("").show();
+    $('.bestsellerText').show();
+    $('.more').show();
     DB.ready(topSales());
 };
 
@@ -145,22 +177,26 @@ var hideMainPage = function(){
     $('.more').hide();
 };
 
-function showSingleProductOnly()
+function showCartPageOnly()
 {
     hideMainPage();
     hideProductOverview();
-    hideCartPage();
-    $('.singleView').html("").show();
-}
+    hideSingleProduct();
 
-var hideSingleProduct = function(){
-    $('.singleView').html("").hide();
-};
+    resetSearch();
+
+    showCartPage();
+
+}
 
 var showCartPage = function(){
     $('#cartTop').show();
     $('#cartPage').html("").show();
     $('#fullPrice').html("").show();
+
+    buildCartPage();
+    printTotalPrice();
+    changeAndCalculateFullPrice();
 };
 
 var hideCartPage = function(){
@@ -168,6 +204,22 @@ var hideCartPage = function(){
     $('#cartPage').hide();
     $('#fullPrice').hide();
 };
+
+function startSearch()
+{
+    showProductOverviewOnly();
+    searchBarAction();
+}
+
+function resetSearch()
+{
+    $('.kategorie').each(function()
+    {
+        $(this).removeClass("active");
+    });
+    document.getElementById("searchbar").value = "";
+    document.getElementById("sortOption").value = "gesamtverkauf";
+}
 
 // Wenn ein Produkt angeklickt wir auf der Hauptseite oder auf der Uebersicht
 // gelangt man auf eine Einzelproduktseite
@@ -199,76 +251,6 @@ var clickCartBtn = function(){
         DB.ready(updateProductQuantity(pid, 1));
     })
 };
-
-
-
-window.onpopstate = function (event)
-{
-    var url = window.location.href;
-
-    if(url.match(/^.*\?p=.*/))
-    {
-        showSingleProductOnly();
-        var pid = url.substring(url.indexOf('=')+1,url.length);
-        DB.ready(loadSingleProduct(pid));
-    }
-    else if (url.match(/^.*\?cart.*/))
-    {
-        visualizeCartPage();
-    }
-    else if (url.match(/^.*\?s=.*f=.*/)) {
-        var paramString = url.substring(url.indexOf('s=')+1,url.length);
-        var filterString = paramString.substring(paramString.indexOf('f=')+2, paramString.length);
-        setFilter(new RegExp("^" + filterString));
-        var searchLength = paramString.length - ( filterString.length + 3);
-        var searchString = paramString.substring(1 , searchLength);
-        document.getElementById("searchbar").value = searchString;
-
-        $('.kategorie').each(function()
-        {
-            if(this.id == filterString)
-            {
-                $(this).addClass("active");
-            }
-            else
-            {
-                $(this).removeClass("active");
-            }
-        });
-        startSearch();
-    }
-    else {
-        $('.kategorie').removeClass("active");
-        document.getElementById("searchbar").value = "";
-        showMainPageOnly();
-    }
-};
-
-//Wrappermethoden------------------------------------------------------------------------------------
-
-function startSearch()
-{
-    showProductOverviewOnly();
-    searchBarAction();
-}
-
-function visualizeCartPage()
-{
-    hideMainPage();
-    hideProductOverview();
-    hideSingleProduct();
-
-    $('.kategorie').each(function()
-    {
-        $(this).removeClass("active");
-    });
-
-    showCartPage();
-    buildCartPage();
-    printTotalPrice();
-    changeAndCalculateFullPrice();
-}
-
 
 
 $(document).ready(main);
