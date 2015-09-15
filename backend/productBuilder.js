@@ -2,9 +2,12 @@
  * Created by peukert on 02.09.15.
  */
 
+var filter = /^.*/;
+
+
 /* Funktion, die meistverkauften Produkte auf der Oberfläche ausgibt, die aktuell noch vorrätig sind.
 * */
-function productSelectBestSales(limitNumber, rowID, bigItem) {
+function productSelectBestSales(limitNumber, rowID) {
     console.log("productSelectBestSales wird aufgerufen. Die meistverkauften Produkte sollen angezeigt werden.");
     DB.Product.find()
         .isNotNull('bild')
@@ -14,11 +17,8 @@ function productSelectBestSales(limitNumber, rowID, bigItem) {
             result.forEach(function (product) {
                console.log("productSelectBest Sales - Folgendes Produkt soll ausgegeben werden:" + JSON.stringify(product));
             });
-            if (bigItem === 1) {
                 printItemsBig(result, rowID)
-            } else {
-                printItemsSmall(result, rowID)
-            }
+
         });
 }
 
@@ -35,17 +35,9 @@ var loadSingleProduct = function (pid) {
 
 
 var topSales = function () {
-    productSelectBestSales(4, "#topProducts", 1);
+    productSelectBestSales(4, "#topProducts");
 };
 
-var allSales = function () {
-    productSelectBestSales(100, "#moreTopProducts");
-};
-
-
-
-
-var filter = /^.*/;
 
 /* Funktion, die die Filtervariable neu setzt.
 *
@@ -328,4 +320,4 @@ $(document).ready(function() {
 
 
 //Hier werden die Methoden ausgeführt, sobald die Datenbank bereit ist.
-DB.ready(topSales);
+//DB.ready(topSales);

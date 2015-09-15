@@ -21,21 +21,18 @@ document.onkeypress = stopRKey;
 **/
 
 var main = function () {
-    hideCartPage();
+   hideCartPage();
 
     DB.ready(function()
     {
         var url = window.location.href;
         if(url.match(/^.*\?p=.*/))
         {
-            hideMainPage();
-            hideProductOverview();
-            showSingleProduct();
+            showSingleProductOnly();
             var pid = url.substring(url.indexOf('=')+1,url.length);
             loadSingleProduct(pid);
         }
         else if (url.match(/^.*\?s=.*f=.*/)) {
-            showProductOverviewOnly();
             var paramString = url.substring(url.indexOf('s=')+1,url.length);
             var filterString = paramString.substring(paramString.indexOf('f=')+2, paramString.length);
             setFilter(new RegExp("^" + filterString));
@@ -54,59 +51,46 @@ var main = function () {
                     $(this).removeClass("active");
                 }
             });
-
-            searchBarAction();
+            startSearch();
         }
         else if (url.match(/^.*\?cart.*/))
         {
-            hideMainPage();
-            hideProductOverview();
-            hideSingleProduct();
-
-            $('.kategorie').each(function()
-            {
-                $(this).removeClass("active");
-            });
-            showCartPage();
-            buildCartPage();
-            printTotalPrice();
-            changeAndCalculateFullPrice();
+            visualizeCartPage();
         }
-
+        else {
+            $('.kategorie').removeClass("active");
+            document.getElementById("searchbar").value = "";
+            showMainPageOnly();
+        }
     });
 
 
     $('.searchbar').on('keyup', function (event) {
         if(!(event.ctrlKey || event.altKey || event.shiftKey || String.fromCharCode(event.which) == 27 || String.fromCharCode(event.which) == 13))
         {
-        console.log("searchbar.keyup - Keyrelease registriert!");
-        showProductOverviewOnly();
-        searchBarAction();
+            startSearch();
         }
     });
+
     $('.sortBox').change(function () {
-        console.log("sortBox.change - �nderung an der Combobox registriert!");
-        showProductOverviewOnly();
-        searchBarAction();
+        startSearch();
     });
+
     $('.kategorie').click(function () {
         var filter;
         if($(this).hasClass('active'))
         {
             $(this).removeClass("active");
-            console.log("active");
             filter = new RegExp("^.*");
         }
         else
         {
             $('.kategorie').removeClass("active");
             $(this).addClass("active");
-            console.log("not active");
             filter = new RegExp("^"+this.id);
         }
-        showProductOverviewOnly();
         setFilter(filter);
-        searchBarAction();
+        startSearch();
     });
 
     $('#welcome').click(function () {
@@ -115,29 +99,18 @@ var main = function () {
         window.history.pushState({info: "Mainpage"}, null, "index.html");
        showMainPageOnly();
     });
+
     // Wird auf "Show me more" gelickt, werden weitere Produkte in einem kleineren Raster angezeigt
     $('.more').click(function () {
-        DB.ready(allSales);
         $('.kategorie').removeClass("active");
         window.history.pushState({info: "Mainpage"}, null, "?s=&f=");
-       showProductOverviewOnly();
+        startSearch();
     });
+
     // Warenkorb Seite wird angezeigt wenn das Warenkorb Symbol angeklickt wird
     $('.cart').click(function(){
-        hideMainPage();
-        hideProductOverview();
-        hideSingleProduct();
-
+        visualizeCartPage();
         window.history.pushState({info: "Cart"}, null, "?cart");
-
-        $('.kategorie').each(function()
-        {
-            $(this).removeClass("active");
-        });
-        showCartPage();
-        buildCartPage();
-        printTotalPrice();
-        changeAndCalculateFullPrice();
     });
 };
 
@@ -151,6 +124,10 @@ var showProductOverviewOnly = function(){
     $('.moreBestseller').html("").show();
 };
 
+var hideProductOverview = function(){
+    $(".moreBestseller").html("").hide();
+};
+
 // LandingPage wird angezeigt
 var showMainPageOnly = function(){
     $('.bestsellerRow').html("").show();
@@ -159,7 +136,7 @@ var showMainPageOnly = function(){
     hideProductOverview();
     hideSingleProduct();
     hideCartPage();
-    topSales();
+    DB.ready(topSales());
 };
 
 var hideMainPage = function(){
@@ -168,16 +145,16 @@ var hideMainPage = function(){
     $('.more').hide();
 };
 
-var hideProductOverview = function(){
-    $(".moreBestseller").html("").hide();
-};
+function showSingleProductOnly()
+{
+    hideMainPage();
+    hideProductOverview();
+    hideCartPage();
+    $('.singleView').html("").show();
+}
 
 var hideSingleProduct = function(){
     $('.singleView').html("").hide();
-};
-
-var showSingleProduct = function(){
-    $('.singleView').html("").show();
 };
 
 var showCartPage = function(){
@@ -196,11 +173,7 @@ var hideCartPage = function(){
 // gelangt man auf eine Einzelproduktseite
 var clickAction = function () {
     $(".productLink").click(function () {
-        console.log(this.id);
-        hideMainPage();
-        hideProductOverview();
-        hideCartPage();
-        showSingleProduct();
+        showSingleProductOnly();
         var pid = this.id;
         var urlString = "?p=" + pid;
         var popString = "Page of " + pid;
@@ -231,45 +204,24 @@ var clickCartBtn = function(){
 
 window.onpopstate = function (event)
 {
-    console.log("window.onpopstate - Postate-Event registriert!");
     var url = window.location.href;
-    console.log("window.onpopstate - Folgende URL wurde eingelesen: " + url);
 
     if(url.match(/^.*\?p=.*/))
     {
-        console.log("window.onpopstate - Anfrage nach Produktansicht erkannt!");
-        hideMainPage();
-        hideProductOverview();
-        showSingleProduct();
+        showSingleProductOnly();
         var pid = url.substring(url.indexOf('=')+1,url.length);
-        console.log("window.onpopstate - Folgende Produkt-ID wurde eingelesen: " + pid);
         DB.ready(loadSingleProduct(pid));
     }
     else if (url.match(/^.*\?cart.*/))
     {
-        hideMainPage();
-        hideProductOverview();
-        hideSingleProduct();
-
-        $('.kategorie').each(function()
-        {
-            $(this).removeClass("active");
-        });
-        showCartPage();
-        buildCartPage();
-        printTotalPrice();
-        changeAndCalculateFullPrice();
+        visualizeCartPage();
     }
     else if (url.match(/^.*\?s=.*f=.*/)) {
-        console.log("window.onpopstate - Anfrage nach Suchergebnissen erkannt!");
-        showProductOverviewOnly();
         var paramString = url.substring(url.indexOf('s=')+1,url.length);
         var filterString = paramString.substring(paramString.indexOf('f=')+2, paramString.length);
         setFilter(new RegExp("^" + filterString));
         var searchLength = paramString.length - ( filterString.length + 3);
         var searchString = paramString.substring(1 , searchLength);
-        console.log("window.onpopstate - Folgender Filter wurde eingelesen: " + filterString);
-        console.log("window.onpopstate - Folgender Suchbegriff wurde eingelesen: " + searchString);
         document.getElementById("searchbar").value = searchString;
 
         $('.kategorie').each(function()
@@ -283,15 +235,40 @@ window.onpopstate = function (event)
                 $(this).removeClass("active");
             }
         });
-        searchBarAction();
+        startSearch();
     }
     else {
-        console.log("window.onpopstate - Keine Anfrage nach Spezialseiten erkannt.");
         $('.kategorie').removeClass("active");
         document.getElementById("searchbar").value = "";
         showMainPageOnly();
     }
-
 };
+
+//Wrappermethoden------------------------------------------------------------------------------------
+
+function startSearch()
+{
+    showProductOverviewOnly();
+    searchBarAction();
+}
+
+function visualizeCartPage()
+{
+    hideMainPage();
+    hideProductOverview();
+    hideSingleProduct();
+
+    $('.kategorie').each(function()
+    {
+        $(this).removeClass("active");
+    });
+
+    showCartPage();
+    buildCartPage();
+    printTotalPrice();
+    changeAndCalculateFullPrice();
+}
+
+
 
 $(document).ready(main);
