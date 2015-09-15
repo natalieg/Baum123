@@ -2,7 +2,8 @@
  * Created by peukert on 02.09.15.
  */
 
-// zeigt die topSaleNumber meist gekauften Produkte an
+/* Funktion, die meistverkauften Produkte auf der Oberfläche ausgibt, die aktuell noch vorrätig sind.
+* */
 function productSelectBestSales(limitNumber, rowID, bigItem) {
     console.log("productSelectBestSales wird aufgerufen. Die meistverkauften Produkte sollen angezeigt werden.");
     DB.Product.find()
@@ -19,7 +20,7 @@ function productSelectBestSales(limitNumber, rowID, bigItem) {
                 printItemsSmall(result, rowID)
             }
         });
-};
+}
 
 var loadSingleProduct = function (pid) {
     console.log("loadSingleProduct wird aufgerufen. Anzeige des Produkts und seiner Bewertung soll via ID eingeleitet werden.");
@@ -31,128 +32,155 @@ var loadSingleProduct = function (pid) {
     });
 };
 
-
-
 var topSales = function () {
     productSelectBestSales(4, "#topProducts", 1);
-}
+};
 
 var allSales = function () {
     productSelectBestSales(100, "#moreTopProducts");
-}
+};
 
 
-//hier werden die Methoden ausgef�hrt, wenn die Datenbank bereit ist
-DB.ready(topSales);
+
 
 var filter = /^.*/;
 
+/* Funktion, die die Filtervariable neu setzt.
+*
+* @Param newFilter: Neuer Regex, der als Filter für die Suche eingesetzt werden soll.
+* */
 function setFilter(newFilter)
 {
     filter = newFilter;
 }
 
-// Sucht Dinge. Vielleicht. Jetzt auch mit Sortierung nach Bewertung.
+
+/* Funktion, welche eine Suche in der Datenbank nach einem Produkt einleitet. Konkret wird
+*  nach den einem Produkt zugefügten Tags gesucht, nach einer eingestellten Kategorie
+*  gefiltert und die Ergebnismenge nach dem aktiven Sortierverfahren geordnet. Weitere
+*  Informationen über die Funktionsweise sind bitte den Kommentaren im Quelltext zu
+*  entnehmen.
+*/
 function searchBarAction() {
-    console.log("searchBarAction wird aufgerufen. Inhalt der Suchleiste soll gesucht werden.");
+    //Der Eintrag der Suchleiste wird in Kleinbuchstaben ermittelt und aus ihm ein
+    //Regex für den Abgleich mit den Produkt-Tags gebildet.
     var input = document.getElementById('searchbar').value.toLowerCase();
-    console.log("searchBarAction - Searchbar enthaelt folgenden Input: " + input);
     var inputReg = new RegExp("^.*" + input);
-    console.log("searchBarAction - Folgender RegEx wurde gebildet: " + inputReg);
 
-    var filterString = filter.toString().substring(2, filter.toString().length - 1);
-    if(filterString.match(/^\.\*/))
-    {
-        filterString = "";
-    };
-    urlRefresh(input, filterString);
-
+    //Aus der Optionsauswahl für die Sortierung wird ein aussagekraeftier String entnommen, mit
+    //dem das Sortierverfahren später eingeleitet werden soll.
     var sort = document.getElementById('sortOption').value;
-    console.log("searchBarAction - Ergebnisse werden sortiert nach: " + sort);
+    console.log("searchBarAction - Input: " + input + " inputReg: " + inputReg + " sort: " + sort);
 
+    // Aufruf der Methode, die gemäß des Sortierverfahrens den Suchbefehl an Baqend richtet.
     sortSwitch(sort, inputReg);
-};
 
+    //Aufruf der Methode, die die URL anpasst.
+    urlRefresh(input);
+}
+
+
+/* Funktion, welche mithilfe eines angegebenen Sortierverfahrens den Aufruf auswählt, der
+* an Baqend gerichtet werden soll.
+*
+* @Param: sort Ein String, der für das entsprechende Sortierverfahren steht.
+* @Param: inputReg Die Eingabe im Suchfeld als Regex.
+*/
 function sortSwitch(sort, inputReg)
 {
     switch(sort)
     {
-        case 'preis':
-            priceSearch(filter, inputReg);
-            break;
-
         case 'Feedbacks':
             feedbackSearch(filter, inputReg);
             break;
 
+        case 'preis':
+            ascSearch(filter, inputReg, sort);
+            break;
+
         default:
-            defaultSearch(filter,inputReg, sort);
+            descSearch(filter,inputReg, sort);
     }
 }
 
-function urlRefresh(searchInput, filterInput)
-{
-    if (window.location.href.match(/^.*\?s=.*f=.*/))
-    {
-        console.log("searchBarAction - Suche durch URL erkannt.");
-        var urlString = "?s=" + searchInput + "&f=" + filterInput;
-        var popString = "Search for " + searchInput;
-        window.history.replaceState({info: popString}, null, urlString);
-        console.log("searchBarAction - URL modifiziert mit: " + urlString);
-    }
-    else
-    {
-        console.log("searchBarAction - Keine Suche erkannt.");
-        var urlString = "?s=" + searchInput + "&f=" + filterInput;
-        var popString = "Search for " + searchInput;
-        window.history.pushState({info: popString}, null, urlString);
-        console.log("searchBarAction - URL modifiziert mit: " + urlString);
-    }
-}
 
-function priceSearch(filterRegex, inputRegex)
+/* Funktion, die eine Suchanfrage an die Datenbank richtet, wenn das Ergebnis aufsteigend nach einer Kategorie
+* sortiert werden soll.(Aktuell existiert nur eine, aber Ergänzungen könnten so leicht abgehandelt werden).
+*
+* @Param: filterRegex Nur aus der Kategorie, die mit diesem Regex beschrieben wurde, sollen Ergebnisse
+*         ausgegeben werden
+* @Param: inputRegex Aus der Sucheingabe gebildeter Regex, mit dem die Tags der Produkte abgeglichen werden.
+* @Param: sortParam Angabe des Spaltennamens, nachdem die Einträge der Datenbank aufsteigend sortiert werden
+ *        sollen.
+*/
+function ascSearch(filterRegex, inputRegex, sortParam)
 {
     console.log("searchBarAction - Suche und Sortierung nach Preis eingeleitet");
     DB.Product.find()
         .matches('liste', filterRegex)
         .matches('tags', inputRegex)
         .isNotNull('bild')
-        .ascending('preis')
+        .ascending(sortParam)
         .resultList(function (result) {
             printItemsSmall(result, "#moreTopProducts");
         });
 }
 
+
+/* Funktion, die eine Suchanfrage an die Datenbank richtet, wenn das Ergebnis nach den Feedbacks
+ * sortiert werden soll.
+ *
+ * @Param: filterRegex Nur aus der Kategorie, die mit diesem Regex beschrieben wurde, sollen Ergebnisse
+ *         ausgegeben werden
+ * @Param: inputRegex Aus der Sucheingabe gebildeter Regex, mit dem die Tags der Produkte abgeglichen werden.
+ */
 function feedbackSearch(filterRegex,inputRegex)
 {
     console.log("searchBarAction - Suche und Sortierung nach Feedbacks eingeleitet");
     DB.Product.find().matches('liste', filterRegex).matches('tags', inputRegex)
         .isNotNull('bild').resultList(function(result)
         {
+            // Definition einer lokalen Vergleichsfunktion für die nachfolgende Sortierung der Liste.
             function sortBew(a,b)
             {
+                // Diese Funktion ermittelt die Durchschnittsbewertung eines Produkts.
                 function bewfinder(obj)
                 {
-                    if(obj.Feedbacks == null)
+                    // Ist die Feedbackliste leer, wird das Produkt vorerst mit 0 Sternen bewertet.
+                    if(obj.Feedbacks.size == 0)
                     {
+                        console.log("Zero");
                         return 0;
                     }
                     else
+                    //Andernfalls wird die Liste mittels reduce auf die Summe aller Bewertungen reduziert
+                    // und anschließend durch ihre Anzahl geteilt.
                     {
-                        return obj.Feedbacks.reduce(function (avg, el) {
-                                return avg + el.Bewertung;
+                        console.log("Not Zero");
+                        return obj.Feedbacks.reduce(function (bewsum, feedback)
+                            {
+                                return bewsum + feedback.Bewertung;
                             }, 0) / obj.Feedbacks.size;
                     }
-
                 }
                 return bewfinder(b) - bewfinder(a);
             }
+            //Liste der Produkte wird nach den Bewertungen sortiert und angezeigt.
             result.sort(sortBew);
             printItemsSmall(result, "#moreTopProducts");
         });
 }
 
-function defaultSearch(filterRegex, inputRegex, sortParam)
+/* Funktion, die eine Suchanfrage an die Datenbank richtet, wenn das Ergebnis absteigend nach einer Kategorie
+ * sortiert werden soll.(Aktuell existiert nur einer, aber Ergänzungen könnten so leicht abgehandelt werden).
+ *
+ * @Param: filterRegex Nur aus der Kategorie, die mit diesem Regex beschrieben wurde, sollen Ergebnisse
+ *         ausgegeben werden
+ * @Param: inputRegex Aus der Sucheingabe gebildeter Regex, mit dem die Tags der Produkte abgeglichen werden.
+ * @Param: sortParam Angabe des Spaltennamens, nachdem die Einträge der Datenbank absteigend sortiert werden
+ *         sollen.
+ */
+function descSearch(filterRegex, inputRegex, sortParam)
 {
     console.log("searchBarAction - Suche und Sortierung nach " + sortParam + " eingeleitet");
     DB.ready(function () {
@@ -167,34 +195,35 @@ function defaultSearch(filterRegex, inputRegex, sortParam)
     });
 }
 
-// In Arbeit: Id rein, Bewertung raus
-
-var getBewertung = function (pid) {
-    DB.Product.load(pid).then(function (product) {
-
-        if(product.Feedbacks == null)
-        {
-// Sonderfall einfügen...
-        }
-        else
-        {
-            var bew = product.Feedbacks.reduce(function (avg, el) {
-                    return avg + el.Bewertung;
-                }, 0) / product.Feedbacks.size;
-            console.log(bew);
-            //Ergebnis kann zwar berechnet, aber nicht ausgegeben werden oO
-        }
-
-    });
-};
-
-
-//Testweises ersetzen der Url in der History. Scheint zu funzen.
-function urlChange()
+function urlRefresh(searchInput)
 {
-    window.history.replaceState(null, null, "fuu.html");
-}
+    //Aus dem in der globalen Filtervariable hinterlegten Regex wird ein String gebildet.
+    //Sollte es sich um keinen Namen einer Gruppe von Produkten handeln, wird der String
+    //vollkommen geleert.
+    var filterString = filter.toString().substring(2, filter.toString().length - 1);
+    if(filterString.match(/^\.\*/))
+    {
+        filterString = "";
+    }
 
+    //Sollte die URL bereits in für eine Suche angepasst worden sein und die nötigen Parameter
+    //enthalten, so wird der aktuelle Eintrag in der Browser-History mit den derzeitigen
+    //Werten von Suchbegriff und Filter überschrieben. Wenn nicht, wird ein solcher Eintrag angelegt.
+    if (window.location.href.match(/^.*\?s=.*f=.*/))
+    {
+        var urlString = "?s=" + searchInput + "&f=" + filterString;
+        var popString = "Search for " + searchInput;
+        window.history.replaceState({info: popString}, null, urlString);
+        console.log("searchBarAction - URL modifiziert mit: " + urlString);
+    }
+    else
+    {
+        var urlString = "?s=" + searchInput + "&f=" + filterString;
+        var popString = "Search for " + searchInput;
+        window.history.pushState({info: popString}, null, urlString);
+        console.log("searchBarAction - URL modifiziert mit: " + urlString);
+    }
+}
 
 //Gibt die Top-Sales-Produkte auf der Oberfl�che aus
 function printItemsBig(products, rowID) {
@@ -256,21 +285,6 @@ var printSingleProduct = function (product) {
 };
 
 
-//Gibt alle Informationen zu den Produkten aus
-// Wird grad nicht verwendet!
-function printProductComplete(products) {
-    products.forEach(function (product) {
-        $("#topProducts").append("<div class=\"col-md-3\"><a class=\"img-shadow\"><img src=\"" + product.bild + "\"></a>" +
-            "<div class=\"productTD\">" + product.name + " </div>" +
-            "<div class=\"productTD\">" + product.preis + " Euro</div>" +
-            "<div class=\"productTD\">nur noch " + product.stueckzahl + " vorhanden</div>" +
-            "<div class=\"productTD\">Bewertung: " + product.Feedbacks.reduce(function (avg, el) {
-                return avg + el.Bewertung;
-            }, 0) / product.Feedbacks.size + "</div></div></div>");
-    });
-    clickAction();
-}
-
 //Gibt die Bewertung eines Produkts zurück
 function getProductScore(products)
 {
@@ -283,3 +297,7 @@ function getProductScore(products)
         }, 0) / product.Feedbacks.size);
     });
 }
+
+
+//Hier werden die Methoden ausgeführt, sobald die Datenbank bereit ist.
+DB.ready(topSales);

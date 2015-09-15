@@ -56,7 +56,8 @@ var main = function () {
             });
 
             searchBarAction();
-        } else if (url.match(/^.*\?cart/))
+        }
+        else if (url.match(/^.*\?cart.*/))
         {
             hideMainPage();
             hideProductOverview();
@@ -242,6 +243,21 @@ window.onpopstate = function (event)
         var pid = url.substring(url.indexOf('=')+1,url.length);
         console.log("window.onpopstate - Folgende Produkt-ID wurde eingelesen: " + pid);
         DB.ready(loadSingleProduct(pid));
+    }
+    else if (url.match(/^.*\?cart.*/))
+    {
+        hideMainPage();
+        hideProductOverview();
+        hideSingleProduct();
+
+        $('.kategorie').each(function()
+        {
+            $(this).removeClass("active");
+        });
+        showCartPage();
+        buildCartPage();
+        printTotalPrice();
+        changeAndCalculateFullPrice();
     }
     else if (url.match(/^.*\?s=.*f=.*/)) {
         console.log("window.onpopstate - Anfrage nach Suchergebnissen erkannt!");
