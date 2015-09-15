@@ -33,3 +33,34 @@ form input[type=text], form input[type=password]{ border: 1px solid #666; paddin
 #footer div{ padding: 5px; }
 
 .close{ font-weight: bold; color: #F00; float: right; position: absolute; bottom: 5px; right: 10px; }
+
+#ex1Slider .slider-selection {
+    background: #BABABA;
+}
+
+#rating li {
+    float:left;
+    list-style-type:none;
+    display: inline;
+}
+
+#rating li.star_off {
+    background: url('../img/greystar.gif') no-repeat left top;
+    background-size: 48px 48px;
+    list-style-type: none;
+    display: inline;
+}
+
+#rating li.star_on {
+    background:url('../img/yellowstar.gif') no-repeat left top;
+    background-size: 48px 48px;
+    list-style-type:none;
+    display: inline;
+}
+
+#rating a {
+    display:block;
+    font-size:0px;
+    width:48px;
+    height:48px;
+}

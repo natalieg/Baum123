@@ -72,6 +72,7 @@ var main = function () {
             printTotalPrice();
             changeAndCalculateFullPrice();
         }
+
     });
 
 
@@ -208,7 +209,7 @@ var clickAction = function () {
     });
 };
 
-// Im Warenkorb wird die Stückzahl geaendert, daraufhin muss die Datenbank aktualisiert und auch
+// Im Warenkorb wird die Stï¿½ckzahl geaendert, daraufhin muss die Datenbank aktualisiert und auch
 // der Gesamtpreis neu berechnet werden
 var changeCartAmountAction = function(){
     $('#fullPrice').html("").show();
@@ -217,8 +218,8 @@ var changeCartAmountAction = function(){
     });
 };
 
-// Action für den Warenkorb-Button, wenn dieser geklickt wird, wird die Stückzahl im Warenkorb um
-// 1 erhöht und in der Datenbank um 1 verringert
+// Action fï¿½r den Warenkorb-Button, wenn dieser geklickt wird, wird die Stï¿½ckzahl im Warenkorb um
+// 1 erhï¿½ht und in der Datenbank um 1 verringert
 var clickCartBtn = function(){
     $('.cartButton').click(function(){
         var pid = this.id;
@@ -290,6 +291,7 @@ window.onpopstate = function (event)
         document.getElementById("searchbar").value = "";
         showMainPageOnly();
     }
+
 };
 
 $(document).ready(main);

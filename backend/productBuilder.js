@@ -32,6 +32,8 @@ var loadSingleProduct = function (pid) {
     });
 };
 
+
+
 var topSales = function () {
     productSelectBestSales(4, "#topProducts", 1);
 };
@@ -267,6 +269,13 @@ function printItemsSmall(products, rowID) {
 var printSingleProduct = function (product) {
     console.log("printSingleProduct wird aufgerufen. Zeigt ein einzelnes Produkt an.");
     $("#singleProduct").append(
+        "<ul id=\"rating\">" +
+        "<li class=\"star_off\"><a title=\"Ich vergebe der Pflanze 1 Punkt\" href=\"?star=1\">Ich vergebe der Pflanze 1 Punkt</a></li>" +
+        "<li class=\"star_off\"><a title=\"Ich vergebe der Pflanze 2 Punkte\" href=\"?star=2\">Ich vergebe der Pflanze 2 Punkte</a></li>" +
+        "<li class=\"star_off\"><a title=\"Ich vergebe der Pflanze 3 Punkte\" href=\"?star=3\">Ich vergebe der Pflanze 3 Punkte</a></li>" +
+        "<li class=\"star_off\"><a title=\"Ich vergebe der Pflanze 4 Punkte\" href=\"?star=4\">Ich vergebe der Pflanze 4 Punkte</a></li>" +
+        "<li class=\"star_off\"><a title=\"Ich vergebe der Pflanze 5 Punkte\" href=\"?star=5\">Ich vergebe der Pflanze 5 Punkte</a></li>" +
+        "</ul>" +
         "<div class=\"col-md-3 singleViewDiv\"><img src=\"" + product.bild + "\"></div>" +
         "<div class=\"col-md-3 singleViewContent\">" +
         "<div class=\"productTD\"><h2>" + product.name + " </h2></div>" +
@@ -276,10 +285,11 @@ var printSingleProduct = function (product) {
         {
             return avg + el.Bewertung;
         }, 0) / product.Feedbacks.size + "</h6> Punkte</div>" +
-        "<div class=\"productTD\">" + "<input type =\"range\" class=\"bewslide\" min=0 max=500 step=100 value=500>" + "</div>" +
+        /**"<div class=\"productTD\">" + "<input type =\"range\" class=\"bewslide\" min=0 max=5 step=1 value=3></div>" +**/
+
         "<div class=\"productDescription productTD\"><p class=\"productDescription\">" + product.beschreibung + "</p></div>" +
             "<br><button type=\"button\" class=\"cartButton\" id=" + product.id + ">Add to Cart</button> " +
-        "</div></div></div></div>"
+        "</div>"
     );
     clickCartBtn();
 };
@@ -297,6 +307,24 @@ function getProductScore(products)
         }, 0) / product.Feedbacks.size);
     });
 }
+
+$(document).ready(function() {
+    $('body').on('mouseover', '#rating', function() {
+
+        $('.star_off').mouseover(function(){
+            $(this).removeClass('star_off').addClass('star_on');
+            $(this).prevAll('.star_off').removeClass('star_off').addClass('star_on');
+            $(this).nextAll('.star_on').removeClass('star_on').addClass('star_off');
+        });
+    }).on('click', '#rating', function(e) {
+        e.preventDefault();
+
+        var $rating = $('#rating');
+
+        console.log($rating.find('.star_on').length);
+    });
+
+});
 
 
 //Hier werden die Methoden ausgeführt, sobald die Datenbank bereit ist.
