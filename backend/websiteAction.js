@@ -26,7 +26,6 @@ var main = function () {
     DB.ready(function()
     {
         var url = window.location.href;
-        console.log("reach this!");
         if(url.match(/^.*\?p=.*/))
         {
             hideMainPage();
@@ -57,18 +56,23 @@ var main = function () {
             });
 
             searchBarAction();
-        }});
+        } else if (url.match(/^.*\?cart/))
+        {
+            hideMainPage();
+            hideProductOverview();
+            hideSingleProduct();
 
-    $(document).on('keydown', function (event) {
-        // Keypress "strg+m"
-        if ((event.ctrlKey && ( String.fromCharCode(event.which) === 'm' || String.fromCharCode(event.which) === 'M'))) {
-            DB.ready(allSales);
-            showProductOverviewOnly();
-            // Keypress "strg+y"
-        } else if (event.ctrlKey && ( String.fromCharCode(event.which) === 'y' || String.fromCharCode(event.which) === 'Y')) {
-            showMainPageOnly();
+            $('.kategorie').each(function()
+            {
+                $(this).removeClass("active");
+            });
+            showCartPage();
+            buildCartPage();
+            printTotalPrice();
+            changeAndCalculateFullPrice();
         }
     });
+
 
     $('.searchbar').on('keyup', function (event) {
         if(!(event.ctrlKey || event.altKey || event.shiftKey || String.fromCharCode(event.which) == 27 || String.fromCharCode(event.which) == 13))
@@ -102,8 +106,10 @@ var main = function () {
         setFilter(filter);
         searchBarAction();
     });
+
     $('#welcome').click(function () {
         $('.kategorie').removeClass("active");
+        document.getElementById("searchbar").value = "";
         window.history.pushState({info: "Mainpage"}, null, "index.html");
        showMainPageOnly();
     });
@@ -119,6 +125,8 @@ var main = function () {
         hideMainPage();
         hideProductOverview();
         hideSingleProduct();
+
+        window.history.pushState({info: "Cart"}, null, "?cart");
 
         $('.kategorie').each(function()
         {
@@ -174,7 +182,7 @@ var showCartPage = function(){
     $('#cartTop').show();
     $('#cartPage').html("").show();
     $('#fullPrice').html("").show();
-}
+};
 
 var hideCartPage = function(){
     $('#cartTop').hide();
