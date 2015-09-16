@@ -7,7 +7,7 @@ var filter = /^.*/;
 
 /* Funktion, die die meistverkauften Produkte auf der Oberfläche ausgibt, die aktuell noch vorrätig sind.
 */
-function ShowBestSales() {
+var ShowBestSales = function() {
     DB.Product.find()
         .isNotNull('bild')
         .greaterThan("stueckzahl", 0)
@@ -16,7 +16,7 @@ function ShowBestSales() {
         {
                 printItemsBig(result)
         });
-}
+};
 
 /*Diese Funktion laedt mithilfe der Produkt-ID eine Ware aus der Datenbank und
 *uebergibt diese dann der Funktion printSingleProduct, die die Anzeige des
@@ -38,10 +38,10 @@ var loadSingleProduct = function (pid)
 *
 * @Param newFilter: Neuer Regex, der als Filter für die Suche eingesetzt werden soll.
 * */
-function setFilter(newFilter)
+var setFilter = function(newFilter)
 {
     filter = newFilter;
-}
+};
 
 
 /* Funktion, welche eine Suche in der Datenbank nach einem Produkt einleitet. Konkret wird
@@ -50,7 +50,7 @@ function setFilter(newFilter)
 *  Informationen über die Funktionsweise sind bitte den Kommentaren im Quelltext zu
 *  entnehmen.
 */
-function searchBarAction() {
+var searchBarAction = function() {
     //Der Eintrag der Suchleiste wird in Kleinbuchstaben ermittelt und aus ihm ein
     //Regex für den Abgleich mit den Produkt-Tags gebildet.
     var input = document.getElementById('searchbar').value.toLowerCase();
@@ -65,7 +65,7 @@ function searchBarAction() {
 
     //Aufruf der Methode, die die URL anpasst.
     urlRefresh(input);
-}
+};
 
 
 /* Funktion, welche mithilfe eines angegebenen Sortierverfahrens den Aufruf auswählt, der
@@ -74,7 +74,7 @@ function searchBarAction() {
 * @Param: sort Ein String, der für das entsprechende Sortierverfahren steht.
 * @Param: inputReg Die Eingabe im Suchfeld als Regex.
 */
-function sortSwitch(sort, inputReg)
+var sortSwitch = function(sort, inputReg)
 {
     switch(sort)
     {
@@ -89,7 +89,7 @@ function sortSwitch(sort, inputReg)
         default:
             descSearch(filter,inputReg, sort);
     }
-}
+};
 
 
 /* Funktion, die eine Suchanfrage an die Datenbank richtet, wenn das Ergebnis aufsteigend nach einer Kategorie
@@ -101,7 +101,7 @@ function sortSwitch(sort, inputReg)
 * @Param: sortParam Angabe des Spaltennamens, nachdem die Einträge der Datenbank aufsteigend sortiert werden
 *         sollen.
 */
-function ascSearch(filterRegex, inputRegex, sortParam)
+var ascSearch = function(filterRegex, inputRegex, sortParam)
 {
     DB.Product.find()
         .matches('liste', filterRegex)
@@ -111,7 +111,7 @@ function ascSearch(filterRegex, inputRegex, sortParam)
         .resultList(function (result) {
             printItemsSmall(result);
         });
-}
+};
 
 
 /* Funktion, die eine Suchanfrage an die Datenbank richtet, wenn das Ergebnis nach den Feedbacks
@@ -121,7 +121,7 @@ function ascSearch(filterRegex, inputRegex, sortParam)
  *         ausgegeben werden
  * @Param: inputRegex Aus der Sucheingabe gebildeter Regex, mit dem die Tags der Produkte abgeglichen werden.
  */
-function feedbackSearch(filterRegex,inputRegex)
+var feedbackSearch = function(filterRegex,inputRegex)
 {
     DB.Product.find().matches('liste', filterRegex).matches('tags', inputRegex)
         .isNotNull('bild').resultList(function(result)
@@ -130,7 +130,7 @@ function feedbackSearch(filterRegex,inputRegex)
             result.sort(sortBew);
             printItemsSmall(result);
         });
-}
+};
 
 /* Vergleichsfunktion, die dazu genutzt werden kann, zu ermitteln, welches Produkt
 * besser bewertet wurde als das andere.
@@ -138,7 +138,7 @@ function feedbackSearch(filterRegex,inputRegex)
 * @Param: prodA Produkt Nummer 1
 * @Param: prodB Produkt Nummer 2
 */
-function sortBew(prodA,prodB)
+var sortBew = function(prodA,prodB)
 {
     // Diese Funktion ermittelt die Durchschnittsbewertung eines Produkts.
     function bewfinder(product)
@@ -171,7 +171,7 @@ function sortBew(prodA,prodB)
  * @Param: sortParam Angabe des Spaltennamens, nachdem die Einträge der Datenbank absteigend sortiert werden
  *         sollen.
  */
-function descSearch(filterRegex, inputRegex, sortParam)
+var descSearch = function(filterRegex, inputRegex, sortParam)
 {
     DB.ready(function () {
         DB.Product.find()
@@ -183,7 +183,7 @@ function descSearch(filterRegex, inputRegex, sortParam)
                 printItemsSmall(result);
             })
     });
-}
+};
 
 /*Funktion, die mithilfe der Eingabe in die Suchleiste und dem vorliegenden Filter
 * die URL in der Adressleiste entsprechend anpasst und einen Eintrag in die Browserhistory
@@ -191,7 +191,7 @@ function descSearch(filterRegex, inputRegex, sortParam)
 *
 * @Param searchInput Die aus der Suchleiste ausgelesene Eingabe des Benutzers
 */
-function urlRefresh(searchInput)
+var urlRefresh = function(searchInput)
 {
     //Aus dem in der globalen Filtervariable hinterlegten Regex wird ein String gebildet.
     //Sollte es sich um keinen Namen einer Gruppe von Produkten handeln, wird der String
@@ -218,7 +218,7 @@ function urlRefresh(searchInput)
     {
         window.history.pushState({info: popString}, null, urlString);
     }
-}
+};
 
 /*Diese Funktion bekommt eine Reihe von Produkten uebergeben und bildet mithilfe dieser Daten
 * Zusaetze fuer die HTML aus, mit denen die Produkte dann auf der Hauptseite dargestellt werden.
@@ -226,8 +226,10 @@ function urlRefresh(searchInput)
 *
 * @Param: products Eine Liste an Produkten, die ausgegeben werden soll
 */
-function printItemsBig(products) {
-    products.forEach(function (product) {
+var printItemsBig = function(products)
+{
+    products.forEach(function (product)
+    {
         var name = product.name;
         if (name.length > 10) {
             name = name.substring(0, 9) + "...";
@@ -238,7 +240,7 @@ function printItemsBig(products) {
             "</div></div>");
     });
     clickAction();
-}
+};
 
 
 /*Diese Funktion bekommt eine Reihe von Produkten uebergeben und bildet mithilfe dieser Daten
@@ -247,8 +249,10 @@ function printItemsBig(products) {
 *
 * @Param: products Eine Liste an Produkten, die ausgegeben werden soll
 */
-function printItemsSmall(products) {
-    products.forEach(function (product) {
+var printItemsSmall = function(products)
+{
+    products.forEach(function (product)
+    {
         var name = product.name;
         if (name.length > 10) {
             name = name.substring(0, 9) + "...";
@@ -260,7 +264,7 @@ function printItemsSmall(products) {
             "</div></div>");
     });
     clickAction();
-}
+};
 
 /*Diese Funktion bekommt ein Produkt uebergeben und gibt dieses dann auf der Weboberflaeche aus.
 * Es werden Zusaetze fuer die HTML gebildet, die die Darstellung der Bewertungssterne, die Anzeige
@@ -268,7 +272,8 @@ function printItemsSmall(products) {
 *
 * @Param: Das auf der Detailseite auszugebende Produkt.
 */
-var printSingleProduct = function (product) {
+var printSingleProduct = function (product)
+{
     $("#singleProduct").append(
 
         "<div class=\"col-md-3 singleViewDiv\"><img src=\"" + product.bild + "\"></div>" +
