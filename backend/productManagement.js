@@ -237,3 +237,4 @@ DB.ready().then(function() {
     throw error('Fehler aufgetreten');
 });
 
+

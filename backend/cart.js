@@ -168,14 +168,14 @@ var deleteProductFromCart = function (pid) {
  * @param pid
  * @param amount
  */
-var updateDBItem = function (pid, amount) {
+var updateDBItem = function (pid, amount)
+{
     DB.Product.load(pid).then(function (DBProduct) {
         DBProduct.stueckzahl = DBProduct.stueckzahl - amount;
         DBProduct.gesamtverkauf = DBProduct.gesamtverkauf + amount;
         DBProduct.update();
     })
-}
-
+};
 
 /**
  * Der Gesamtpreis wird auf der Oberfläche wiedergegeben
@@ -186,4 +186,3 @@ var printTotalPrice = function () {
         "<div class=\"totalPrice col-md-2\">" + totalPrice + " Euro</div>" +
         "</div></div></div>");
 };
-

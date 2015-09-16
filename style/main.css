@@ -324,6 +324,7 @@
 .cartItem img {
     height: 80px !important;
     border-radius: 5px;
+    border: 1px solid #BBB;
 }
 
 .cartTopView {
@@ -365,3 +366,5 @@ h6 {
 .deleteFromCart {
     cursor: pointer;
 }
+
+

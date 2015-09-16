@@ -454,3 +454,4 @@ var clickStarBtn = function(){
 
 //Start der Main-Funktion.
 $(document).ready(main);
+
