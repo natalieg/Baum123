@@ -139,6 +139,10 @@ var changeAndCalculateFullPrice = function () {
 
 };
 
+/**
+ * Löscht ein Produkt aus dem Warenkorb
+ * @param pid
+ */
 var deleteProductFromCart = function (pid) {
     cartItems.forEach(function (product) {
         if (product.p.id + "d" === pid) {
