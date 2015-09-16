@@ -2,50 +2,48 @@
  * Created by peukert on 02.09.15.
  */
 
-/* Funktion, die meistverkauften Produkte auf der Oberfläche ausgibt, die aktuell noch vorrätig sind.
+var filter = /^.*/;
+
+
+/* Funktion, die die meistverkauften Produkte auf der Oberfläche ausgibt, die aktuell noch vorrätig sind.
+*
+* @Param: limitNumber Die Anzahl der Produkte, die maximal ausgegeben werden sollen
+* @Param  rowID
 * */
-function productSelectBestSales(limitNumber, rowID, bigItem) {
-    console.log("productSelectBestSales wird aufgerufen. Die meistverkauften Produkte sollen angezeigt werden.");
+function productSelectBestSales(limitNumber, rowID) {
     DB.Product.find()
         .isNotNull('bild')
         .greaterThan("stueckzahl", 0)
         .descending("gesamtverkauf").limit(limitNumber)
-        .resultList(function (result) {
-            result.forEach(function (product) {
-               console.log("productSelectBest Sales - Folgendes Produkt soll ausgegeben werden:" + JSON.stringify(product));
-            });
-            if (bigItem === 1) {
+        .resultList(function (result)
+        {
                 printItemsBig(result, rowID)
-            } else {
-                printItemsSmall(result, rowID)
-            }
         });
 }
 
-var loadSingleProduct = function (pid) {
-    console.log("loadSingleProduct wird aufgerufen. Anzeige des Produkts und seiner Bewertung soll via ID eingeleitet werden.");
-    var idBewertung = {};
-    DB.Product.load(pid).then(function (product) {
-        console.log("loadSingleProduct - Folgendes Produkt geladen:" + JSON.stringify(product));
+/*Diese Funktion laedt mithilfe der Produkt-ID eine Ware aus der Datenbank und
+*uebergibt diese dann der Funktion printSingleProduct, die die Anzeige des
+*Produktes uebernimmt.
+*
+* @Param: pid Die ID des Produkts.
+*/
+var loadSingleProduct = function (pid)
+{
+    DB.Product.load(pid).then(function (product)
+    {
             printSingleProduct(product);
-        console.log("loadSingleProduct - Folgende Bewertung errechnet:" + idBewertung[getProductScore(product)]);
+
     });
 };
 
 
-
-var topSales = function () {
-    productSelectBestSales(4, "#topProducts", 1);
+/*Diese Funktion gibt die vier meistverkauften Produkte auf der Oberflaeche aus.
+*/
+var topSales = function ()
+{
+    productSelectBestSales(4, "#topProducts");
 };
 
-var allSales = function () {
-    productSelectBestSales(100, "#moreTopProducts");
-};
-
-
-
-
-var filter = /^.*/;
 
 /* Funktion, die die Filtervariable neu setzt.
 *
@@ -72,7 +70,6 @@ function searchBarAction() {
     //Aus der Optionsauswahl für die Sortierung wird ein aussagekraeftier String entnommen, mit
     //dem das Sortierverfahren später eingeleitet werden soll.
     var sort = document.getElementById('sortOption').value;
-    console.log("searchBarAction - Input: " + input + " inputReg: " + inputReg + " sort: " + sort);
 
     // Aufruf der Methode, die gemäß des Sortierverfahrens den Suchbefehl an Baqend richtet.
     sortSwitch(sort, inputReg);
@@ -113,11 +110,10 @@ function sortSwitch(sort, inputReg)
 *         ausgegeben werden
 * @Param: inputRegex Aus der Sucheingabe gebildeter Regex, mit dem die Tags der Produkte abgeglichen werden.
 * @Param: sortParam Angabe des Spaltennamens, nachdem die Einträge der Datenbank aufsteigend sortiert werden
- *        sollen.
+*         sollen.
 */
 function ascSearch(filterRegex, inputRegex, sortParam)
 {
-    console.log("searchBarAction - Suche und Sortierung nach Preis eingeleitet");
     DB.Product.find()
         .matches('liste', filterRegex)
         .matches('tags', inputRegex)
@@ -138,40 +134,44 @@ function ascSearch(filterRegex, inputRegex, sortParam)
  */
 function feedbackSearch(filterRegex,inputRegex)
 {
-    console.log("searchBarAction - Suche und Sortierung nach Feedbacks eingeleitet");
     DB.Product.find().matches('liste', filterRegex).matches('tags', inputRegex)
         .isNotNull('bild').resultList(function(result)
         {
-            // Definition einer lokalen Vergleichsfunktion für die nachfolgende Sortierung der Liste.
-            function sortBew(a,b)
-            {
-                // Diese Funktion ermittelt die Durchschnittsbewertung eines Produkts.
-                function bewfinder(obj)
-                {
-                    // Ist die Feedbackliste leer, wird das Produkt vorerst mit 0 Sternen bewertet.
-                    if(obj.Feedbacks.size == 0)
-                    {
-                        console.log("Zero");
-                        return 0;
-                    }
-                    else
-                    //Andernfalls wird die Liste mittels reduce auf die Summe aller Bewertungen reduziert
-                    // und anschließend durch ihre Anzahl geteilt.
-                    {
-                        console.log("Not Zero");
-                        return obj.Feedbacks.reduce(function (bewsum, feedback)
-                            {
-                                return bewsum + feedback.Bewertung;
-                            }, 0) / obj.Feedbacks.size;
-                    }
-                }
-                return bewfinder(b) - bewfinder(a);
-            }
             //Liste der Produkte wird nach den Bewertungen sortiert und angezeigt.
             result.sort(sortBew);
             printItemsSmall(result, "#moreTopProducts");
         });
 }
+
+/* Vergleichsfunktion, die dazu genutzt werden kann, zu ermitteln, welches Produkt
+* besser bewertet wurde als das andere.
+*
+* @Param: prodA Produkt Nummer 1
+* @Param: prodB Produkt Nummer 2
+*/
+function sortBew(prodA,prodB)
+{
+    // Diese Funktion ermittelt die Durchschnittsbewertung eines Produkts.
+    function bewfinder(product)
+    {
+        // Ist die Feedbackliste leer, wird das Produkt vorerst mit 0 Sternen bewertet.
+        if(product.Feedbacks.size == 0)
+        {
+            return 0;
+        }
+        else
+        //Andernfalls wird die Liste mittels reduce auf die Summe aller Bewertungen reduziert
+        // und anschließend durch ihre Anzahl geteilt.
+        {
+            return product.Feedbacks.reduce(function (bewsum, feedback)
+                {
+                    return bewsum + feedback.Bewertung;
+                }, 0) / product.Feedbacks.size;
+        }
+    }
+    return bewfinder(prodB) - bewfinder(prodA);
+};
+
 
 /* Funktion, die eine Suchanfrage an die Datenbank richtet, wenn das Ergebnis absteigend nach einer Kategorie
  * sortiert werden soll.(Aktuell existiert nur einer, aber Ergänzungen könnten so leicht abgehandelt werden).
@@ -184,7 +184,6 @@ function feedbackSearch(filterRegex,inputRegex)
  */
 function descSearch(filterRegex, inputRegex, sortParam)
 {
-    console.log("searchBarAction - Suche und Sortierung nach " + sortParam + " eingeleitet");
     DB.ready(function () {
         DB.Product.find()
             .matches('liste', filterRegex)
@@ -197,6 +196,12 @@ function descSearch(filterRegex, inputRegex, sortParam)
     });
 }
 
+/*Funktion, die mithilfe der Eingabe in die Suchleiste und dem vorliegenden Filter
+* die URL in der Adressleiste entsprechend anpasst und einen Eintrag in die Browserhistory
+* einfuegt, bzw., wenn schon vorhanden, erneuert.
+*
+* @Param searchInput Die aus der Suchleiste ausgelesene Eingabe des Benutzers
+*/
 function urlRefresh(searchInput)
 {
     //Aus dem in der globalen Filtervariable hinterlegten Regex wird ein String gebildet.
@@ -211,32 +216,25 @@ function urlRefresh(searchInput)
     //Sollte die URL bereits in für eine Suche angepasst worden sein und die nötigen Parameter
     //enthalten, so wird der aktuelle Eintrag in der Browser-History mit den derzeitigen
     //Werten von Suchbegriff und Filter überschrieben. Wenn nicht, wird ein solcher Eintrag angelegt.
+    var urlString = "?s=" + searchInput + "&f=" + filterString;
+    var popString = "Search for " + searchInput;
+
     if (window.location.href.match(/^.*\?s=.*f=.*/))
     {
-        var urlString = "?s=" + searchInput + "&f=" + filterString;
-        var popString = "Search for " + searchInput;
         window.history.replaceState({info: popString}, null, urlString);
-        console.log("searchBarAction - URL modifiziert mit: " + urlString);
     }
     else
     {
-        var urlString = "?s=" + searchInput + "&f=" + filterString;
-        var popString = "Search for " + searchInput;
         window.history.pushState({info: popString}, null, urlString);
-        console.log("searchBarAction - URL modifiziert mit: " + urlString);
     }
 }
 
 //Gibt die Top-Sales-Produkte auf der Oberfl�che aus
 function printItemsBig(products, rowID) {
-    console.log("printItemsBig wird aufgerufen. Zeigt die meistverkauften Produkte an.");
     products.forEach(function (product) {
-        console.log("printItemsBig - Folgendes Produkt soll angezeigt werden: " + JSON.stringify(product));
         var name = product.name;
-        console.log("printItemsBig - Folgender Name soll angezeigt werden: " + name);
         if (name.length > 10) {
             name = name.substring(0, 9) + "...";
-            console.log("printItemsBig - Name wird verkürzt auf: " + name);
         }
         $(rowID).append("<div id=\"" + product.id + "\" class=\"productLink productRow col-md-3\">" +
             "<a class=\"img-shadow\"><img src=\"" + product.bild + "\"></a>" +
@@ -249,13 +247,10 @@ function printItemsBig(products, rowID) {
 
 //Zeigt kleine Produkte an.
 function printItemsSmall(products, rowID) {
-    console.log("printItemsSmall wird aufgerufen. Zeigt Miniaturansichten der Produkte an (Suchergebnisse).");
     products.forEach(function (product) {
-        console.log("printItemsSmall - Folgendes Produkt soll angezeigt werden: " + JSON.stringify(product));
         var name = product.name;
         if (name.length > 10) {
             name = name.substring(0, 9) + "...";
-            console.log("printItemsSmall - Folgender Name soll angezeigt werden: " + name);
         }
         $(rowID).append("<div id=\"" + product.id + "\" class=\"productLink productRow col-md-2\">" +
             "<a><img src=\"" + product.bild + "\"></a>" +
@@ -267,7 +262,6 @@ function printItemsSmall(products, rowID) {
 }
 
 var printSingleProduct = function (product) {
-    console.log("printSingleProduct wird aufgerufen. Zeigt ein einzelnes Produkt an.");
     $("#singleProduct").append(
         "<ul id=\"rating\">" +
         "<li class=\"star_off\"><a title=\"Ich vergebe der Pflanze 1 Punkt\" href=\"?star=1\">Ich vergebe der Pflanze 1 Punkt</a></li>" +
@@ -298,7 +292,6 @@ var printSingleProduct = function (product) {
 //Gibt die Bewertung eines Produkts zurück
 function getProductScore(products)
 {
-    console.log("getProductScore wird aufgerufen. Gibt die Bewertungen aller Produkte zurueck.");
     products.forEach(function (product)
     {
         return product.id + (product.Feedbacks.reduce(function (avg, el)
@@ -326,6 +319,3 @@ $(document).ready(function() {
 
 });
 
-
-//Hier werden die Methoden ausgeführt, sobald die Datenbank bereit ist.
-DB.ready(topSales);
