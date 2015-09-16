@@ -20,22 +20,53 @@ function stopRKey(evt) {
 document.onkeypress = stopRKey;
 **/
 
-var main = function () {
+/* Funktion, die ausgeführt wird, sobald das Skript geladen ist. Sie startet den ersten Aufbau
+*  der Website und initialisiert im Anschluss die grundlegenden Ueberpruefungen, mit denen
+*  die Interaktionen mit der Web-Applikation moeglich gemacht werden.
+*  Weitere Informationen über die zusaetzkichen Funktionsweisen sind bitte den Kommentaren
+*  im Quelltext zu entnehmen.
+*
+*/
+var main = function ()
+{
 
-    DB.ready(function(){createPage()});
+    //Der Aufbau der Website wird eingeleitet, sobald die Datenbank bereit zum Herausgeben der
+    //anzuzeigenden Produkte ist. Dabei wird die URL in der Adressleiste beachtet.
+    DB.ready(function()
+        {
+            createPage()
+        });
 
-    $('.searchbar').on('keyup', function (event) {
-        if(!(event.ctrlKey || event.altKey || event.shiftKey || String.fromCharCode(event.which) == 27 || String.fromCharCode(event.which) == 13))
+    //Sobald in der Searchbar ein Tastendruck abgeschlossen wurde, wird die Suchfunktion
+    //aufgerufen. Mittels einer If-Abfrage wird verhindert, dass eine solche Suche auch
+    //mit den Tasten STRG, ALT, SHIFT, Esc und Enter, sowie den Pfeiltasten ausgeloest werden
+    //kann.
+    $('.searchbar').on('keyup', function (event)
+    {
+        if(!(event.ctrlKey || event.altKey || event.shiftKey
+            || String.fromCharCode(event.which) == 27 || String.fromCharCode(event.which) == 13
+            || String.fromCharCode(event.which) == "%" || String.fromCharCode(event.which) == "&"
+            || String.fromCharCode(event.which) == "'" || String.fromCharCode(event.which) == "("))
         {
             startSearch();
         }
     });
 
+    //Sollte die Einstellung der Sortierung verändert werden, so wird die Suche gestartet,
+    //bzw. aktualisiert.
     $('.sortBox').change(function () {
         startSearch();
     });
 
-    $('.kategorie').click(function () {
+    //Eine Aenderung der Filter bewirkt ebenso ein Ausloesen der Suchfunktion und
+    //aktualisiert den global hinterlegten Filter-Regex. Wird eine Kategorie gewaehlt,
+    //die bereits aktiv ist, so wird ihr der Aktiv-Zustand entzogen und der Regex
+    //so veraendert, dass er alle Ausdruecke akzeptiert. Wird hingegen eine nicht
+    //aktive Kategorie gewaehlt, so werden alle anderen aktiven Kategorien abgestellt,
+    //die soeben gewaehlte in den Aktiv-Zustand versetzt und danach der Regex mit dem
+    //Namen der Kategorie erneuert.
+    $('.kategorie').click(function ()
+    {
         var filter;
         if($(this).hasClass('active'))
         {
@@ -52,46 +83,94 @@ var main = function () {
         startSearch();
     });
 
-    $('#welcome').click(function () {
-        window.history.pushState({info: "Mainpage"}, null, "index.html");
-       showMainPageOnly();
+    //Ein Klick auf das Logo der Seite schickt den Anwender zurueck zum Startbildschirm.
+    //Sollte noch kein Eintrag in der Browser-Historie vorhanden sein, so wird einer
+    //angelegt, damit zu der Seite vor und zurueckgesprungen werden kann.
+    $('#welcome').click(function ()
+    {
+        showMainPageOnly();
+        if (window.location.href.match(/^.*\?main/))
+        {
+            window.history.replaceState({info: "Mainpage"}, null, "?main");
+        }
+        else
+        {
+            window.history.pushState({info: "Mainpage"}, null, "?main");
+        }
     });
 
-    // Wird auf "Show me more" gelickt, werden weitere Produkte in einem kleineren Raster angezeigt
-    $('.more').click(function () {
-        window.history.pushState({info: "Mainpage"}, null, "?s=&f=");
+    // Ein Klick auf den Link "Show me more" leitet eine Suche ohne Begriff ein
+    // und listet so die aktuell bestverkauften Produkte auf. Es wird auch ein
+    // Eintrag in der Browserhistory angelegt.
+    $('.more').click(function ()
+    {
         startSearch();
+        window.history.pushState({info: "Mainpage"}, null, "?s=&f=");
     });
 
-    // Warenkorb Seite wird angezeigt wenn das Warenkorb Symbol angeklickt wird
-    $('.cart').click(function(){
+    // Ein Klick auf das Warenkorbsymbol oeffnet ebenjene Auflistung an zum Kauf
+    // vorgemerkten Produkten. Je nachdem, ob das Symbol bei bereits geoeffnetem
+    // Warenkorb ausgesteuert wurde, wird ein Eintrag in der Browserhistory angelegt
+    // oder erneuert.
+    $('.cart').click(function()
+    {
         showCartPageOnly();
-        window.history.pushState({info: "Cart"}, null, "?cart");
+        if (window.location.href.match(/^.*\?cart/))
+        {
+            window.history.replaceState({info: "Cart"}, null, "?cart");
+        }
+        else
+        {
+            window.history.pushState({info: "Cart"}, null, "?cart");
+        }
     });
 };
 
+/* Sollte ein Klick auf die Vor-/Zurueck-Buttons im Browser erfolgen, so wird die
+* zu zeigende Seite unter Zuhilfenahme der URL neu erstellt.
+*/
 window.onpopstate = function ()
 {
-    DB.ready(function(){createPage()});
+    DB.ready(function()
+    {
+        createPage()
+    });
 };
 
-function createPage()
+
+/* Die Funktion, die den Aufbau der Weboberflaeche einleitet. Sie entnimmt der
+* Adressleiste die URL, ueberprueft diese auf Uebereinstimmungen mit bekannten
+* Mustern und gibt entsprechend des Ergebnisses die Befehle zu Herstellen der
+* Oberflaeche.
+* Weitere Informationen über die zusaetzkichen Funktionsweisen sind bitte den Kommentaren
+* im Quelltext zu entnehmen.
+ */
+var createPage = function()
 {
     var url = window.location.href;
+
+    //An dieser Stelle wird eine Produktseite erstellt.
     if(url.match(/^.*\?p=.*/))
     {
         showSingleProductOnly();
         var pid = url.substring(url.indexOf('=')+1,url.length);
         loadSingleProduct(pid);
     }
-    else if (url.match(/^.*\?s=.*f=.*/)) {
+
+    //Hier kommt es zum Aufbau einer Suchansicht.
+    else if (url.match(/^.*\?s=.*f=.*/))
+    {
+        //Es werden die Eingabe in die Suchleiste und der Filter aus der URL ausgelesen.
         var paramString = url.substring(url.indexOf('s=')+1,url.length);
         var filterString = paramString.substring(paramString.indexOf('f=')+2, paramString.length);
-        setFilter(new RegExp("^" + filterString));
+
+        //Die Eingabe fuer die Suchleiste wird in selbige eingetragen.
         var searchLength = paramString.length - ( filterString.length + 3);
         var searchString = paramString.substring(1 , searchLength);
         document.getElementById("searchbar").value = searchString;
 
+        //Der neue Filter wird gesetzt und der Reiter an der Oberflaeche auf aktiv geschaltet.
+        setFilter(new RegExp("^" + filterString));
         $('.kategorie').each(function()
         {
             if(this.id == filterString)
@@ -103,39 +182,66 @@ function createPage()
                 $(this).removeClass("active");
             }
         });
+
+        //Die Ansicht wird fuer die Suche umgestellt und die eigentliche Suche eingeleitet.
         startSearch();
     }
+
+    //Sollte dieser Fall eintreten, wird der Warenkorb angezeigt.
     else if (url.match(/^.*\?cart.*/))
     {
         showCartPageOnly();
     }
-    else {
+
+    //Sollte keiner der Sonderfaelle zutreffen, wird die Seite automatisch zur
+    //Frontpage umgeleitet.
+    else
+    {
+        window.history.replaceState({info: "Mainpage"}, null, "?main");
         showMainPageOnly();
     }
-}
+};
 
-function showSingleProductOnly()
+/* Der Aufruf dieser Funktion versteckt alle austauschbaren Elemente der Oeberflaeche,
+*  setzt alle Suchspezifika auf den Standartzustand und deckt danach die Elemente fuer
+*  die Einzelansicht eines Produktes auf.
+*/
+var showSingleProductOnly = function()
 {
     hideMainPage();
     hideProductOverview();
     hideCartPage();
 
-    showSingleProduct();
-}
+    resetInput();
 
+    showSingleProduct();
+};
+
+/* Diese Funktion zeigt ein einzelnes Produkt an.
+*  (Der Einzel-Befehl wurde in eine Funktion eingebunden, um spaetere Ergaenzungen zu
+*  erleichtern.)
+*/
 var showSingleProduct = function()
 {
     $('.singleView').html("").show();
 };
 
-var hideSingleProduct = function(){
+/* Diese Funktion blendet ein einzelnes Produkt aus.
+ *  (Der Einzel-Befehl wurde in eine Funktion eingebunden, um spaetere Ergaenzungen zu
+ *  erleichtern.)
+ */
+var hideSingleProduct = function()
+{
     $('.singleView').html("").hide();
 };
 
 
 
-// Zeigt die Produktuebersicht Ansicht der Hauptseite
-var showProductOverviewOnly = function(){
+/* Der Aufruf dieser Funktion versteckt alle austauschbaren Elemente der Oeberflaeche,
+ * und deckt danach die Elemente fuer die Auflistung der Suchergebnisse auf.
+ */
+var showProductOverviewOnly = function()
+{
     hideMainPage();
     hideSingleProduct();
     hideCartPage();
@@ -143,26 +249,42 @@ var showProductOverviewOnly = function(){
     showProductOverview();
 };
 
+/* Diese Funktion zeigt die Suchergebnisse an.
+ *  (Der Einzel-Befehl wurde in eine Funktion eingebunden, um spaetere Ergaenzungen zu
+ *  erleichtern.)
+ */
 var showProductOverview = function()
 {
     $('.moreBestseller').html("").show();
 };
 
-var hideProductOverview = function(){
+/* Diese Funktion blendet die Suchergebnisse aus.
+ *  (Der Einzel-Befehl wurde in eine Funktion eingebunden, um spaetere Ergaenzungen zu
+ *  erleichtern.)
+ */
+var hideProductOverview = function()
+{
     $(".moreBestseller").html("").hide();
 };
 
-// LandingPage wird angezeigt
-var showMainPageOnly = function(){
+/* Der Aufruf dieser Funktion versteckt alle austauschbaren Elemente der Oeberflaeche,
+ *  setzt alle Suchspezifika auf den Standartzustand und deckt danach die Elemente fuer
+ *  die Landingpage auf.
+ */
+var showMainPageOnly = function()
+{
     hideProductOverview();
     hideSingleProduct();
     hideCartPage();
 
-    resetSearch();
+    resetInput();
 
     showMainPage();
 };
 
+/* Diese Funktion zeigt die Landingpage an. Aus der Datenbank werden die am meisten verkauften
+* Produkte ausgelesen und als Vorschlaege auf der Seite angezeigt.
+ */
 var showMainPage = function()
 {
     $('.bestsellerRow').html("").show();
@@ -171,25 +293,35 @@ var showMainPage = function()
     DB.ready(topSales());
 };
 
-var hideMainPage = function(){
+/* Diese Funktion blendet die Landingpage aus.
+ */
+var hideMainPage = function()
+{
     $('.bestsellerRow').html("").hide();
     $('.bestsellerText').hide();
     $('.more').hide();
 };
 
-function showCartPageOnly()
+/* Der Aufruf dieser Funktion versteckt alle austauschbaren Elemente der Oeberflaeche,
+ *  setzt alle Suchspezifika auf den Standartzustand und deckt danach die Elemente fuer
+ *  den Warenkorb auf.
+ */
+var showCartPageOnly = function()
 {
     hideMainPage();
     hideProductOverview();
     hideSingleProduct();
 
-    resetSearch();
+    resetInput();
 
     showCartPage();
 
-}
+};
 
-var showCartPage = function(){
+/* Diese Funktion zeigt den Warenkorb an.
+ */
+var showCartPage = function()
+{
     $('#cartTop').show();
     $('#cartPage').html("").show();
     $('#fullPrice').html("").show();
@@ -199,53 +331,100 @@ var showCartPage = function(){
     changeAndCalculateFullPrice();
 };
 
-var hideCartPage = function(){
+/* Diese Funktion blendet den Warenkorb aus.
+ */
+var hideCartPage = function()
+{
     $('#cartTop').hide();
     $('#cartPage').hide();
     $('#fullPrice').hide();
 };
 
-function startSearch()
+/* Diese Funktion zeigt die Suchansicht an und laesst danach die Suchbar auslesen, um den
+* darin enthaltenen Begriff in der Datenbank zu suchen.
+*/
+var startSearch = function()
 {
     showProductOverviewOnly();
     searchBarAction();
-}
+};
 
-function resetSearch()
+/*Diese Funktion setzt die Eingabe der Suchleiste, die eingestellte Sortierung und den aktiven
+* Filter zurueck auf den Anfangszustand.(Kein Suchbegriff, Sortierung nach Verkaufszahlen, kein Filter).
+*/
+var resetInput = function()
+{
+    resetSearch();
+    resetSort();
+    resetFilter();
+};
+
+/* Diese Funktion setzt die Sortierung zurueck.
+ *  (Der Einzel-Befehl wurde in eine Funktion eingebunden, um spaetere Ergaenzungen zu
+ *  erleichtern.)
+ */
+var resetSort = function()
+{
+    document.getElementById("sortOption").value = "gesamtverkauf";
+};
+
+/* Diese Funktion setzt den eingestellten Filter zurueck.
+ */
+var resetFilter = function()
 {
     $('.kategorie').each(function()
     {
         $(this).removeClass("active");
     });
-    document.getElementById("searchbar").value = "";
-    document.getElementById("sortOption").value = "gesamtverkauf";
-}
+    setFilter(/^.*/);
+};
 
-// Wenn ein Produkt angeklickt wir auf der Hauptseite oder auf der Uebersicht
-// gelangt man auf eine Einzelproduktseite
-var clickAction = function () {
-    $(".productLink").click(function () {
-        showSingleProductOnly();
+/* Diese Funktion setzt die Eingabe in der Suchleiste zurueck.
+ *  (Der Einzel-Befehl wurde in eine Funktion eingebunden, um spaetere Ergaenzungen zu
+ *  erleichtern.)
+ */
+var resetSearch = function()
+{
+    document.getElementById("searchbar").value = "";
+};
+
+/* Diese Funktion registriert Klick-Ereignisse und fuehrt entsprechend der Quelle dieser
+* Aktionen aus. Aktuell wird hier nur der Klick auf ein Produktbild abgefangen, sodass
+* dessen Detailseite angezeigt und in der Browserhistory vermerkt wird.
+ */
+var clickAction = function ()
+{
+    $(".productLink").click(function ()
+    {
         var pid = this.id;
+        DB.ready(loadSingleProduct(pid));
+        showSingleProductOnly();
         var urlString = "?p=" + pid;
         var popString = "Page of " + pid;
         window.history.pushState({info: popString}, null, urlString);
-        DB.ready(loadSingleProduct(pid));
     });
 };
 
-// Im Warenkorb wird die Stï¿½ckzahl geaendert, daraufhin muss die Datenbank aktualisiert und auch
-// der Gesamtpreis neu berechnet werden
-var changeCartAmountAction = function(){
-    $('#fullPrice').html("").show();
-    $('.cartAmountInput').change(function(){
+
+/* Diese Funktion registriert Aenderungen der Stueckzahlen der Waren im Warenkorb und aktualisiert
+* entsprechend die Datenbank und die Gesamtkosten fuer den Kunden.
+ */
+var changeCartAmountAction = function()
+{
+    $('.cartAmountInput').change(function()
+    {
         changeAndCalculateFullPrice();
     });
+    $('#fullPrice').html("").show();
 };
 
-// Action fï¿½r den Warenkorb-Button, wenn dieser geklickt wird, wird die Stï¿½ckzahl im Warenkorb um
-// 1 erhï¿½ht und in der Datenbank um 1 verringert
-var clickCartBtn = function(){
+
+/* Diese Funktion registriert einen Klick auf den Button, der ein Produkt einmal dem Warenkorb
+* hinzufuegen soll und tut entsprechendes. In der Datenbank wird entsprechend die Anzahl
+* der verfuegbaren Produkte um 1 reduziert.
+ */
+var clickCartBtn = function()
+{
     $('.cartButton').click(function(){
         var pid = this.id;
         DB.ready(updateProductQuantity(pid, 1));
@@ -253,4 +432,5 @@ var clickCartBtn = function(){
 };
 
 
+//Start der Main-Funktion.
 $(document).ready(main);
