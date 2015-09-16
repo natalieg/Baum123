@@ -6,18 +6,15 @@ var filter = /^.*/;
 
 
 /* Funktion, die die meistverkauften Produkte auf der Oberfläche ausgibt, die aktuell noch vorrätig sind.
-*
-* @Param: limitNumber Die Anzahl der Produkte, die maximal ausgegeben werden sollen
-* @Param  rowID
-* */
-function productSelectBestSales(limitNumber, rowID) {
+*/
+function ShowBestSales() {
     DB.Product.find()
         .isNotNull('bild')
         .greaterThan("stueckzahl", 0)
-        .descending("gesamtverkauf").limit(limitNumber)
+        .descending("gesamtverkauf").limit(4)
         .resultList(function (result)
         {
-                printItemsBig(result, rowID)
+                printItemsBig(result)
         });
 }
 
@@ -34,14 +31,6 @@ var loadSingleProduct = function (pid)
             printSingleProduct(product);
 
     });
-};
-
-
-/*Diese Funktion gibt die vier meistverkauften Produkte auf der Oberflaeche aus.
-*/
-var topSales = function ()
-{
-    productSelectBestSales(4, "#topProducts");
 };
 
 
@@ -120,7 +109,7 @@ function ascSearch(filterRegex, inputRegex, sortParam)
         .isNotNull('bild')
         .ascending(sortParam)
         .resultList(function (result) {
-            printItemsSmall(result, "#moreTopProducts");
+            printItemsSmall(result);
         });
 }
 
@@ -139,7 +128,7 @@ function feedbackSearch(filterRegex,inputRegex)
         {
             //Liste der Produkte wird nach den Bewertungen sortiert und angezeigt.
             result.sort(sortBew);
-            printItemsSmall(result, "#moreTopProducts");
+            printItemsSmall(result);
         });
 }
 
@@ -191,7 +180,7 @@ function descSearch(filterRegex, inputRegex, sortParam)
             .isNotNull('bild')
             .descending(sortParam)
             .resultList(function (result) {
-                printItemsSmall(result, "#moreTopProducts");
+                printItemsSmall(result);
             })
     });
 }
@@ -215,11 +204,13 @@ function urlRefresh(searchInput)
 
     //Sollte die URL bereits in für eine Suche angepasst worden sein und die nötigen Parameter
     //enthalten, so wird der aktuelle Eintrag in der Browser-History mit den derzeitigen
-    //Werten von Suchbegriff und Filter überschrieben. Wenn nicht, wird ein solcher Eintrag angelegt.
-    var urlString = "?s=" + searchInput + "&f=" + filterString;
+    //Werten von Suchbegriff, Filter und Sortierung überschrieben. Wenn nicht, wird ein
+    // solcher Eintrag angelegt.
+    var orderString = document.getElementById("sortOption").value;
+    var urlString = "?s=" + searchInput + "&f=" + filterString + "&o=" + orderString;
     var popString = "Search for " + searchInput;
 
-    if (window.location.href.match(/^.*\?s=.*f=.*/))
+    if (window.location.href.match(/^.*\?s=.*&f=.*&o=.*/))
     {
         window.history.replaceState({info: popString}, null, urlString);
     }
@@ -229,14 +220,19 @@ function urlRefresh(searchInput)
     }
 }
 
-//Gibt die Top-Sales-Produkte auf der Oberfl�che aus
-function printItemsBig(products, rowID) {
+/*Diese Funktion bekommt eine Reihe von Produkten uebergeben und bildet mithilfe dieser Daten
+* Zusaetze fuer die HTML aus, mit denen die Produkte dann auf der Hauptseite dargestellt werden.
+* Im Speziellen werden hier die Verkaufsschlager der Landingpage angezeigt.
+*
+* @Param: products Eine Liste an Produkten, die ausgegeben werden soll
+*/
+function printItemsBig(products) {
     products.forEach(function (product) {
         var name = product.name;
         if (name.length > 10) {
             name = name.substring(0, 9) + "...";
         }
-        $(rowID).append("<div id=\"" + product.id + "\" class=\"productLink productRow col-md-3\">" +
+        $("#topProducts").append("<div id=\"" + product.id + "\" class=\"productLink productRow col-md-3\">" +
             "<a class=\"img-shadow\"><img src=\"" + product.bild + "\"></a>" +
             "<div class=\"productRow col-md-3\"><div class=\"productName\">" + name + " </div></div>" +
             "</div></div>");
@@ -245,14 +241,19 @@ function printItemsBig(products, rowID) {
 }
 
 
-//Zeigt kleine Produkte an.
-function printItemsSmall(products, rowID) {
+/*Diese Funktion bekommt eine Reihe von Produkten uebergeben und bildet mithilfe dieser Daten
+* Zusaetze fuer die HTML aus, mit denen die Produkte dann auf der Hauptseite dargestellt werden.
+* Im Speziellen werden hier die Ergebnisse einer Suchanfrage angezeigt.
+*
+* @Param: products Eine Liste an Produkten, die ausgegeben werden soll
+*/
+function printItemsSmall(products) {
     products.forEach(function (product) {
         var name = product.name;
         if (name.length > 10) {
             name = name.substring(0, 9) + "...";
         }
-        $(rowID).append("<div id=\"" + product.id + "\" class=\"productLink productRow col-md-2\">" +
+        $("#moreTopProducts").append("<div id=\"" + product.id + "\" class=\"productLink productRow col-md-2\">" +
             "<a><img src=\"" + product.bild + "\"></a>" +
             "<div class=\"productRow col-md-2\"><div class=\"productNameSmall\">" + name + "<br><p>"
             + " EUR " + product.preis + "</p></div>" +
@@ -261,6 +262,12 @@ function printItemsSmall(products, rowID) {
     clickAction();
 }
 
+/*Diese Funktion bekommt ein Produkt uebergeben und gibt dieses dann auf der Weboberflaeche aus.
+* Es werden Zusaetze fuer die HTML gebildet, die die Darstellung der Bewertungssterne, die Anzeige
+* des Produktbildes und die Ausgabe der Textdaten regeln.
+*
+* @Param: Das auf der Detailseite auszugebende Produkt.
+*/
 var printSingleProduct = function (product) {
     $("#singleProduct").append(
         "<ul id=\"rating\">" +
@@ -289,33 +296,37 @@ var printSingleProduct = function (product) {
 };
 
 
+/* Sobald das Laden der Datei abgeschlossen ist, werden die innenstehenden Funktionen aktiv.
+*/
+$(document).ready(function()
+{
+    //Sollte die Maus auf die Sternebewertung eines Produktes bewegt werden, so
+    //werden die Sterne entsprechend der Position der Maus eingefärbt.
+    $('body').on('mouseover', '#rating', function()
+    {
+        $('.star_off').mouseover(function(){
+            $(this).removeClass('star_off').addClass('star_on');
+            $(this).prevAll('.star_off').removeClass('star_off').addClass('star_on');
+            $(this).nextAll('.star_on').removeClass('star_on').addClass('star_off');
+        });
+    }).on('click', '#rating', function(e)
+    {
+        e.preventDefault();
+        var $rating = $('#rating');
+        console.log($rating.find('.star_on').length);
+    });
+});
+
+//-----------------------------------Unused Code?--------------------------------------
+
 //Gibt die Bewertung eines Produkts zurück
 function getProductScore(products)
 {
     products.forEach(function (product)
     {
         return product.id + (product.Feedbacks.reduce(function (avg, el)
-        {
-            return avg + el.Bewertung;
-        }, 0) / product.Feedbacks.size);
+            {
+                return avg + el.Bewertung;
+            }, 0) / product.Feedbacks.size);
     });
 }
-
-$(document).ready(function() {
-    $('body').on('mouseover', '#rating', function() {
-
-        $('.star_off').mouseover(function(){
-            $(this).removeClass('star_off').addClass('star_on');
-            $(this).prevAll('.star_off').removeClass('star_off').addClass('star_on');
-            $(this).nextAll('.star_on').removeClass('star_on').addClass('star_off');
-        });
-    }).on('click', '#rating', function(e) {
-        e.preventDefault();
-
-        var $rating = $('#rating');
-
-        console.log($rating.find('.star_on').length);
-    });
-
-});
-

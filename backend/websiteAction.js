@@ -158,18 +158,22 @@ var createPage = function()
     }
 
     //Hier kommt es zum Aufbau einer Suchansicht.
-    else if (url.match(/^.*\?s=.*f=.*/))
+    else if (url.match(/^.*\?s=.*f=.*o=.*/))
     {
         //Es werden die Eingabe in die Suchleiste und der Filter aus der URL ausgelesen.
-        var paramString = url.substring(url.indexOf('s=')+1,url.length);
-        var filterString = paramString.substring(paramString.indexOf('f=')+2, paramString.length);
+        var sfoString = url.substring(url.indexOf('s=')+2,url.length);
+        var foString = sfoString.substring(sfoString.indexOf('f=')+2, sfoString.length);
+        var oString = foString.substring(foString.indexOf('o=')+2, foString.length);
 
         //Die Eingabe fuer die Suchleiste wird in selbige eingetragen.
-        var searchLength = paramString.length - ( filterString.length + 3);
-        var searchString = paramString.substring(1 , searchLength);
+        var searchLength = sfoString.length - ( foString.length + 3);
+        var searchString = sfoString.substring(0 , searchLength);
         document.getElementById("searchbar").value = searchString;
 
         //Der neue Filter wird gesetzt und der Reiter an der Oberflaeche auf aktiv geschaltet.
+        var filterLength = foString.length - ( oString.length + 3);
+        var filterString = foString.substring(0 , filterLength);
+
         setFilter(new RegExp("^" + filterString));
         $('.kategorie').each(function()
         {
@@ -182,6 +186,9 @@ var createPage = function()
                 $(this).removeClass("active");
             }
         });
+
+        //Die Sortierung wird eingestellt.
+        document.getElementById("sortOption").value = oString;
 
         //Die Ansicht wird fuer die Suche umgestellt und die eigentliche Suche eingeleitet.
         startSearch();
@@ -290,7 +297,7 @@ var showMainPage = function()
     $('.bestsellerRow').html("").show();
     $('.bestsellerText').show();
     $('.more').show();
-    DB.ready(topSales());
+    DB.ready(ShowBestSales());
 };
 
 /* Diese Funktion blendet die Landingpage aus.
