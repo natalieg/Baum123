@@ -263,26 +263,25 @@ function printItemsSmall(products, rowID) {
 
 var printSingleProduct = function (product) {
     $("#singleProduct").append(
-        "<ul id=\"rating\">" +
-        "<li class=\"star_off\"><a title=\"Ich vergebe der Pflanze 1 Punkt\" href=\"?star=1\">Ich vergebe der Pflanze 1 Punkt</a></li>" +
-        "<li class=\"star_off\"><a title=\"Ich vergebe der Pflanze 2 Punkte\" href=\"?star=2\">Ich vergebe der Pflanze 2 Punkte</a></li>" +
-        "<li class=\"star_off\"><a title=\"Ich vergebe der Pflanze 3 Punkte\" href=\"?star=3\">Ich vergebe der Pflanze 3 Punkte</a></li>" +
-        "<li class=\"star_off\"><a title=\"Ich vergebe der Pflanze 4 Punkte\" href=\"?star=4\">Ich vergebe der Pflanze 4 Punkte</a></li>" +
-        "<li class=\"star_off\"><a title=\"Ich vergebe der Pflanze 5 Punkte\" href=\"?star=5\">Ich vergebe der Pflanze 5 Punkte</a></li>" +
-        "</ul>" +
+
         "<div class=\"col-md-3 singleViewDiv\"><img src=\"" + product.bild + "\"></div>" +
         "<div class=\"col-md-3 singleViewContent\">" +
         "<div class=\"productTD\"><h2>" + product.name + " </h2></div>" +
-        "<div class=\"productTD\">" + product.preis + " Euro</div>" +
+        "<div class=\"productTD\"><h6 class=\"preis\">" + product.preis + "</h6>" +" Euro</div>" +
         "<div class=\"productTD\">nur noch <h6 class=\"stueckZahl\">" + product.stueckzahl + "</h6> vorhanden</div>" +
         "<div class=\"productTD\">Durchschnittliche Produktbewertung: <h6 class=\"productScore\">"  + product.Feedbacks.reduce(function (avg, el)
         {
             return avg + el.Bewertung;
         }, 0) / product.Feedbacks.size + "</h6> Punkte</div>" +
-        /**"<div class=\"productTD\">" + "<input type =\"range\" class=\"bewslide\" min=0 max=5 step=1 value=3></div>" +**/
-
+        "<div class=\"productTD rating\">" +
+        "<ul class=\"rating\" id=\"rating\">" +
+        "<li class=\"star_off\" id=\"star1\"><a title=\"Ich vergebe der Pflanze 1 Punkt\" href=\"?star=1\">Ich vergebe der Pflanze 1 Punkt</a></li>" +
+        "<li class=\"star_off\" id=\"star2\"><a title=\"Ich vergebe der Pflanze 2 Punkte\" href=\"?star=2\">Ich vergebe der Pflanze 2 Punkte</a></li>" +
+        "<li class=\"star_off\" id=\"star3\"><a title=\"Ich vergebe der Pflanze 3 Punkte\" href=\"?star=3\">Ich vergebe der Pflanze 3 Punkte</a></li>" +
+        "<li class=\"star_off\" id=\"star4\"><a title=\"Ich vergebe der Pflanze 4 Punkte\" href=\"?star=4\">Ich vergebe der Pflanze 4 Punkte</a></li>" +
+        "<li class=\"star_off\" id=\"star5\"><a title=\"Ich vergebe der Pflanze 5 Punkte\" href=\"?star=5\">Ich vergebe der Pflanze 5 Punkte</a></li></ul></div>" +
         "<div class=\"productDescription productTD\"><p class=\"productDescription\">" + product.beschreibung + "</p></div>" +
-            "<br><button type=\"button\" class=\"cartButton\" id=" + product.id + ">Add to Cart</button> " +
+        "<br><button type=\"button\" class=\"cartButton\" id=" + product.id + ">Add to Cart</button> " +
         "</div>"
     );
     clickCartBtn();

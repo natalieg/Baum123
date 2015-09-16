@@ -38,29 +38,31 @@ form input[type=text], form input[type=password]{ border: 1px solid #666; paddin
     background: #BABABA;
 }
 
-#rating li {
-    float:left;
+.rating {
+    display: inline-block;
+    margin-left: -20px;
+}
+
+.rating li {
     list-style-type:none;
-    display: inline;
+    display: inline-block;
 }
 
 #rating li.star_off {
     background: url('../img/greystar.gif') no-repeat left top;
-    background-size: 48px 48px;
+    background-size: 20px 20px;
     list-style-type: none;
-    display: inline;
 }
 
 #rating li.star_on {
     background:url('../img/yellowstar.gif') no-repeat left top;
-    background-size: 48px 48px;
+    background-size: 20px 20px;
     list-style-type:none;
-    display: inline;
 }
 
 #rating a {
     display:block;
     font-size:0px;
-    width:48px;
-    height:48px;
+    width:30px;
+    height:30px;
 }

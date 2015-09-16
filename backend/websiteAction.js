@@ -431,6 +431,19 @@ var clickCartBtn = function()
     })
 };
 
+var deleteFromCart = function(){
+    $('.deleteFromCart').click(function(){
+        console.log("Deleting Item from Cart");
+        var pid = this.id;
+        deleteProductFromCart(pid);
+        showCartPage();
+    })
+};
+
+//TODO Bewertungsfunktion
+var clickStarBtn = function(){
+
+};
 
 //Start der Main-Funktion.
 $(document).ready(main);

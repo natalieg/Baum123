@@ -12,18 +12,19 @@ var cartCount = $('.cartCounter').value;
  * Die Anzahl im Lager wird reduziert, an die Warenkorbmethode wird übergeben, um welches Produkt es sich handelt
  * Sind keine Produkte mehr auf Lager, wird eine Infonachricht darüber erzeugt.
  * @param pid
+ * @param amount
  */
 var updateProductQuantity = function (pid, amount) {
     amount = parseInt(amount);
     console.log("Anzahl der Produkte wird um 1 reduziert");
     DB.Product.load(pid).then(function (cartProduct) {
-        if (cartProduct.stueckzahl >= 1) {
+        if (cartProduct.stueckzahl >= amount) {
             cartProduct.stueckzahl = cartProduct.stueckzahl - amount;
             cartProduct.gesamtverkauf = cartProduct.gesamtverkauf + amount;
             cartProduct.update();
             $('.stueckZahl').text(cartProduct.stueckzahl);
-            updateCartItem(pid, 1);
-            cartCount = cartCount + 1;
+            updateCartItem(pid, amount);
+            cartCount = cartCount + amount;
             $('.cartCounter').text(cartCount);
         } else {
             window.alert("Keine mehr auf Lager!");
@@ -71,11 +72,13 @@ var buildCartPage = function () {
             "<div class=\"col-md-2\">" + product.p.preis + " Euro</div>" +
             "<div class=\"col-md-2\">" +
             "<input class=\"cartAmountInput\" min='0' type=" + "number" + " id=" + "" + product.p.id + "a" + "" + " value=" + "" + product.a + "" + ">" +
-            "</input>" +
+            "</input></div>" +
+            "<div class=\"col-md-2 deleteFromCart\" id=\"" + product.p.id + "d" + "\">  Delete" +
             "</div></div></div>");
     });
     clickAction();
     changeCartAmountAction();
+    deleteFromCart();
 };
 
 /**
@@ -86,50 +89,88 @@ var buildCartPage = function () {
 var changeAndCalculateFullPrice = function () {
     console.log("Calculate Full Price");
     totalPrice = 0;
-    cartItems.forEach(function (CartProduct) {
-        var productPrice = CartProduct.p.preis;
-        var oldAmount = CartProduct.a;
-        var newAmount = $('#' + CartProduct.p.id + 'a').val();
-        newAmount = parseInt(newAmount);
-        var inStock = 0;
-        DB.Product.load(CartProduct.p.id).then(function (product) {
-            console.log("Aktualisiere Produkt in DB");
-            inStock = product.stueckzahl;
-            console.log("New Amount: " + newAmount + " Old Amount: " + oldAmount + " Auf Lager " + inStock);
-            var inStockPlusOldAmount = (oldAmount + inStock);
-            // Hier wird sichergestellt, dass nicht mehr Produkte in den Warenkorb gelegt werden, als auf Lager sind
-            if (newAmount > 0) {
-                if ((newAmount <= parseInt(inStockPlusOldAmount))) {
-                    console.log("New Amount: " + newAmount + " Auf Lager und Old Amount: " + inStockPlusOldAmount);
-                    CartProduct.a = newAmount;
-                    var productFullPrice = (productPrice * newAmount);
-                    totalPrice = totalPrice + productFullPrice;
-                    $('.totalPrice').text(totalPrice + " Euro");
-                    var diffAmount = newAmount - oldAmount;
-                    // Update Product in DB
-                    product.stueckzahl = product.stueckzahl - diffAmount;
-                    product.gesamtverkauf = product.gesamtverkauf + diffAmount;
-                    product.update();
-                    console.log("Produkt erfolgreich in DB aktualisiert");
-                    cartCount = parseInt(cartCount + diffAmount);
-                    $('.cartCounter').text(parseInt(cartCount));
-                    // Wenn die Produktanzahl zu hoch ist, gibt es Fehlermeldungen
-                } else if (inStock > 0) {
-                    window.alert("Nur noch " + inStock + " " + product.name + " auf Lager!");
-                    CartProduct.a = oldAmount;
-                    $('#' + CartProduct.p.id + 'a').val(oldAmount);
+    if (cartItems.length === 0 || cartItems.length === null) {
+        $('.totalPrice').text("0 Euro");
+    } else {
+        cartItems.forEach(function (CartProduct) {
+            var productPrice = CartProduct.p.preis;
+            var oldAmount = CartProduct.a;
+            var newAmount = $('#' + CartProduct.p.id + 'a').val();
+            newAmount = parseInt(newAmount);
+            var inStock = 0;
+            DB.Product.load(CartProduct.p.id).then(function (product) {
+                console.log("Aktualisiere Produkt in DB");
+                inStock = product.stueckzahl;
+                console.log("New Amount: " + newAmount + " Old Amount: " + oldAmount + " Auf Lager " + inStock);
+                var inStockPlusOldAmount = (oldAmount + inStock);
+                // Hier wird sichergestellt, dass nicht mehr Produkte in den Warenkorb gelegt werden, als auf Lager sind
+                if (newAmount > 0) {
+                    if ((newAmount <= parseInt(inStockPlusOldAmount))) {
+                        console.log("New Amount: " + newAmount + " Auf Lager und Old Amount: " + inStockPlusOldAmount);
+                        CartProduct.a = newAmount;
+                        var productFullPrice = (productPrice * newAmount);
+                        totalPrice = totalPrice + productFullPrice;
+                        $('.totalPrice').text(totalPrice + " Euro");
+                        var diffAmount = newAmount - oldAmount;
+                        // Update Product in DB
+                        product.stueckzahl = product.stueckzahl - diffAmount;
+                        product.gesamtverkauf = product.gesamtverkauf + diffAmount;
+                        product.update();
+                        console.log("Produkt erfolgreich in DB aktualisiert");
+                        cartCount = parseInt(cartCount + diffAmount);
+                        $('.cartCounter').text(parseInt(cartCount));
+                        // Wenn die Produktanzahl zu hoch ist, gibt es Fehlermeldungen
+                    } else if (inStock > 0) {
+                        window.alert("Nur noch " + inStock + " " + product.name + " auf Lager!");
+                        CartProduct.a = oldAmount;
+                        $('#' + CartProduct.p.id + 'a').val(oldAmount);
+                    } else {
+                        window.alert(product.name + " ist leider nicht mehr auf Lager.");
+                        CartProduct.a = oldAmount;
+                        $('#' + CartProduct.p.id + 'a').val(oldAmount);
+                    }
                 } else {
-                    window.alert(product.name + " ist leider nicht mehr auf Lager.");
+                    window.alert("Bitte geben Sie einen gueltigen Wert ein!");
                     CartProduct.a = oldAmount;
-                    $('#' + CartProduct.p.id + 'a').val(oldAmount);
                 }
-            } else {
-                window.alert("Bitte geben Sie einen gueltigen Wert ein!");
-                CartProduct.a = oldAmount;
-            }
+            });
         });
+    }
+
+};
+
+var deleteProductFromCart = function (pid) {
+    cartItems.forEach(function (product) {
+        if (product.p.id + "d" === pid) {
+            var productPosition = cartItems.indexOf(product);
+            var productAmount = product.a;
+            productAmount = parseInt(productAmount);
+            productAmount = productAmount * -1;
+
+            cartCount += productAmount;
+            $('.cartCounter').text(cartCount);
+
+            updateDBItem(product.p.id, productAmount);
+            cartItems.splice(productPosition, 1);
+
+            console.log("Produkt wurde erfolgreich entfernt!");
+            console.log("Cart Items: " + JSON.stringify(cartItems));
+        }
     });
 };
+
+/**
+ * aktualisiert das Produkt auf der DB
+ * @param pid
+ * @param amount
+ */
+var updateDBItem = function (pid, amount) {
+    DB.Product.load(pid).then(function (DBProduct) {
+        DBProduct.stueckzahl = DBProduct.stueckzahl - amount;
+        DBProduct.gesamtverkauf = DBProduct.gesamtverkauf + amount;
+        DBProduct.update();
+    })
+}
 
 
 /**
