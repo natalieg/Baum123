@@ -2,14 +2,7 @@
  * Created by Nat on 07.09.2015.
  */
 
-var cartCount = 0;
 
-/**
- * Togglet die Top-Produkte Ansicht in Hide/Show wenn "m" gedr?ckt wird
- * TODO Bei m (more) verstecken, unterproduktansicht anzeigen
- */
-var cartItems = [];
-var totalPrice = 0;
 /**
  function stopRKey(evt) {
     var evt = (evt) ? evt : ((event) ? event : null);
