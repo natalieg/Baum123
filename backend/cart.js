@@ -125,10 +125,8 @@ var changeAndCalculateFullPrice = function ()
                 console.log("New Amount: " + newAmount + " Old Amount: " + oldAmount + " Auf Lager " + inStock);
                 var inStockPlusOldAmount = (oldAmount + inStock);
                 // Hier wird sichergestellt, dass nicht mehr Produkte in den Warenkorb gelegt werden, als auf Lager sind
-                if (newAmount > 0)
-                {
-                    if ((newAmount <= parseInt(inStockPlusOldAmount)))
-                    {
+                if (newAmount > 0){
+                    if ((newAmount <= parseInt(inStockPlusOldAmount))){
                         console.log("New Amount: " + newAmount + " Auf Lager und Old Amount: " + inStockPlusOldAmount);
                         CartProduct.a = newAmount;
                         var productFullPrice = (productPrice * newAmount);
@@ -143,21 +141,19 @@ var changeAndCalculateFullPrice = function ()
                         cartCount = parseInt(cartCount + diffAmount);
                         $('.cartCounter').text(parseInt(cartCount));
                         // Wenn die Produktanzahl zu hoch ist, gibt es Fehlermeldungen
-                    } else if (inStock > 0)
-                    {
+                    } else if (inStock > 0) {
                         window.alert("Nur noch " + inStock + " " + product.name + " auf Lager!");
                         CartProduct.a = oldAmount;
                         $('#' + CartProduct.p.id + 'a').val(oldAmount);
-                    } else
-                    {
+                    } else {
                         window.alert(product.name + " ist leider nicht mehr auf Lager.");
                         CartProduct.a = oldAmount;
                         $('#' + CartProduct.p.id + 'a').val(oldAmount);
                     }
-                } else
-                {
+                } else {
                     window.alert("Bitte geben Sie einen gueltigen Wert ein!");
                     CartProduct.a = oldAmount;
+                    $('#' + CartProduct.p.id + 'a').val(oldAmount);
                 }
             });
         });
