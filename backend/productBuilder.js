@@ -79,15 +79,15 @@ var sortSwitch = function(sort, inputReg)
     switch(sort)
     {
         case 'Feedbacks':
-            feedbackSearch(filter, inputReg);
+            feedbackSearch(inputReg);
             break;
 
         case 'preis':
-            ascSearch(filter, inputReg, sort);
+            ascSearch(inputReg, sort);
             break;
 
         default:
-            descSearch(filter,inputReg, sort);
+            descSearch(inputReg, sort);
     }
 };
 
@@ -101,10 +101,10 @@ var sortSwitch = function(sort, inputReg)
 * @Param: sortParam Angabe des Spaltennamens, nachdem die Einträge der Datenbank aufsteigend sortiert werden
 *         sollen.
 */
-var ascSearch = function(filterRegex, inputRegex, sortParam)
+var ascSearch = function(inputRegex, sortParam)
 {
     DB.Product.find()
-        .matches('liste', filterRegex)
+        .matches('liste', filter)
         .matches('tags', inputRegex)
         .isNotNull('bild')
         .ascending(sortParam)
@@ -121,9 +121,9 @@ var ascSearch = function(filterRegex, inputRegex, sortParam)
  *         ausgegeben werden
  * @Param: inputRegex Aus der Sucheingabe gebildeter Regex, mit dem die Tags der Produkte abgeglichen werden.
  */
-var feedbackSearch = function(filterRegex,inputRegex)
+var feedbackSearch = function(inputRegex)
 {
-    DB.Product.find().matches('liste', filterRegex).matches('tags', inputRegex)
+    DB.Product.find().matches('liste', filter).matches('tags', inputRegex)
         .isNotNull('bild').resultList(function(result)
         {
             //Liste der Produkte wird nach den Bewertungen sortiert und angezeigt.
@@ -171,11 +171,11 @@ var sortBew = function(prodA,prodB)
  * @Param: sortParam Angabe des Spaltennamens, nachdem die Einträge der Datenbank absteigend sortiert werden
  *         sollen.
  */
-var descSearch = function(filterRegex, inputRegex, sortParam)
+var descSearch = function(inputRegex, sortParam)
 {
     DB.ready(function () {
         DB.Product.find()
-            .matches('liste', filterRegex)
+            .matches('liste', filter)
             .matches('tags', inputRegex)
             .isNotNull('bild')
             .descending(sortParam)

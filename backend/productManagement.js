@@ -65,9 +65,9 @@ DB.ready().then(function() {
         location.reload();
     }
 
-    function productUpdateDetail(){
-        console.log("Hallo");
-        }
+
+
+
 
 
 // -------------------------------------------------------------------------------------------------------
@@ -197,7 +197,7 @@ DB.ready().then(function() {
                 "<td class=" + "productTD" + "> Stueckzahl: </td>" +
                 "<td class=" + "productTD" + ">" + (product).stueckzahl + " </td> " +
                 "<td><input min='0' type=" + "number" + " id=" + "" + (product).id + "b" + "" + "></input></td>" +
-                "<td><button class=\"productUpdaten\">Produkt Updaten</button></td>" +
+                "<td><button  class=\"productUpdaten\" id=\""+(product).id+"\">Produkt Updaten</button></td>" +
                 "</tr>");
 
         });
@@ -228,13 +228,69 @@ DB.ready().then(function() {
         });
 
         $("#hello2").on('click', '.productUpdaten', function() {
-            productUpdateDetail();
+            $("#hello2").hide();
+            $("#but").hide();
+            $("#neu").hide();
+            $("#bearbeiten").html('').show();
+            var id = this.id;
+            buildProductBearbeiten(id);
         });
 
+        var buildProductBearbeiten = function(proID){
+            DB.Product.find().equal('id', proID).singleResult(function(pro){
+                $("#bearbeiten").append('<form>' +
+                    '<input id=\"name\" value=\"' + pro.name + '\">Name</input><br>' +
+                    '<input id=\"tags\" value=\"' + pro.tags + '\">Tags</input><br>' +
+                    '<input id=\"beschreibug\" value=\"' + pro.beschreibung + '\">Beschreibung</input><br>' +
+                    '<input id=\"stueckzahl\" value=\"' + pro.stueckzahl + '\">Stückzahl</input><br>' +
+                    '<input id=\"preis\" value=\"' + pro.preis + '\">Preis</input><br>' +
+                    '<input id=\"liste\" value=\"' + pro.liste + '\">Liste</input><br>' +
+                    '<input id=\"bild\" value=\"' + pro.bild + '\">Bild</input><br>' +
+                    '<button type=\"button\" class=\"proupdaten\" id=\"proupdatenid\">Updaten</button><br>' +
+                    '<button class=\"delete\" id=\"deleteid\" type=\"button\" >Produkt Löschen</button>' +
+                    '</form></form>')
+                clickdelete(proID);
+                singleProductUpdate(proID);
+            });
+
+        }
     }
+    var singleProductUpdate = function(pid){
+        console.log("manno");
+        $('.proupdaten').click(function() {
+            console.log("djhfaösdfhlaskdjhfalsdkj");
+
+
+
+            DB.Product.load(pid).then(function (product) {
+                console.log(product);
+                product.name = document.getElementById('name').value;
+                product.tags = document.getElementById('tags').value;
+                product.beschreibung = document.getElementById('beschreibung').value;
+                product.stueckzahl = document.getElementById('stueckzahl').value;
+                product.preis = document.getElementById('preis').value;
+                product.liste = document.getElementById('liste').value;
+                product.bild = document.getElementById('bild').value;
+                product.update();
+            });
+
+        });
+    }
+    var clickdelete = function(pid) {
+        console.log("hallöchen");
+        $('.delete').click(function() {
+            console.log("natalie will was sehen");
+            DB.Product.load(pid).then(function (product){
+                    product.delete().then(function(){
+                        console.log("weg");
+                    });
+                }
+            )
+        })}
+
+        ;
 
 }).catch(function() {
     throw error('Fehler aufgetreten');
 });
-
 
