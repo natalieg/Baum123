@@ -317,7 +317,15 @@ $(document).ready(function()
     {
         e.preventDefault();
         var $rating = $('#rating');
-        console.log($rating.find('.star_on').length);
+        var rating = $rating.find('.star_on').length;
+        console.log(rating);
+        var url = window.location.href;
+        var pid = url.substring(url.indexOf('p=')+2,url.length);
+        console.log(pid);
+
+        //An dieser Stelle wuerde der DB-Aufruf liegen, um zumindest anonyme Feedbacks einzugeben.
+        //Nur leider erkennt Baqend die Uebergabe nicht an.
+
     });
 });
 

@@ -111,56 +111,67 @@ var changeAndCalculateFullPrice = function ()
         $('.totalPrice').text("0 Euro");
     } else
     {
-        cartItems.forEach(function (CartProduct)
+        cartItems.forEach(function (cartProduct)
         {
-            var productPrice = CartProduct.p.preis;
-            var oldAmount = CartProduct.a;
-            var newAmount = $('#' + CartProduct.p.id + 'a').val();
+            var productPrice = cartProduct.p.preis;
+            var oldAmount = cartProduct.a;
+            var newAmount = $('#' + cartProduct.p.id + 'a').val();
             newAmount = parseInt(newAmount);
             var inStock = 0;
-            DB.Product.load(CartProduct.p.id).then(function (product)
+            DB.Product.load(cartProduct.p.id).then(function (product)
             {
                 console.log("Aktualisiere Produkt in DB");
                 inStock = product.stueckzahl;
                 console.log("New Amount: " + newAmount + " Old Amount: " + oldAmount + " Auf Lager " + inStock);
                 var inStockPlusOldAmount = (oldAmount + inStock);
                 // Hier wird sichergestellt, dass nicht mehr Produkte in den Warenkorb gelegt werden, als auf Lager sind
+
                 if (newAmount > 0){
                     if ((newAmount <= parseInt(inStockPlusOldAmount))){
                         console.log("New Amount: " + newAmount + " Auf Lager und Old Amount: " + inStockPlusOldAmount);
-                        CartProduct.a = newAmount;
-                        var productFullPrice = (productPrice * newAmount);
-                        totalPrice = totalPrice + productFullPrice;
+                        cartProduct.a = newAmount;
+                        totalPrice = totalPrice + (productPrice * newAmount);
                         $('.totalPrice').text(totalPrice + " Euro");
                         var diffAmount = newAmount - oldAmount;
                         // Update Product in DB
-                        product.stueckzahl = product.stueckzahl - diffAmount;
-                        product.gesamtverkauf = product.gesamtverkauf + diffAmount;
-                        product.update();
-                        console.log("Produkt erfolgreich in DB aktualisiert");
-                        cartCount = parseInt(cartCount + diffAmount);
-                        $('.cartCounter').text(parseInt(cartCount));
+                        updateCart(product,diffAmount);
+
+
                         // Wenn die Produktanzahl zu hoch ist, gibt es Fehlermeldungen
-                    } else if (inStock > 0) {
-                        window.alert("Nur noch " + inStock + " " + product.name + " auf Lager!");
-                        CartProduct.a = oldAmount;
-                        $('#' + CartProduct.p.id + 'a').val(oldAmount);
-                    } else {
-                        window.alert(product.name + " ist leider nicht mehr auf Lager.");
-                        CartProduct.a = oldAmount;
-                        $('#' + CartProduct.p.id + 'a').val(oldAmount);
+                    } else if (inStock > 0)
+                    {
+                        setBackAmount(cartProduct, oldAmount);
+                        window.alert("Bitte geben Sie einen gueltigen Wert ein!");
+                    } else
+                    {
+                        setBackAmount(cartProduct, oldAmount);
+                        window.alert("Bitte geben Sie einen gueltigen Wert ein!");
                     }
-                } else {
+                } else
+                {
+                    setBackAmount(cartProduct, oldAmount);
                     window.alert("Bitte geben Sie einen gueltigen Wert ein!");
-                    CartProduct.a = oldAmount;
-                    $('#' + CartProduct.p.id + 'a').val(oldAmount);
                 }
             });
         });
     }
 };
 
+var setBackAmount = function(cartProduct, oldAmount)
+{
+    cartProduct.a = oldAmount;
+    $('#' + cartProduct.p.id + 'a').val(oldAmount);
+};
 
+var updateCart = function(product, diffAmount)
+{
+    product.stueckzahl = product.stueckzahl - diffAmount;
+    product.gesamtverkauf = product.gesamtverkauf + diffAmount;
+    product.update();
+    console.log("Produkt erfolgreich in DB aktualisiert");
+    cartCount = parseInt(cartCount + diffAmount);
+    $('.cartCounter').text(parseInt(cartCount));
+};
 
 /**
  * Löscht ein Produkt aus dem Warenkorb

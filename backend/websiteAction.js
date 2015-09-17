@@ -409,11 +409,12 @@ var clickAction = function ()
 /* Diese Funktion registriert Aenderungen der Stueckzahlen der Waren im Warenkorb und aktualisiert
  * entsprechend die Datenbank und die Gesamtkosten fuer den Kunden.
  */
+
 var changeCartAmountAction = function()
 {
     $('.cartAmountInput').change(function()
     {
-        changeAndCalculateFullPrice();
+            changeAndCalculateFullPrice();
     });
     $('#fullPrice').html("").show();
 };
