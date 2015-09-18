@@ -64,7 +64,7 @@ var searchBarAction = function() {
     sortSwitch(sort, inputReg);
 
     //Aufruf der Methode, die die URL anpasst.
-    urlRefresh(input);
+    urlRefresh(input, sort);
 };
 
 
@@ -185,13 +185,14 @@ var descSearch = function(inputRegex, sortParam)
     });
 };
 
-/*Funktion, die mithilfe der Eingabe in die Suchleiste und dem vorliegenden Filter
+/*Funktion, die mithilfe der Eingabe in die Suchleiste, der Einstellung der Combobox und dem vorliegenden Filter
 * die URL in der Adressleiste entsprechend anpasst und einen Eintrag in die Browserhistory
 * einfuegt, bzw., wenn schon vorhanden, erneuert.
 *
 * @Param searchInput Die aus der Suchleiste ausgelesene Eingabe des Benutzers
+* @Param sortInput Die aktuelle Einstellung der Sortier-Combobox
 */
-var urlRefresh = function(searchInput)
+var urlRefresh = function(searchInput, sortInput)
 {
     //Aus dem in der globalen Filtervariable hinterlegten Regex wird ein String gebildet.
     //Sollte es sich um keinen Namen einer Gruppe von Produkten handeln, wird der String
@@ -206,8 +207,7 @@ var urlRefresh = function(searchInput)
     //enthalten, so wird der aktuelle Eintrag in der Browser-History mit den derzeitigen
     //Werten von Suchbegriff, Filter und Sortierung überschrieben. Wenn nicht, wird ein
     // solcher Eintrag angelegt.
-    var orderString = document.getElementById("sortOption").value;
-    var urlString = "?s=" + searchInput + "&f=" + filterString + "&o=" + orderString;
+    var urlString = "?s=" + searchInput + "&f=" + filterString + "&o=" + sortInput;
     var popString = "Search for " + searchInput;
 
     if (window.location.href.match(/^.*\?s=.*&f=.*&o=.*/))
