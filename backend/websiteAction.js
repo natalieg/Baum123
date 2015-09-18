@@ -276,9 +276,7 @@ var showMainPageOnly = function()
     hideProductOverview();
     hideSingleProduct();
     hideCartPage();
-
     resetInput();
-
     showMainPage();
 };
 

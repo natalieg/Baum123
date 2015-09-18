@@ -14,27 +14,22 @@ var cartCount = $('.cartCounter').value;
  * @param pid
  * @param amount
  */
-var updateProductQuantity = function (pid, amount)
-{
+var updateProductQuantity = function (pid, amount) {
     amount = parseInt(amount);
     console.log("Anzahl der Produkte wird um 1 reduziert");
-    DB.Product.load(pid).then(function (cartProduct)
-    {
-        if (cartProduct.stueckzahl >= amount)
-        {
+    DB.Product.load(pid).then(function (cartProduct) {
+        if (cartProduct.stueckzahl >= amount) {
             cartProduct.stueckzahl = cartProduct.stueckzahl - amount;
             cartProduct.gesamtverkauf = cartProduct.gesamtverkauf + amount;
             cartProduct.update();
             $('.stueckZahl').text(cartProduct.stueckzahl);
             updateCartItem(pid, amount);
-            if(typeof cartCount === "undefined")
-            {
+            if (typeof cartCount === "undefined") {
                 cartCount = 0;
             }
             cartCount = cartCount + amount;
             $('.cartCounter').text(cartCount);
-        } else
-        {
+        } else {
             window.alert("Keine mehr auf Lager!");
         }
     });
@@ -47,22 +42,17 @@ var updateProductQuantity = function (pid, amount)
  * @param pid
  * @param amount
  */
-var updateCartItem = function (pid, amount)
-{
-    DB.Product.load(pid).then(function (product)
-    {
+var updateCartItem = function (pid, amount) {
+    DB.Product.load(pid).then(function (product) {
         var productExists = false;
-        cartItems.forEach(function (product)
-        {
-            if (product.p.id === pid)
-            {
+        cartItems.forEach(function (product) {
+            if (product.p.id === pid) {
                 product.a += amount;
                 productExists = true;
             }
         });
         // Wenn das Produkt noch nicht im Warenkorb existiert, wird es der Liste hinzugefügt
-        if (!productExists)
-        {
+        if (!productExists) {
             cartItems.push({p: product, a: 1});
         }
     });
@@ -72,13 +62,10 @@ var updateCartItem = function (pid, amount)
 /**
  * Hier wird die eigentliche Warenkorb Seite erzeugt
  */
-var buildCartPage = function ()
-{
-    cartItems.forEach(function (product)
-    {
+var buildCartPage = function () {
+    cartItems.forEach(function (product) {
         var name = product.p.name;
-        if (name.length > 10)
-        {
+        if (name.length > 10) {
             name = name.substring(0, 9) + "...";
         }
         $("#cartPage").append("<div class=\"row\">" +
@@ -102,53 +89,45 @@ var buildCartPage = function ()
  * Diese Methode wird ausgeführt, wenn ein einzelnes Produkt über den Warenkorb Button in den Warenkorb
  * hinzugefügt wird oder eine Produktmenge im Warenkorb verändert wird
  */
-var changeAndCalculateFullPrice = function ()
-{
+var changeAndCalculateFullPrice = function () {
     console.log("Calculate Full Price");
     totalPrice = 0;
-    if (cartItems.length === 0 || cartItems.length === null)
-    {
+    if (cartItems.length === 0 || cartItems.length === null) {
         $('.totalPrice').text("0 Euro");
-    } else
-    {
-        cartItems.forEach(function (cartProduct)
-        {
+    } else {
+        cartItems.forEach(function (cartProduct) {
             var productPrice = cartProduct.p.preis;
             var oldAmount = cartProduct.a;
             var newAmount = $('#' + cartProduct.p.id + 'a').val();
             newAmount = parseInt(newAmount);
             var inStock = 0;
-            DB.Product.load(cartProduct.p.id).then(function (product)
-            {
+            DB.Product.load(cartProduct.p.id).then(function (product) {
                 console.log("Aktualisiere Produkt in DB");
                 inStock = product.stueckzahl;
                 console.log("New Amount: " + newAmount + " Old Amount: " + oldAmount + " Auf Lager " + inStock);
                 var inStockPlusOldAmount = (oldAmount + inStock);
                 // Hier wird sichergestellt, dass nicht mehr Produkte in den Warenkorb gelegt werden, als auf Lager sind
 
-                if (newAmount > 0){
-                    if ((newAmount <= parseInt(inStockPlusOldAmount))){
+                if (newAmount > 0) {
+                    if ((newAmount <= parseInt(inStockPlusOldAmount))) {
                         console.log("New Amount: " + newAmount + " Auf Lager und Old Amount: " + inStockPlusOldAmount);
                         cartProduct.a = newAmount;
                         totalPrice = totalPrice + (productPrice * newAmount);
                         $('.totalPrice').text(totalPrice + " Euro");
                         var diffAmount = newAmount - oldAmount;
                         // Update Product in DB
-                        updateCart(product,diffAmount);
+                        updateCart(product, diffAmount);
 
 
                         // Wenn die Produktanzahl zu hoch ist, gibt es Fehlermeldungen
-                    } else if (inStock > 0)
-                    {
+                    } else if (inStock > 0) {
                         setBackAmount(cartProduct, oldAmount);
                         window.alert("Bitte geben Sie einen gueltigen Wert ein!");
-                    } else
-                    {
+                    } else {
                         setBackAmount(cartProduct, oldAmount);
                         window.alert("Bitte geben Sie einen gueltigen Wert ein!");
                     }
-                } else
-                {
+                } else {
                     setBackAmount(cartProduct, oldAmount);
                     window.alert("Bitte geben Sie einen gueltigen Wert ein!");
                 }
@@ -157,14 +136,12 @@ var changeAndCalculateFullPrice = function ()
     }
 };
 
-var setBackAmount = function(cartProduct, oldAmount)
-{
+var setBackAmount = function (cartProduct, oldAmount) {
     cartProduct.a = oldAmount;
     $('#' + cartProduct.p.id + 'a').val(oldAmount);
 };
 
-var updateCart = function(product, diffAmount)
-{
+var updateCart = function (product, diffAmount) {
     product.stueckzahl = product.stueckzahl - diffAmount;
     product.gesamtverkauf = product.gesamtverkauf + diffAmount;
     product.update();
@@ -177,12 +154,9 @@ var updateCart = function(product, diffAmount)
  * Löscht ein Produkt aus dem Warenkorb
  * @param pid
  */
-var deleteProductFromCart = function (pid)
-{
-    cartItems.forEach(function (product)
-    {
-        if (product.p.id + "d" === pid)
-        {
+var deleteProductFromCart = function (pid) {
+    cartItems.forEach(function (product) {
+        if (product.p.id + "d" === pid) {
             var productPosition = cartItems.indexOf(product);
             var productAmount = product.a;
             productAmount = parseInt(productAmount);
@@ -205,10 +179,8 @@ var deleteProductFromCart = function (pid)
  * @param pid
  * @param amount
  */
-var updateDBItem = function (pid, amount)
-{
-    DB.Product.load(pid).then(function (DBProduct)
-    {
+var updateDBItem = function (pid, amount) {
+    DB.Product.load(pid).then(function (DBProduct) {
         DBProduct.stueckzahl = DBProduct.stueckzahl - amount;
         DBProduct.gesamtverkauf = DBProduct.gesamtverkauf + amount;
         DBProduct.update();
@@ -219,11 +191,19 @@ var updateDBItem = function (pid, amount)
 /**
  * Der Gesamtpreis wird auf der Oberfläche wiedergegeben
  */
-var printTotalPrice = function ()
-{
+var printTotalPrice = function () {
     $("#fullPrice").append("<div class=\"row\">" +
         "<div class=\"col-md-6\"></div>" +
         "<div class=\"totalPrice col-md-2\">" + totalPrice + " Euro</div>" +
+        "<div class=\"jetztKaufen col-md-2\"><button>Jetzt kaufen!</button></div>" +
         "</div></div></div>");
+    clickJetztKaufen();
+};
+
+
+var clickJetztKaufen = function () {
+    $('.jetztKaufen').click(function () {
+       location.reload();
+    });
 };
 
