@@ -76,7 +76,7 @@ var login = function() {
         }).then(function(role) {
             if (role || role.hasUser(DB.User.me))
             {
-                window.location=("http://localhost:63342/baum123/frontend/produktaenderung.html");
+                window.location=("../frontend/produktaenderung.html");
             }
         });
     });
