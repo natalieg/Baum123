@@ -203,6 +203,7 @@ var printTotalPrice = function () {
 
 var clickJetztKaufen = function () {
     $('.jetztKaufen').click(function () {
+        window.history.replaceState({info: "Mainpage"}, null, "?main");
        location.reload();
     });
 };

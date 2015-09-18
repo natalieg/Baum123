@@ -328,17 +328,3 @@ $(document).ready(function()
 
     });
 });
-
-//-----------------------------------Unused Code?--------------------------------------
-
-//Gibt die Bewertung eines Produkts zurück
-function getProductScore(products)
-{
-    products.forEach(function (product)
-    {
-        return product.id + (product.Feedbacks.reduce(function (avg, el)
-            {
-                return avg + el.Bewertung;
-            }, 0) / product.Feedbacks.size);
-    });
-}
